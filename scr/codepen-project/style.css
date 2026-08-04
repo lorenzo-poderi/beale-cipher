@@ -1,1 +1,579 @@
 /* CSS personalizzato */
+
+body {
+    font-size: 14px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0;
+    margin: 0;
+    isolation: isolate;
+
+    ul.no-bullets {
+        list-style-type: none;
+        /* Remove bullets */
+        padding: 0;
+        /* Remove padding */
+        margin: 0;
+        /* Remove margins */
+    }
+
+    header {
+        flex: 0 0 60px;
+        flex-direction: row;
+    }
+
+    header .top-nav {
+        height: 32px;
+    }
+
+    main {
+        padding: 0;
+        margin: 0;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .pageHeader {
+        height: 100px;
+        display: flex;
+        align-items: center;
+    }
+
+
+    aside {
+    
+        width: 60px;
+        height: 100%;
+        position: fixed;
+        margin: 0.25rem;
+
+        .left-menu {
+            ul {
+                padding: 0;
+                margin: 0;
+            }
+
+            li {
+                list-style-type: none;
+                padding: 0.5rem 0.5rem;
+                font-size: 1rem;
+
+                &.link:hover {
+                    cursor: pointer !important;
+                    background-color: #f8f9fa;
+                    color: #000;
+                }
+
+                &.link-2-level:hover {
+                    cursor: pointer !important;
+                    background-color: #f8f9fa;
+                    height: 50px;
+                    a {
+                        color: #000;
+                    }
+                }
+
+                &.active {
+                    background-color: white;
+                    color: red !important;
+
+                    a {
+                        color: red !important;
+                    }
+                }
+
+                a {
+                    color: white;
+                }
+
+                i.ms-Icon {
+                    position: relative;
+                    top: 4px;
+                    font-size: 1.3rem;
+                    margin-right: 0.2rem;
+                }
+
+                label {
+                    padding-left: 0.3rem;
+
+                    &:hover {
+                        cursor: pointer !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .content-side {
+        width: 100%;
+        max-width: 1620px;
+        padding: 0.25rem;
+        margin-left: 0;
+        position: relative;
+        margin-left: calc(60px + 0.25rem);
+        background-color: white;
+
+        .detail-section {
+            padding: 0.25rem 0;
+
+            > div > label {
+                font-size: 0.8rem;
+                font-weight: 500;
+                margin-bottom: 0.25rem;
+                width: 100%;
+            }
+        }
+    }
+
+    .content-side-menu-expanded {
+        margin-left: calc(260px + 0.25rem);
+    }
+
+    
+    .toolbar {
+        width: 100%;
+        background: #fafafa;
+
+        ul {
+            background: inherit;
+            list-style: none;
+            width: 100%;
+            padding: 0;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        li {
+            display: inline;
+            float: left;
+            height: 75px;
+            text-align: center;
+            cursor: pointer;
+
+            &.separator {
+                border-left: 1px solid #ddd;
+                height: 64px;
+                width: 1px;
+                position: relative;
+                top: 8px;
+                margin-bottom: 12px;
+            }
+        }
+
+        .item {
+            padding: 2px 5px;
+            margin: 5px 5px;
+            text-align: center;
+            min-width: 70px;
+            height: 85px;
+
+            &:hover {
+                background-color: #eee;
+                cursor: pointer;
+            }
+
+            &.separator {
+                min-width: 0;
+                border-left: 1px solid #ddd;
+                width: 1px;
+                margin: 8px 5px;
+                padding: 0;
+
+                &:hover {
+                    background-color: #fafafa;
+                    cursor: default;
+                }
+            }
+        }
+    }
+
+    .ms-Icon {
+        transition: all 0.3s ease;
+
+        &.collapsed {
+            transform: rotateZ(0deg);
+        }
+
+        &.expanded {
+            transform: rotateZ(-90deg);
+        }
+    }
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-description {
+    font-size: 1rem !important;
+    line-height: 1.8rem;
+}
+
+
+
+/* **** */
+
+
+html { font-size: 14px; }
+body {
+
+    header .top-nav {
+        height: 30px;
+        background-color: #c00b1e;
+    }
+
+    header .user-bar {
+        background-color: #f2f2f2 !important;
+    }
+
+   
+    
+    aside {
+        margin: 0rem;
+        //width: 260px
+    }
+
+    aside ul li {
+        height: 50px;
+        font-size: 14px !important;
+        
+        i {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+
+   
+}
+
+.bg-secondary-light
+{
+    color: #444 !important;
+}
+
+/* Sovrascrive lo styles2 e consente di avere un bottone su sfondo verde ma con scritta bianca*/
+.nav-pills.dark .nav-link.active, .nav-pills.dark .nav-item.show .nav-link {
+    color: white !important;
+}
+
+.pageHeader  
+{
+    height: 90px !important;
+}
+
+.pageHeader  
+{
+    .title {
+        font-size: 30px !important;
+        white-space: nowrap;
+        font-weight: 200;
+    }
+
+    .logo {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.bg-darker-custom {
+    background-color: #607c89 !important
+}
+
+.left-menu {
+    position: absolute;
+    left: 0px;
+    width: 260px;
+    height: 100%;
+    z-index: 102;
+    background-color: #455a64 !important;
+    /* Utilizza lo scroll se ci fossero molte applicazioni, ma nasconde la scroll bar */
+    overflow: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+/* Nasconde la scroll bar  su Chrome, Safari e Opera*/
+.left-menu::-webkit-scrollbar {
+    display: none; 
+  }
+
+.left-menu-mini {
+    width: 60px
+}
+
+/* Permette di nascondere le icone dalla barra di sinistra */
+.left-menu-mini li:not(:first-child) {
+    display: none;
+}
+
+.left-nav-menu {
+    z-index: 100;
+    margin-left: 60px;
+        
+    .left-nav-menu-item {
+        
+        a {
+            color: white;
+            font-size: 14px;
+            color: white !important;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            cursor: pointer;
+            font-weight: normal;
+        }
+    }
+
+    .left-nav-menu-item-level-2 {
+        
+        a {
+            height: 40px;
+        }
+    }
+}
+
+
+#app .sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+    z-index: 1050;
+}
+
+#geomarketing {
+    .sc-panel-bar-item {
+        cursor: pointer;
+        background-color: #f8f9fa;
+      }
+
+    .k-panelbar {
+        border-width: 0px;
+    }
+
+    .k-panelbar-item
+    {
+        margin-bottom: 0.5rem;
+    }
+}
+
+
+/* HOMEPAGE */
+
+.cm-home-tile {
+    
+}
+
+.cm-border-left-warning {
+    border-left: #ffb900 solid 3px !important;
+}
+
+.cm-todowrapper {
+    border-left: 3px #ffb900 solid;
+    padding-left: 20px;
+    margin-left: 0px;
+}
+.cm-todowrapper:hover{
+    opacity: 100%;
+}
+
+/* Fix Kendo */
+
+/* Serve ad espandere il contenuto di un tabstrip */
+.k-animation-container-relative 
+{
+    display: block;
+}
+
+
+/* MODIFICHE ALLE GRIGLIE DI KENDO */
+
+      
+/* rimuovo i bordi per una tabella più pulita */
+.cm-k-grid-no-borders
+{
+    border-width: 0px !important;
+    --kendo-grid-cell-border-width-y: 0px !important;
+
+    .k-grid-header
+    {
+        background-color: inherit !important;
+    }
+    
+    .k-grid-header
+    {
+        padding-inline-end: 0px;
+    }
+
+    .k-grid-footer
+    {
+        padding-inline-end: 0px;
+    }
+}
+
+/* rimuovo un padding finale alla griglia */
+.cm-k-grid-no-grid-header-padding
+{
+   
+    /* credo che questo padding finale servisse come spazio per la scrollbar della griglia. Dunque è da rimuovere se la griglia non ha la scrollbar */
+    .k-grid-header
+    {
+        padding-inline-end: 0px !important;
+    }
+
+    .k-grid-footer
+    {
+        padding-inline-end: 0px !important;
+    }
+}
+
+/* background di una griglia */
+.cm-grid-row-danger
+{
+    color: black;
+    background-color: #ecc !important;
+}
+
+.cm-grid-row-danger:hover
+{
+    background-color: #efbcbc !important; 
+}
+
+.cm-grid-row-warning
+{
+    color: black;
+    background-color: #ffeab3 !important;
+}
+
+.cm-grid-row-warning:hover
+{
+    background-color: #eedba7 !important; 
+}
+
+
+/* Rimuove lo scroll verticale */
+.cm-k-grid-no-scroll .k-grid-content
+{
+    overflow-y: auto;
+}
+
+.cm-c-pointer {
+    cursor: pointer;
+}
+
+.cm-cursor-hover {
+    cursor: pointer;
+}
+
+.cm-cursor-hover:hover {
+    background-color: #eee;
+}
+
+.cm-cursor-hover-underline:hover {
+    text-decoration: underline;
+}
+
+.cm-print-newpage { page-break-before:always; }
+
+@media print {
+    .cm-print-hidden { display: none !important; }
+}
+
+/* In video il logo ha un margine, in stampa no */
+@media screen {
+    .cm-logo {
+        min-width: 160px;
+    }
+}
+
+@media print {
+    .cm-logo {
+        margin-bottom: 10px;
+    }
+}
+
+/* td senza padding verticale nella griglia */
+.cm-k-grid-compressed  td
+{
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+/* Rotazione in verticale di una colonna di una griglia */
+.cm-grid-rotate-90 .k-cell-inner  {
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100%; /* Assicurati che la cella abbia un'altezza sufficiente */
+}
+
+.cm-grid-rotate-90 .k-cell-inner .k-column-title
+{
+    display: block;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    white-space: nowrap;
+    transform: rotate(180deg);
+}
+
+.cm-blinking {
+    animation: blinking 1s 3;
+  }
+  
+  @keyframes blinking {
+    0%, 100% {
+      opacity: 1; /* Elemento visibile */
+    }
+    50% {
+      opacity: 0; /* Elemento invisibile */
+    }
+  }
+  
+
+  .sc-accordion-map-mini-icon
+  {
+    font-size: 98px;
+    position: absolute;
+    right: 58px;
+    top: -16px;
+    color: #607c89;
+    opacity: 40%;
+    z-index: 1000;
+    overflow: hidden;
+    height: 62px;
+  }
+
+ .sc-accordion-map-header:hover .sc-accordion-map-mini-icon
+  {
+    top: -36px;
+    height: 82px;
+    z-index: 1055;
+  }
+
+  .sc-accordion-map-big-icon
+  {
+    font-size: 126px;
+    position: absolute;
+    right: 15px;
+    color: #f3f3f3;
+    opacity: 40%;
+    z-index: 1;
+  }
+
+  .sc-accordion-map-collapsible
+  {
+    z-index: 2;
+  }
+
+  .sc-accordion-map-content
+  {
+    z-index: 3;
+    position: relative;
+    min-height: 200px;
+  }
+
+
+.cursor-pointer {
+    cursor: pointer
+}

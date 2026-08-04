@@ -1,18 +1,195 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Progetto</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Contenuto qui -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app" class="container">
+      <!-- Contenuto qui -->
+      <main>
+        <div class="bg-white" style="max-width: 100%; padding: 0px">
+          <header>
+            <div>
+              <div class="no-print">
+                <div class="top-nav bg-brand-10"></div>
+                <div
+                  class="user-bar top-nav d-flex bg-secondary-light justify-content-end align-items-center px-2"
+                >
+                </div>
+              </div>
+              <div class="pageHeader border-bottom">
+                <div class="logo text-center crm-logo" style="cursor: pointer">
+                  
+                </div>
+                <div class="title-container">
+                  <div class="crm-print-hidden">
+                    <a href="/"
+                      ><img
+                        src="/public/images/bc-home.gif"
+                        alt="home"
+                        class="me-1" /></a
+                    ><img
+                      src="/public/images/bc-separator.gif"
+                      alt="home"
+                      class="ms-2 me-2"
+                    /><a class="text-dark" href="/scheda">Schede aziendali</a
+                    ><img
+                      src="/public/images/bc-separator.gif"
+                      alt="home"
+                      class="ms-2 me-2"
+                    /><a class="text-dark" href="/scheda/azienda"
+                      >Scheda azienda</a
+                    >
+                  </div>
+                  <div class="title">Scheda azienda</div>
+                  <div class="subtitle"><div class="fs-xs">&nbsp;</div></div>
+                </div>
+              </div>
+            </div>
+          </header>
+          <div class="d-flex">
+            <aside class="bg-darker-custom text-white" style="top: 161px">
+              <div class="left-menu left-menu-mini">
+                <ul>
+                  <li class="link">
+                    <label
+                      ><i class="ms-Icon ms-Icon--WaffleOffice365"></i
+                    ></label>
+                  </li>
+                  <li title="Home" class="link">
+                    <label><i class="ms-Icon ms-Icon--Home"></i></label>
+                  </li>
+                  <li title="Schede aziendali" class="bg-white text-darker">
+                    <label><i class="ms-Icon ms-Icon--ContactCard"></i></label>
+                  </li>
+                  <li title="Relazioni area manager" class="link">
+                    <label
+                      ><i class="ms-Icon ms-Icon--IssueTrackingMirrored"></i
+                    ></label>
+                  </li>
+                  <li title="Concorrenti" class="link">
+                    <label
+                      ><i class="ms-Icon ms-Icon--ConnectContacts"></i
+                    ></label>
+                  </li>
+                  <li title="Obiettivi commerciali" class="link">
+                    <label><i class="ms-Icon ms-Icon--Bullseye"></i></label>
+                  </li>
+                  <li title="Riunioni commerciali" class="link">
+                    <label><i class="ms-Icon ms-Icon--Group"></i></label>
+                  </li>
+                  <li title="Analisi di zona" class="link">
+                    <label
+                      ><i class="ms-Icon ms-Icon--MapDirections"></i
+                    ></label>
+                  </li>
+                  <li title="Redditività stand" class="link">
+                    <label><i class="ms-Icon ms-Icon--AllCurrency"></i></label>
+                  </li>
+                  <li title="Premi smaltimento" class="link">
+                    <label><i class="ms-Icon ms-Icon--RewardsLogo"></i></label>
+                  </li>
+                  <li title="Visite" class="link">
+                    <label><i class="ms-Icon ms-Icon--Family"></i></label>
+                  </li>
+                  <li title="Polizze" class="link">
+                    <label><i class="ms-Icon ms-Icon--Feedback"></i></label>
+                  </li>
+                  <li title="Relazioni agenti" class="link">
+                    <label
+                      ><i class="ms-Icon ms-Icon--TextDocumentShared"></i
+                    ></label>
+                  </li>
+                  <li title="Appuntamenti" class="link">
+                    <label><i class="ms-Icon ms-Icon--Calendar"></i></label>
+                  </li>
+                  <li title="Stores" class="link">
+                    <label><i class="ms-Icon ms-Icon--Street"></i></label>
+                  </li>
+                  <li title="Valutazione punti vendita" class="link">
+                    <label><i class="ms-Icon ms-Icon--FavoriteStar"></i></label>
+                  </li>
+                </ul>
+              </div>
+              <div class="left-nav-menu">
+                <div
+                  class="p-3"
+                  style="
+                    font-weight: bold;
+                    font-size: 1.3rem;
+                    line-height: 1rem;
+                  "
+                >
+                  <div class="left-nav-menu-item mb-3">
+                    <span class="text">Schede aziendali</span>
+                  </div>
+                  <div>
+                    <div class="left-nav-menu-item">
+                      <a class="d-flex" href="/scheda/cliente"
+                        ><span class="ms-Icon ms-Icon--Group pe-3"></span
+                        ><span title="Scheda clienti" class="flex-grow-1 text"
+                          >Scheda clienti</span
+                        ></a
+                      >
+                    </div>
+                    <div class="left-nav-menu-item">
+                      <a class="d-flex" href="/scheda/agente"
+                        ><span class="ms-Icon ms-Icon--Contact pe-3"></span
+                        ><span title="Scheda agenti" class="flex-grow-1 text"
+                          >Scheda agenti</span
+                        ></a
+                      >
+                    </div>
+                    <div class="left-nav-menu-item">
+                      <a class="d-flex" href="/scheda/azienda"
+                        ><span class="ms-Icon ms-Icon--Home pe-3"></span
+                        ><span
+                          title="Scheda azienda"
+                          class="flex-grow-1 fw-bold text-decoration-underline text"
+                          >Scheda azienda</span
+                        ></a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+            <div class="content-side false">
+              <div class="row m-2">
+                <div>
+                  <div class="toolbar">
+                    <div class="d-flex justify-content-start flex-wrap">
+                      <button
+                        class="k-button k-button-sm k-button-flat k-button-flat-base k-rounded-md fw-normal py-3"
+                        style="min-width: 80px"
+                      >
+                        <span class="k-button-text"
+                          ><i
+                            class="ms-Icon ms-Icon--ChromeBack fs-xl text-dark"
+                            aria-hidden="true"
+                          ></i>
+                          <div class="d-none d-md-block">
+                            Indietro <br /><br /></div
+                        ></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
