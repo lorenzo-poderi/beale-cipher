@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "status": "Done",
+    "trimmedLines": 26,
+    "firstSentenceLine": 92,
+    "confidence": 0.99,
+    "firstSentence": "When in the Course of human events, it becomes necessary for one people"
+  },
+  {
+    "id": 4,
+    "status": "Done",
+    "trimmedLines": 26,
+    "firstSentenceLine": 41,
+    "confidence": 1,
+    "firstSentence": "Four score and seven years ago, our fathers brought forth"
+  },
+  {
+    "id": 5,
+    "status": "Done",
+    "trimmedLines": 24,
+    "firstSentenceLine": 61,
+    "confidence": 0.99,
+    "firstSentence": "We the people of the United States, in Order to form a more perfect Union,"
+  },
+  {
+    "id": 6,
+    "status": "Done",
+    "trimmedLines": 24,
+    "firstSentenceLine": 33,
+    "confidence": 1,
+    "firstSentence": "No man thinks more highly than I do of the patriotism, as well as abilities,"
+  },
+  {
+    "id": 7,
+    "status": "Done",
+    "trimmedLines": 22,
+    "firstSentenceLine": 31,
+    "confidence": 0.99,
+    "firstSentence": "In the name of God, Amen.  We, whose names are underwritten, the Loyal"
+  }
+]

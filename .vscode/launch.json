@@ -11,9 +11,9 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\scr\\node-scripts\\search-opening-sentence\\search.js",
-            //"args": [ "--id", "1", "--simulate"]
-            "args": [ "--id", "5"]
+            "program": "${workspaceFolder}\\src\\node-scripts\\search-opening-sentence\\search.js",
+            //"args": [ "--id", "1", "--simulate", "--results", "src\\data\\generated\\list-of-results.json"],
+            "args": [ "--id", "7", "--results", "src\\data\\generated\\list-of-results.json"]
         }
     ]
 }
