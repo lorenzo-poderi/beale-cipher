@@ -55,7 +55,7 @@ Per "inizio" si intende la frase iniziale che un lettore leggerebbe una volta sa
 - sottotitoli di capitoli;
 - introduzioni al capitolo;
 - numerazioni dei capitoli (I. II. III. IV | 1. 2. 3. 4.);
-- Date, mesi o anni relativi ai fatti;
+- date, mesi o anni relativi ai fatti;
 - ecc;
 
 Per fare un esempio, se parlassimo della "Divina commedia" di "Dante Alighieri" la frase di inizio sarebbe la seguente: 
@@ -89,7 +89,7 @@ Lo script principale prevederà il passaggio dei seguenti parametri:
  - id: corrispondente ad un 1 di un ebook del progetto Gutenberg;
  - txt: testo estratto dell'ebook (tipicamente 500 righe);
  - modelName: nome del modello da utilizzare;
- - simultate: true | false (default = false) (modalità di prova che non effettuerà veramente la chiamata alla AI, ma ne effettuerà solamente una simulazione, selezionando una riga a caso, purché non sia vuota)
+ - simulate: true | false (default = false) (modalità di prova che non effettuerà veramente la chiamata alla AI, ma ne effettuerà solamente una simulazione, selezionando una riga a caso, purché non sia vuota)
 
 ### 3.2 Le istruzioni di prompt per la ricerca dell'inizio dell'opera tramite AI
 
@@ -734,7 +734,7 @@ Lo script dovrà produrre log ad ogni azione compiuta per capire cosa è success
 Il file di log dovrà contenere l'id dell'ebook analizzato.
 
 Esempio:
- - log-1-ai.txt
+ - log-1.txt
 
 
 Esempio di cosa fare log:
@@ -766,8 +766,8 @@ In questo modo sarà possibile fare un analisi sui costi relativi ai token.
 
 ---
 
-## 15. Test di mockup
+## 15. Esecuzione in modalità simulazione per testing
 
-Fare in modo che lo script simuli la chiamata alle api di OpenAI tramite un parametro.
+Fare in modo che lo script, tramite il parametro "simulate" possa essere eseguito come una simulazione e non effettui veramente la chiamata alle api di OpenAI.
 In questo modo non verranno bruciati dei token per fare dei test e si avrà da subito un modello funzionante di prova.
-In modalità "Test" verrà ritornata una riga casuale del testo, purche non vuota.
+In modalità "simulazione" verrà ritornata una riga casuale del testo, purche non vuota.

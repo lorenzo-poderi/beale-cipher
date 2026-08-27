@@ -1,0 +1,4 @@
+config/config.development.json
+config/config.staging.json
+config/config.production.json
+logs/
