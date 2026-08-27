@@ -13,7 +13,7 @@
             ],
             "program": "${workspaceFolder}\\src\\node-scripts\\search-opening-sentence\\search.js",
             //"args": [ "--id", "1", "--simulate", "--results", "src\\data\\generated\\list-of-results.json"],
-            "args": [ "--id", "7", "--results", "src\\data\\generated\\list-of-results.json"]
+            "args": [ "--id", "19", "--results", "src\\data\\generated\\list-of-results.json"]
         }
     ]
 }

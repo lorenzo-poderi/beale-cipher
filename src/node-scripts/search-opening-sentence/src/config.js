@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const DEFAULTS = {
     firstSampleLines: 100,
-    secondSampleLines: 200,
+    secondSampleLines: 500,
     maxAttempts: 2,
     gutenbergMarker: '*** START OF THE PROJECT GUTENBERG EBOOK',
     modelName: 'gpt-5.6-luna',

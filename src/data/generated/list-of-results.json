@@ -38,5 +38,53 @@
     "firstSentenceLine": 31,
     "confidence": 0.99,
     "firstSentence": "In the name of God, Amen.  We, whose names are underwritten, the Loyal"
+  },
+  {
+    "id": 8,
+    "status": "Done",
+    "trimmedLines": 24,
+    "firstSentenceLine": 40,
+    "confidence": 1,
+    "firstSentence": "Fellow countrymen:  At this second appearing to take the oath"
+  },
+  {
+    "id": 9,
+    "status": "Done",
+    "trimmedLines": 24,
+    "firstSentenceLine": 34,
+    "confidence": 1,
+    "firstSentence": "Fellow citizens of the United States: in compliance with a custom as"
+  },
+  {
+    "id": 15,
+    "status": "Done",
+    "trimmedLines": 26,
+    "firstSentenceLine": 872,
+    "confidence": 1,
+    "firstSentence": "Call me Ishmael. Some years ago—never mind how long precisely—having"
+  },
+  {
+    "id": 17,
+    "status": "Done",
+    "trimmedLines": 28,
+    "firstSentenceLine": 163,
+    "confidence": 0.99,
+    "firstSentence": "1:1 I, Nephi, having been born of goodly parents, therefore I was"
+  },
+  {
+    "id": 18,
+    "status": "Done",
+    "trimmedLines": 26,
+    "firstSentenceLine": 135,
+    "confidence": 0.94,
+    "firstSentence": "To the People of the State of New York:"
+  },
+  {
+    "id": 19,
+    "status": "Done",
+    "trimmedLines": 26,
+    "firstSentenceLine": 125,
+    "confidence": 0.99,
+    "firstSentence": "Should you ask me, whence these stories?"
   }
 ]
