@@ -5,8 +5,10 @@ const path = require('path');
 const {
     loadConfig,
     getListOfResults,
-    loadPrompt,
-    getApiKey
+    getListOfBooks,
+    getCipher1,
+    getCipher2,
+    getCipher3,
 } = require('./src/config');
 
 const {
@@ -63,17 +65,13 @@ async function main() {
      */
     const id = getArgument(args, '--id');
 
-    /*
-     * Deve essere specificato uno solo dei due
-     * metodi di selezione degli ID.
-     */
-    if (!id) {
+    // if (!id) {
 
-        throw new Error(
-            'È necessario specificare --id <id> oppure ' +
-            '--json <file.json>.'
-        );
-    }
+    //     throw new Error(
+    //         'È necessario specificare --id <id> oppure ' +
+    //         '--json <file.json>.'
+    //     );
+    // }
 
     /*
      * Parametri comuni utilizzati dall'orchestrator.
@@ -82,8 +80,10 @@ async function main() {
 
         basePath: config.basePath,
         listOfResults: listOfResults,
+        cipher1: getCipher1(config),
+        cipher2: getCipher2(config),
+        cipher3: getCipher3(config),
         config,
-
         simulate,
 
         loggerFactory: currentId =>
@@ -115,24 +115,20 @@ async function main() {
             })
         )[0];
     }
+    else
+    {
+        // Rielaboro tutti gli id disponibili
+        let books = getListOfBooks(config);
+        let ids = books.map(x => x.id);
 
+        result = 
+            await processIds({
+                ...common,
 
-    /*
-     * Elaborazione degli ID contenuti in un file JSON.
-     *
-     * Esempio:
-     *
-     * node search.js
-     *     --json books.json
-     *     --results ./data/results.json
-     */
-    else {
+                ids: ids
+            });
+       
 
-        result = await processJsonFile({
-            ...common,
-
-            jsonFile: path.resolve(jsonFile)
-        });
     }
 
 

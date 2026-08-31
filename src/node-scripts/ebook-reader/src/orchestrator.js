@@ -23,6 +23,9 @@ async function processIds({
     ids,
     basePath,
     listOfResults,
+    cipher1,
+    cipher2,
+    cipher3,
     config,
     simulate,
     loggerFactory
@@ -44,26 +47,33 @@ async function processIds({
         const logger = loggerFactory(id);
         let firstSentenceLine = findFirstSentenceLine(id, listOfResults);
 
-        try {
-            results.push(await extractSingleBook({
-                id,
-                firstSentenceLine,
-                filePath: buildBookPath(basePath, id),
-                config,
-                logger,
-                simulate
-            }));
-        } catch (e) {
-            logger.write(`UNHANDLED ERROR: ${e.stack||e.message}`);
-            results.push({
-                id,
-                status: 'Error',
-                trimmedLines: null,
-                firstSentenceLine: null,
-                confidence: null,
-                firstSentence: null
-            });
+        if (firstSentenceLine != null) {
+
+            try {
+                results.push(await extractSingleBook({
+                    id,
+                    firstSentenceLine,
+                    filePath: buildBookPath(basePath, id),
+                    cipher1,
+                    cipher2,
+                    cipher3,
+                    config,
+                    logger,
+                    simulate
+                }));
+            } catch (e) {
+                logger.write(`UNHANDLED ERROR: ${e.stack || e.message}`);
+                results.push({
+                    id,
+                    status: 'Error',
+                    trimmedLines: null,
+                    firstSentenceLine: null,
+                    confidence: null,
+                    firstSentence: null
+                });
+            }
         }
+
     }
     return results;
 }

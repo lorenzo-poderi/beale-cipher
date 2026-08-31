@@ -10,6 +10,9 @@ async function extractSingleBook({
     id,
     firstSentenceLine,
     filePath,
+    cipher1,
+    cipher2,
+    cipher3,
     config,
     logger,
     simulate
@@ -60,14 +63,26 @@ async function extractSingleBook({
         i++;
     }
 
+    let solvedCipher1 = solveCipher(cipher1, firstLetters);
+    let solvedCipher2 = solveCipher(cipher2, firstLetters);
+    let solvedCipher3 = solveCipher(cipher3, firstLetters);
+
     return {
         id,
         status: 'Done',
         firstLetters: firstLetters.join(''),
         firstLettersLength: firstLetters.length,
-        
+        solvedCipher1: solvedCipher1,
+        solvedCipher2: solvedCipher2,
+        solvedCipher3: solvedCipher3
     };
 }
+
+function solveCipher(cipher, firstLetters) 
+{
+    return cipher.map(x => x < firstLetters.length ? firstLetters[x-1] : '_').join('');
+}
+
 
 
 function removeSpecialChars(text, charsToRemove) {
