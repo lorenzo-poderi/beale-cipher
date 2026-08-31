@@ -16,6 +16,8 @@ const DEFAULTS = {
     cipher1: path.join(__dirname, '..', '..', '..', 'data', 'originals','cipher1.txt'),
     cipher2: path.join(__dirname, '..', '..', '..', 'data', 'originals','cipher2.txt'),
     cipher3: path.join(__dirname, '..', '..', '..', 'data', 'originals','cipher3.txt'),
+    charsToRemove: "-*\"'“•()0123456789.",
+    endOfProjectGutenberg: "*** END OF THE PROJECT GUTENBERG"
 };
 
 function loadConfig() {

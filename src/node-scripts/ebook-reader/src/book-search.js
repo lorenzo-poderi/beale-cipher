@@ -26,6 +26,7 @@ async function extractSingleBook({
 
     const lines = await readBook(filePath);
     logger.write(`File read successfully. Total lines: ${lines.length}`);
+    logger.write(`First sentence found at line ${firstSentenceLine}`);
 
     let i = 0;
     let line = null;
@@ -35,46 +36,48 @@ async function extractSingleBook({
 
     while (firstLetters.length < config.maxWords) {
         line = lines[firstSentenceLine + i];
+
+        if (line.startsWith(config.endOfProjectGutenberg))
+        {
+            break;
+        }
+
         words = line != null ? line.split(' ') : [];
 
         for (let j = 0; j < words.length; j++) {
             word = words[j];
 
             if (word != null && word.length > 0) {
-                character = word[0]; 
+                word = removeSpecialChars(word, config.charsToRemove);
+                if (word.length > 0) {
+                    character = word[0];
+                    firstLetters.push(character.toUpperCase());
+                }
 
-                firstLetters.push(character);
             }
         }
 
         i++;
     }
 
-    const firstSentence = lines[firstSentenceLine];
-
-    // if (markerLine < 0) {
-    //     logger.write('Gutenberg marker not found.');
-    //     return {
-    //         id,
-    //         status: 'Not found',
-    //         trimmedLines: null,
-    //         firstSentenceLine: null,
-    //         confidence: null,
-    //         firstSentence: null
-    //     };
-    // }
-
-    logger.write(`First sentence found at line ${firstSentenceLine}`);
-
-    const sizes = [config.firstSampleLines, config.secondSampleLines];
-
     return {
         id,
         status: 'Done',
         firstLetters: firstLetters.join(''),
         firstLettersLength: firstLetters.length,
+        
     };
 }
+
+
+function removeSpecialChars(text, charsToRemove) {
+    for (const char of charsToRemove) {
+        text = text.replaceAll(char, '');
+    }
+
+    return text;
+}
+
 module.exports = {
     extractSingleBook
 };
