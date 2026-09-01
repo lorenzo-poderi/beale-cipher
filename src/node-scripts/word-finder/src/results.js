@@ -124,22 +124,13 @@ async function updateResults(resultsFile, newResults) {
             existingResults.push(newResult);
 
             continue;
+        } else {
+                existingResults[existingIndex].count += newResult.count;
         }
 
 
         const existingResult = existingResults[existingIndex];
 
-
-        /*
-         * L'ID esiste già.
-         *
-         * Verifichiamo se il nuovo risultato può
-         * sostituire quello precedente.
-         */
-        if (canReplace(existingResult, newResult)) {
-
-            existingResults[existingIndex] = newResult;
-        }
     }
 
 
@@ -148,7 +139,7 @@ async function updateResults(resultsFile, newResults) {
      */
     await saveResults(
         resultsFile,
-        existingResults
+        existingResults.sort((a,b) => b.count - a.count)
     );
 }
 

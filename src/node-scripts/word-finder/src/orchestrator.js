@@ -28,14 +28,20 @@ async function processIds({
     cipher3,
     config,
     simulate,
-    loggerFactory
+    logger
 }) {
     // Risultati come i seguenti:
     // [{ word: "test", count: 3 }, { word: "example", count: 2 }]
     const results = [];
 
+    let index = 0;
+    let totalIds = ids.length;
+
     for (const id of ids) {
-    
+        index++;
+        
+        logger.write(`Reading id: ${id} (${index} / ${totalIds})`);
+
         try {
             let specialWords = await extractSingleBook({
                 id,

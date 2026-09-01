@@ -47,10 +47,12 @@ function getArgument(args, name) {
 }
 
 
+
+
 async function main() {
 
     const config = loadConfig();
-    
+
     const listOfBooks = getListOfBooks(config);
 
     const args = process.argv.slice(2);
@@ -63,7 +65,6 @@ async function main() {
         basePath: config.basePath,
         listOfBooks: listOfBooks,
         config,
-        simulate,
 
         loggerFactory: currentId =>
             createLogger(currentId, config)
@@ -72,45 +73,52 @@ async function main() {
 
     let result;
 
+    const logger = createLogger(config);
+
     // Rielaboro tutti gli id disponibili
     let ids = listOfBooks.map(x => x.id);
 
-    result = 
-        await processIds({
-            ...common,
+    for (let i = 0; i < ids.length; i += 10) {
 
-            ids: ids
-        });
-    
+        const group = ids.slice(i, i + 10);
 
+        // Elabora il gruppo
 
+        result =
+            await processIds({
+                ...common,
 
-    /*
-     * Converte il risultato in un array.
-     *
-     * processIds() restituisce un array anche quando
-     * viene elaborato un solo ID, ma manteniamo questa
-     * gestione per sicurezza.
-     */
-    const results = Array.isArray(result)
-        ? result
-        : [result];
-
-    // Riordino tutti i risultati sulla base del conteggio delle occorrenze, dal più alto al più basso.
-    const sortedResults = results.sort((a, b) => b.count - a.count);
+                ids: group,
+                logger
+            });
 
 
+        logger.write("update results...");
 
-    /*
-     * Aggiorna results.json.
-     *
-     * Tutta la logica relativa agli status e alla
-     * sostituzione dei risultati è contenuta in results.js.
-     */
-    await updateResults(
-        config.listOfSpecialWordsFile,
-        sortedResults
-    );
+        await updateResults(
+            config.listOfSpecialWordsFile,
+            result
+        );
+
+    }
+
+
+    // /*
+    //  * Converte il risultato in un array.
+    //  *
+    //  * processIds() restituisce un array anche quando
+    //  * viene elaborato un solo ID, ma manteniamo questa
+    //  * gestione per sicurezza.
+    //  */
+    // const results = Array.isArray(result)
+    //     ? result
+    //     : [result];
+
+    // // Riordino tutti i risultati sulla base del conteggio delle occorrenze, dal più alto al più basso.
+    // const sortedResults = results.sort((a, b) => b.count - a.count);
+
+
+
 
     /*
      * Mantiene la stampa del risultato a video.

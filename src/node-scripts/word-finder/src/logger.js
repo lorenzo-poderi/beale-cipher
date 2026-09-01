@@ -2,12 +2,14 @@
 const fs = require('fs');
 const path = require('path');
 
-function createLogger(id, c) {
+function createLogger(c) {
     fs.mkdirSync(c.logDirectory, {
         recursive: true
     });
 
-    const file = path.join(c.logDirectory, `log-${id}.txt`);
+    //const file = path.join(c.logDirectory, `log-${id}.txt`);
+    const file = path.join(c.logDirectory, `log.txt`);
+
     return {
         file,
         write(message) {

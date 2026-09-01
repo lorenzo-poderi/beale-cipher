@@ -244,6 +244,10 @@ function isApostropheWord(token) {
     return /^[A-Za-zÀ-ÖØ-öø-ÿ]+['’][A-Za-zÀ-ÖØ-öø-ÿ]+$/.test(token);
 }
 
+function endsWithSpecialCharWord(token) {
+    return /^[A-Za-zÀ-ÖØ-öø-ÿ]+[',.]?$/.test(token);
+}
+
 
 /**
  * Divide una parola contenente apostrofo.
@@ -264,5 +268,6 @@ module.exports = {
     isListMarker,
     isHyphenatedWord,
     isApostropheWord,
-    splitApostrophe
+    splitApostrophe,
+    endsWithSpecialCharWord
 };
