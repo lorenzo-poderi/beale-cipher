@@ -13,7 +13,7 @@ const {
     isHyphenatedWord,
     isApostropheWord,
     splitApostrophe,
-    endsWithSpecialCharWord
+    startsOrEndsWithSpecialCharWord
 } = require('./word-parser');
 
 async function extractSingleBook({
@@ -60,7 +60,7 @@ async function extractSingleBook({
 
                 if (!isAlphanumeric(word)) {
 
-                    if (!endsWithSpecialCharWord(word))
+                    if (!startsOrEndsWithSpecialCharWord(word))
                     {
                         results.push(word);
                     }

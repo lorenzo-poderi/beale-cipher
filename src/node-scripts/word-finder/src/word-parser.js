@@ -248,6 +248,9 @@ function endsWithSpecialCharWord(token) {
     return /^[A-Za-zÀ-ÖØ-öø-ÿ]+[',.]?$/.test(token);
 }
 
+function startsOrEndsWithSpecialCharWord(token) {
+    return /^+[',.":][A-Za-zÀ-ÖØ-öø-ÿ]+[',.":]?$/.test(token);
+}
 
 /**
  * Divide una parola contenente apostrofo.
@@ -269,5 +272,6 @@ module.exports = {
     isHyphenatedWord,
     isApostropheWord,
     splitApostrophe,
-    endsWithSpecialCharWord
+    endsWithSpecialCharWord,
+    startsOrEndsWithSpecialCharWord
 };
