@@ -249,7 +249,7 @@ function endsWithSpecialCharWord(token) {
 }
 
 function startsOrEndsWithSpecialCharWord(token) {
-    return /^+[',.":][A-Za-zÀ-ÖØ-öø-ÿ]+[',.":]?$/.test(token);
+    return /^[',.":;“‘’\[\]]?[A-Za-zÀ-ÖØ-öø-ÿ]+[',.":;“‘’\[\]]?$/.test(token);
 }
 
 /**
