@@ -6,15 +6,11 @@ const {
     extractLines
 } = require('./gutenberg');
 
-async function searchSingleBook({
+async function extractSingleBook({
     id,
     filePath,
     config,
-    searchByAI,
     logger,
-    prompt,
-    apiKey,
-    modelName,
     simulate
 }) {
     logger.write('Reading file...');
@@ -106,7 +102,6 @@ async function searchSingleBook({
         firstSentence: null
     };
 }
-
 module.exports = {
-    searchSingleBook
+    extractSingleBook
 };
