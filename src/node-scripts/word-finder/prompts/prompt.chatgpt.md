@@ -1,0 +1,5904 @@
+# Catalogazione delle stringhe speciali estratte dagli ebook Project Gutenberg
+
+## Obiettivo
+
+Il file `list-of-special-words.json` contiene 5.773 stringhe uniche che contengono almeno un carattere diverso da una lettera o da un numero. Le stringhe sono accompagnate dal numero di occorrenze.
+
+Lo scopo è classificare ogni stringa in modo da poter costruire successivamente funzioni Node.js basate su espressioni regolari. Le categorie principali sono quelle definite nel prompt originale; è stata aggiunta una categoria residuale per non forzare casi particolari dentro categorie non appropriate.
+
+**Nota importante:** una stessa stringa può essere interpretabile in più modi. Per l'implementazione delle funzioni conviene applicare le regole in un ordine prestabilito: prima riconoscere i casi certamente vuoti, poi i marcatori, poi le parole con più termini e infine la semplice punteggiatura esterna. I casi ambigui devono poter essere restituiti come `ambiguous`/`da verificare`.
+
+## Statistiche
+
+- Categoria 1 — caratteri di troppo da rimuovere: **4172**
+- Categoria 2 — simboli/stringhe senza significato: **61**
+- Categoria 2b — elenchi, numerazioni e marcatori assimilabili a vuoto: **60**
+- Categoria 3 — possibile significato oppure no: **260**
+- Categoria 4 — possibili più termini: **1163**
+- Categoria 5 — altri casi speciali da verificare: **57**
+- Totale: **5773**
+
+---
+
+## 1. Parole o stringhe con caratteri di troppo da ripulire
+
+Qui rientrano le stringhe nelle quali i caratteri speciali sono normalmente solo punteggiatura o formattazione esterna alla parola. La parola ripulita si ottiene rimuovendo tali caratteri, senza modificare il contenuto alfabetico/numerico.
+
+Pattern tipici:
+- virgolette all'inizio: `“I`, `"I`, `‘I`, `'I` → `I`
+- virgolette alla fine: `you”`, `you"`, ecc.
+- punteggiatura finale: `it;`, `it.`, `you?`, `said:`, `me!` → parola senza punteggiatura
+- punteggiatura iniziale: `“The`, `‘The`, `"The` → `The`
+- formattazione corsiva con `_`: `_her_.` → `her`
+- parentesi/ganci quando sono chiaramente troncati e non rappresentano un'annotazione autonoma: `(as` → `as`, `[L.` → `L`
+- tabulazioni o spazi di formattazione iniziali: `\tThe` → `The`
+
+### Elenco completo
+
+- `“I` → `I` — occorrenze: 5503
+- `"I` → `I` — occorrenze: 1692
+- `“You` → `You` — occorrenze: 1446
+- `it;` → `it` — occorrenze: 1397
+- `him;` → `him` — occorrenze: 1243
+- `“The` → `The` — occorrenze: 1092
+- `“And` → `And` — occorrenze: 1061
+- `“What` → `What` — occorrenze: 963
+- `“It` → `It` — occorrenze: 959
+- `me;` → `me` — occorrenze: 958
+- `o’` → `o` — occorrenze: 952
+- `them;` → `them` — occorrenze: 905
+- `th’` → `th` — occorrenze: 846
+- `“But` → `But` — occorrenze: 791
+- `said:` → `said` — occorrenze: 748
+- `‘I` → `I` — occorrenze: 725
+- `“and` → `and` — occorrenze: 682
+- `'I` → `I` — occorrenze: 594
+- `“My` → `My` — occorrenze: 569
+- `“Yes,` → `Yes` — occorrenze: 552
+- `“Well,` → `Well` — occorrenze: 542
+- `her;` → `her` — occorrenze: 525
+- `"The` → `The` — occorrenze: 521
+- `it.”` → `it` — occorrenze: 520
+- `’tis` → `tis` — occorrenze: 509
+- `“but` → `but` — occorrenze: 474
+- `you;` → `you` — occorrenze: 472
+- `“He` → `He` — occorrenze: 447
+- `“A` → `A` — occorrenze: 436
+- `“That` → `That` — occorrenze: 433
+- `“No,` → `No` — occorrenze: 431
+- `“If` → `If` — occorrenze: 427
+- `“How` → `How` — occorrenze: 426
+- `’Tis` → `Tis` — occorrenze: 415
+- `me.”` → `me` — occorrenze: 409
+- `of;` → `of` — occorrenze: 403
+- `“that` → `that` — occorrenze: 402
+- `you.”` → `you` — occorrenze: 400
+- `man;` → `man` — occorrenze: 395
+- `you?` → `you` — occorrenze: 392
+- `“the` → `the` — occorrenze: 390
+- `adj.;` → `adj` — occorrenze: 384
+- `sir,”` → `sir` — occorrenze: 379
+- `it?` → `it` — occorrenze: 375
+- `“Do` → `Do` — occorrenze: 361
+- `“you` → `you` — occorrenze: 361
+- `“Oh,` → `Oh` — occorrenze: 351
+- `“We` → `We` — occorrenze: 350
+- `"You` → `You` — occorrenze: 346
+- `i’` → `i` — occorrenze: 343
+- `I;` → `I` — occorrenze: 340
+- `me!` → `me` — occorrenze: 340
+- `me?` → `me` — occorrenze: 339
+- `v.;` → `v` — occorrenze: 332
+- `“There` → `There` — occorrenze: 320
+- `him:` → `him` — occorrenze: 312
+- `"It` → `It` — occorrenze: 301
+- `time;` → `time` — occorrenze: 299
+- `"What` → `What` — occorrenze: 293
+- `“Not` → `Not` — occorrenze: 293
+- `again;` → `again` — occorrenze: 291
+- `"And` → `And` — occorrenze: 287
+- `said;` → `said` — occorrenze: 285
+- `“Is` → `Is` — occorrenze: 284
+- `it?”` → `it` — occorrenze: 280
+- `to;` → `to` — occorrenze: 274
+- `us;` → `us` — occorrenze: 273
+- `so;` → `so` — occorrenze: 272
+- `“This` → `This` — occorrenze: 271
+- `there;` → `there` — occorrenze: 266
+- `“In` → `In` — occorrenze: 260
+- `life;` → `life` — occorrenze: 259
+- `not;` → `not` — occorrenze: 258
+- `"and` → `and` — occorrenze: 254
+- `up;` → `up` — occorrenze: 254
+- `you?”` → `you` — occorrenze: 251
+- `‘The` → `The` — occorrenze: 250
+- `Oh!` → `Oh` — occorrenze: 249
+- `it,”` → `it` — occorrenze: 248
+- `’em` → `em` — occorrenze: 247
+- `away;` → `away` — occorrenze: 246
+- `way;` → `way` — occorrenze: 245
+- `"My` → `My` — occorrenze: 244
+- `him?` → `him` — occorrenze: 244
+- `you,”` → `you` — occorrenze: 244
+- `“She` → `She` — occorrenze: 244
+- `him.”` → `him` — occorrenze: 243
+- `“Why,` → `Why` — occorrenze: 242
+- `n.;` → `n` — occorrenze: 240
+- `“Why` → `Why` — occorrenze: 238
+- `one;` → `one` — occorrenze: 237
+- `“Then` → `Then` — occorrenze: 236
+- `me,”` → `me` — occorrenze: 234
+- `sir;` → `sir` — occorrenze: 233
+- `it!` → `it` — occorrenze: 231
+- `“To` → `To` — occorrenze: 229
+- `day;` → `day` — occorrenze: 225
+- `himself;` → `himself` — occorrenze: 221
+- `well;` → `well` — occorrenze: 221
+- `hand;` → `hand` — occorrenze: 220
+- `more;` → `more` — occorrenze: 220
+- `he;` → `he` — occorrenze: 219
+- `all;` → `all` — occorrenze: 218
+- `“if` → `if` — occorrenze: 216
+- `“it` → `it` — occorrenze: 212
+- `“Let` → `Let` — occorrenze: 211
+- `on;` → `on` — occorrenze: 210
+- `mind;` → `mind` — occorrenze: 209
+- `world;` → `world` — occorrenze: 208
+- `etc.,` → `etc` — occorrenze: 206
+- `"He` → `He` — occorrenze: 205
+- `before;` → `before` — occorrenze: 205
+- `me:` → `me` — occorrenze: 204
+- `men;` → `men` — occorrenze: 204
+- `people;` → `people` — occorrenze: 203
+- `"the` → `the` — occorrenze: 201
+- `out;` → `out` — occorrenze: 201
+- `"that` → `that` — occorrenze: 198
+- `an’` → `an` — occorrenze: 198
+- `other;` → `other` — occorrenze: 196
+- `God;` → `God` — occorrenze: 192
+- `head;` → `head` — occorrenze: 192
+- `night;` → `night` — occorrenze: 191
+- `“Yes,”` → `Yes` — occorrenze: 190
+- `"If` → `If` — occorrenze: 188
+- `be;` → `be` — occorrenze: 188
+- `this?` → `this` — occorrenze: 188
+- `“They` → `They` — occorrenze: 188
+- `saying:` → `saying` — occorrenze: 186
+- `“O` → `O` — occorrenze: 186
+- `in;` → `in` — occorrenze: 185
+- `‘You` → `You` — occorrenze: 185
+- `“Have` → `Have` — occorrenze: 185
+- `it."` → `it` — occorrenze: 183
+- `place;` → `place` — occorrenze: 183
+- `“to` → `to` — occorrenze: 183
+- `“Oh!` → `Oh` — occorrenze: 182
+- `"That` → `That` — occorrenze: 180
+- `“for` → `for` — occorrenze: 180
+- `house;` → `house` — occorrenze: 176
+- `you!` → `you` — occorrenze: 176
+- `"But` → `But` — occorrenze: 174
+- `"We` → `We` — occorrenze: 174
+- `“Who` → `Who` — occorrenze: 171
+- `it:` → `it` — occorrenze: 170
+- `thee;` → `thee` — occorrenze: 170
+- `do;` → `do` — occorrenze: 168
+- `wi’` → `wi` — occorrenze: 168
+- `“Are` → `Are` — occorrenze: 167
+- `them?` → `them` — occorrenze: 166
+- `“So` → `So` — occorrenze: 166
+- `“Very` → `Very` — occorrenze: 166
+- `"but` → `but` — occorrenze: 165
+- `do?` → `do` — occorrenze: 165
+- `me?”` → `me` — occorrenze: 163
+- `this;` → `this` — occorrenze: 163
+- `not?` → `not` — occorrenze: 162
+- `down;` → `down` — occorrenze: 161
+- `heart;` → `heart` — occorrenze: 161
+- `that?` → `that` — occorrenze: 161
+- `“Mr.` → `Mr` — occorrenze: 160
+- `“Your` → `Your` — occorrenze: 160
+- `now;` → `now` — occorrenze: 158
+- `side;` → `side` — occorrenze: 158
+- `“what` → `what` — occorrenze: 158
+- `Ah!` → `Ah` — occorrenze: 157
+- `him!` → `him` — occorrenze: 157
+- `ha’` → `ha` — occorrenze: 156
+- `that;` → `that` — occorrenze: 154
+- `'The` → `The` — occorrenze: 153
+- `another;` → `another` — occorrenze: 152
+- `myself;` → `myself` — occorrenze: 152
+- `“As` → `As` — occorrenze: 152
+- `“By` → `By` — occorrenze: 152
+- `“Ah,` → `Ah` — occorrenze: 150
+- `“is` → `is` — occorrenze: 150
+- `“When` → `When` — occorrenze: 150
+- `me."` → `me` — occorrenze: 149
+- `_The` → `The` — occorrenze: 148
+- `them:` → `them` — occorrenze: 148
+- `_Nautilus_` → `Nautilus` — occorrenze: 147
+- `Sir,’` → `Sir` — occorrenze: 147
+- `with;` → `with` — occorrenze: 147
+- `this:` → `this` — occorrenze: 145
+- `here?` → `here` — occorrenze: 144
+- `her.”` → `her` — occorrenze: 143
+- `“a` → `a` — occorrenze: 143
+- `love;` → `love` — occorrenze: 142
+- `“Ah!` → `Ah` — occorrenze: 142
+- `“Come` → `Come` — occorrenze: 142
+- `death;` → `death` — occorrenze: 140
+- `land;` → `land` — occorrenze: 140
+- `“Where` → `Where` — occorrenze: 140
+- `sir.”` → `sir` — occorrenze: 139
+- `water;` → `water` — occorrenze: 139
+- `“No` → `No` — occorrenze: 139
+- `for;` → `for` — occorrenze: 138
+- `'You` → `You` — occorrenze: 137
+- `me!”` → `me` — occorrenze: 136
+- `off;` → `off` — occorrenze: 136
+- `things;` → `things` — occorrenze: 136
+- `work;` → `work` — occorrenze: 136
+- `“No,”` → `No` — occorrenze: 136
+- `“For` → `For` — occorrenze: 135
+- `her?` → `her` — occorrenze: 134
+- `manner;` → `manner` — occorrenze: 134
+- `was;` → `was` — occorrenze: 134
+- `“O,` → `O` — occorrenze: 134
+- `earth;` → `earth` — occorrenze: 132
+- `eyes;` → `eyes` — occorrenze: 132
+- `good;` → `good` — occorrenze: 132
+- `say;` → `say` — occorrenze: 132
+- `&c` → `c` — occorrenze: 130
+- `‘What` → `What` — occorrenze: 130
+- `“Did` → `Did` — occorrenze: 130
+- `“we` → `we` — occorrenze: 130
+- `done;` → `done` — occorrenze: 129
+- `ground;` → `ground` — occorrenze: 129
+- `them.”` → `them` — occorrenze: 129
+- `together;` → `together` — occorrenze: 129
+- `you."` → `you` — occorrenze: 129
+- `“Nay,` → `Nay` — occorrenze: 129
+- `"This` → `This` — occorrenze: 128
+- `country;` → `country` — occorrenze: 128
+- `it!”` → `it` — occorrenze: 128
+- `sea;` → `sea` — occorrenze: 128
+- `“Oh` → `Oh` — occorrenze: 128
+- `here.”` → `here` — occorrenze: 127
+- `here;` → `here` — occorrenze: 127
+- `true;` → `true` — occorrenze: 127
+- `alas!` → `alas` — occorrenze: 126
+- `face;` → `face` — occorrenze: 126
+- `Th’` → `Th` — occorrenze: 125
+- `‘And` → `And` — occorrenze: 125
+- `now?` → `now` — occorrenze: 123
+- `hands;` → `hands` — occorrenze: 122
+- `sir?` → `sir` — occorrenze: 121
+- `fire;` → `fire` — occorrenze: 120
+- `go;` → `go` — occorrenze: 120
+- `her:` → `her` — occorrenze: 120
+- `sir,’` → `sir` — occorrenze: 120
+- `"Well,` → `Well` — occorrenze: 118
+- `Alas!` → `Alas` — occorrenze: 118
+- `nothing;` → `nothing` — occorrenze: 118
+- `own;` → `own` — occorrenze: 118
+- `there?` → `there` — occorrenze: 118
+- `“he` → `he` — occorrenze: 118
+- `man!` → `man` — occorrenze: 117
+- `God!` → `God` — occorrenze: 116
+- `home;` → `home` — occorrenze: 116
+- `right;` → `right` — occorrenze: 116
+- `"A` → `A` — occorrenze: 115
+- `"How` → `How` — occorrenze: 115
+- `him?”` → `him` — occorrenze: 115
+- `says:` → `says` — occorrenze: 115
+- `that?”` → `that` — occorrenze: 115
+- `you!”` → `you` — occorrenze: 115
+- `again.”` → `again` — occorrenze: 114
+- `sir?”` → `sir` — occorrenze: 114
+- `“All` → `All` — occorrenze: 114
+- `him,”` → `him` — occorrenze: 113
+- `too;` → `too` — occorrenze: 113
+- `father;` → `father` — occorrenze: 112
+- `say:` → `say` — occorrenze: 112
+- `'And` → `And` — occorrenze: 111
+- `so?` → `so` — occorrenze: 111
+- `“Come,` → `Come` — occorrenze: 111
+- `“Now,` → `Now` — occorrenze: 111
+- `come;` → `come` — occorrenze: 110
+- `know.”` → `know` — occorrenze: 110
+- `rest;` → `rest` — occorrenze: 109
+- `upon;` → `upon` — occorrenze: 109
+- `“Well,”` → `Well` — occorrenze: 109
+- `ha!` → `ha` — occorrenze: 108
+- `man?` → `man` — occorrenze: 108
+- `replied:` → `replied` — occorrenze: 108
+- `thing;` → `thing` — occorrenze: 108
+- `"Oh,` → `Oh` — occorrenze: 107
+- `now.”` → `now` — occorrenze: 107
+- `then,”` → `then` — occorrenze: 107
+- `then?` → `then` — occorrenze: 106
+- `you:` → `you` — occorrenze: 106
+- `‘My` → `My` — occorrenze: 106
+- `"There` → `There` — occorrenze: 105
+- `back;` → `back` — occorrenze: 105
+- `years;` → `years` — occorrenze: 105
+- `"Thou` → `Thou` — occorrenze: 104
+- `“Good` → `Good` — occorrenze: 104
+- `_I_` → `I` — occorrenze: 103
+- `know;` → `know` — occorrenze: 103
+- `so,”` → `so` — occorrenze: 103
+- `that.”` → `that` — occorrenze: 103
+- `will;` → `will` — occorrenze: 103
+- `he?` → `he` — occorrenze: 102
+- `“Will` → `Will` — occorrenze: 102
+- `&c.,` → `c` — occorrenze: 101
+- `air;` → `air` — occorrenze: 100
+- `dear,”` → `dear` — occorrenze: 100
+- `ho!` → `ho` — occorrenze: 100
+- `us?` → `us` — occorrenze: 100
+- `“Here` → `Here` — occorrenze: 100
+- `“Thank` → `Thank` — occorrenze: 99
+- `'but` → `but` — occorrenze: 98
+- `alone;` → `alone` — occorrenze: 98
+- `door;` → `door` — occorrenze: 98
+- `law;` → `law` — occorrenze: 98
+- `"for` → `for` — occorrenze: 97
+- `enough;` → `enough` — occorrenze: 97
+- `that,”` → `that` — occorrenze: 97
+- `“this` → `this` — occorrenze: 97
+- `dead;` → `dead` — occorrenze: 96
+- `end;` → `end` — occorrenze: 96
+- `friends;` → `friends` — occorrenze: 96
+- `words;` → `words` — occorrenze: 96
+- `“At` → `At` — occorrenze: 96
+- `friend;` → `friend` — occorrenze: 95
+- `king;` → `king` — occorrenze: 95
+- `“in` → `in` — occorrenze: 95
+- `“Now` → `Now` — occorrenze: 95
+- `“Of` → `Of` — occorrenze: 95
+- `room;` → `room` — occorrenze: 94
+- `then?”` → `then` — occorrenze: 94
+- `thus:` → `thus` — occorrenze: 94
+- `’t` → `t` — occorrenze: 94
+- `“But,` → `But` — occorrenze: 94
+- `“Thou` → `Thou` — occorrenze: 93
+- `others;` → `others` — occorrenze: 92
+- `themselves;` → `themselves` — occorrenze: 92
+- `“Dear` → `Dear` — occorrenze: 92
+- `"if` → `if` — occorrenze: 91
+- `body;` → `body` — occorrenze: 91
+- `here?”` → `here` — occorrenze: 91
+- `thro’` → `thro` — occorrenze: 91
+- `us.”` → `us` — occorrenze: 91
+- `‘It` → `It` — occorrenze: 91
+- `“my` → `my` — occorrenze: 91
+- `answered:` → `answered` — occorrenze: 90
+- `money;` → `money` — occorrenze: 90
+- `name;` → `name` — occorrenze: 90
+- `word;` → `word` — occorrenze: 90
+- `‘Oh,` → `Oh` — occorrenze: 90
+- `"Now` → `Now` — occorrenze: 89
+- `all.”` → `all` — occorrenze: 89
+- `business;` → `business` — occorrenze: 89
+- `know,”` → `know` — occorrenze: 89
+- `no;` → `no` — occorrenze: 89
+- `over;` → `over` — occorrenze: 89
+- `son;` → `son` — occorrenze: 89
+- `"She` → `She` — occorrenze: 88
+- `brother;` → `brother` — occorrenze: 88
+- `him."` → `him` — occorrenze: 88
+- `is;` → `is` — occorrenze: 88
+- `power;` → `power` — occorrenze: 88
+- `there!` → `there` — occorrenze: 88
+- `time.”` → `time` — occorrenze: 88
+- `"For` → `For` — occorrenze: 87
+- `"To` → `To` — occorrenze: 87
+- `'tis` → `tis` — occorrenze: 87
+- `_and` → `and` — occorrenze: 87
+- `indeed!` → `indeed` — occorrenze: 87
+- `now?”` → `now` — occorrenze: 87
+- `thought;` → `thought` — occorrenze: 87
+- `“there` → `there` — occorrenze: 87
+- `do.”` → `do` — occorrenze: 86
+- `light;` → `light` — occorrenze: 86
+- `no!` → `no` — occorrenze: 86
+- `now,”` → `now` — occorrenze: 86
+- `"In` → `In` — occorrenze: 85
+- `"Let` → `Let` — occorrenze: 85
+- `blood;` → `blood` — occorrenze: 85
+- `mother;` → `mother` — occorrenze: 85
+- `them!` → `them` — occorrenze: 85
+- `lord?` → `lord` — occorrenze: 84
+- `man.”` → `man` — occorrenze: 84
+- `me,"` → `me` — occorrenze: 84
+- `“Be` → `Be` — occorrenze: 84
+- `“On` → `On` — occorrenze: 84
+- `"When` → `When` — occorrenze: 83
+- `be?` → `be` — occorrenze: 83
+- `family;` → `family` — occorrenze: 83
+- `there.”` → `there` — occorrenze: 83
+- `"Then` → `Then` — occorrenze: 82
+- `'What` → `What` — occorrenze: 82
+- `arms;` → `arms` — occorrenze: 82
+- `days;` → `days` — occorrenze: 82
+- `O!` → `O` — occorrenze: 82
+- `town;` → `town` — occorrenze: 82
+- `well,”` → `well` — occorrenze: 82
+- `’ud` → `ud` — occorrenze: 82
+- `“Yes.”` → `Yes` — occorrenze: 82
+- `did;` → `did` — occorrenze: 81
+- `war;` → `war` — occorrenze: 81
+- `“Because` → `Because` — occorrenze: 81
+- `“how` → `how` — occorrenze: 81
+- `better;` → `better` — occorrenze: 80
+- `her!` → `her` — occorrenze: 80
+- `lord;` → `lord` — occorrenze: 80
+- `lost;` → `lost` — occorrenze: 80
+- `thee?` → `thee` — occorrenze: 80
+- `"Do` → `Do` — occorrenze: 79
+- `"you` → `you` — occorrenze: 79
+- `replied;` → `replied` — occorrenze: 79
+- `say?` → `say` — occorrenze: 79
+- `see;` → `see` — occorrenze: 79
+- `vain;` → `vain` — occorrenze: 79
+- `‘and` → `and` — occorrenze: 79
+- `"Why` → `Why` — occorrenze: 78
+- `about;` → `about` — occorrenze: 78
+- `is,”` → `is` — occorrenze: 78
+- `man,”` → `man` — occorrenze: 78
+- `mine;` → `mine` — occorrenze: 78
+- `she;` → `she` — occorrenze: 78
+- `t’` → `t` — occorrenze: 78
+- `you,"` → `you` — occorrenze: 78
+- `“Can` → `Can` — occorrenze: 78
+- `“Go` → `Go` — occorrenze: 78
+- `“God` → `God` — occorrenze: 78
+- `“Perhaps` → `Perhaps` — occorrenze: 78
+- `'the` → `the` — occorrenze: 77
+- `England;` → `England` — occorrenze: 77
+- `matter;` → `matter` — occorrenze: 77
+- `moment;` → `moment` — occorrenze: 77
+- `nature;` → `nature` — occorrenze: 77
+- `part;` → `part` — occorrenze: 77
+- `words:` → `words` — occorrenze: 77
+- `"Who` → `Who` — occorrenze: 76
+- `etc.;` → `etc` — occorrenze: 76
+- `herself;` → `herself` — occorrenze: 76
+- `No;` → `No` — occorrenze: 76
+- `not,”` → `not` — occorrenze: 76
+- `now!` → `now` — occorrenze: 76
+- `truth;` → `truth` — occorrenze: 76
+- `voice;` → `voice` — occorrenze: 76
+- `wife;` → `wife` — occorrenze: 76
+- `“Tell` → `Tell` — occorrenze: 76
+- `“they` → `they` — occorrenze: 76
+- `age;` → `age` — occorrenze: 75
+- `ENDNOTES:` → `ENDNOTES` — occorrenze: 75
+- `I?` → `I` — occorrenze: 75
+- `soul;` → `soul` — occorrenze: 75
+- `year;` → `year` — occorrenze: 75
+- `‘A` → `A` — occorrenze: 75
+- `’twas` → `twas` — occorrenze: 75
+- `“With` → `With` — occorrenze: 75
+- `"to` → `to` — occorrenze: 74
+- `'and` → `and` — occorrenze: 74
+- `bed;` → `bed` — occorrenze: 74
+- `kind;` → `kind` — occorrenze: 74
+- `mean?` → `mean` — occorrenze: 74
+- `old;` → `old` — occorrenze: 74
+- `well.”` → `well` — occorrenze: 74
+- `woman;` → `woman` — occorrenze: 74
+- `'Tis` → `Tis` — occorrenze: 73
+- `fear;` → `fear` — occorrenze: 73
+- `feet;` → `feet` — occorrenze: 73
+- `it,"` → `it` — occorrenze: 73
+- `name?”` → `name` — occorrenze: 73
+- `state;` → `state` — occorrenze: 73
+- `us!` → `us` — occorrenze: 73
+- `“One` → `One` — occorrenze: 73
+- `“Poor` → `Poor` — occorrenze: 73
+- `“Take` → `Take` — occorrenze: 73
+- `"a` → `a` — occorrenze: 72
+- `course;` → `course` — occorrenze: 72
+- `first;` → `first` — occorrenze: 72
+- `not?”` → `not` — occorrenze: 72
+- `way.”` → `way` — occorrenze: 72
+- `‘that` → `that` — occorrenze: 72
+- `"No,` → `No` — occorrenze: 71
+- `_you_` → `you` — occorrenze: 71
+- `done?` → `done` — occorrenze: 71
+- `follows:` → `follows` — occorrenze: 71
+- `here,”` → `here` — occorrenze: 71
+- `sir!` → `sir` — occorrenze: 71
+- `What!` → `What` — occorrenze: 71
+- `’em,` → `em` — occorrenze: 71
+- `again!` → `again` — occorrenze: 70
+- `child;` → `child` — occorrenze: 70
+- `more.”` → `more` — occorrenze: 70
+- `No!` → `No` — occorrenze: 70
+- `oh!` → `oh` — occorrenze: 70
+- `once;` → `once` — occorrenze: 70
+- `property;` → `property` — occorrenze: 70
+- `sir,"` → `sir` — occorrenze: 70
+- `them."` → `them` — occorrenze: 70
+- `‘He` → `He` — occorrenze: 70
+- `‘Yes,` → `Yes` — occorrenze: 70
+- `“Ay,` → `Ay` — occorrenze: 70
+- `'It` → `It` — occorrenze: 69
+- `long;` → `long` — occorrenze: 69
+- `made;` → `made` — occorrenze: 69
+- `matter?` → `matter` — occorrenze: 69
+- `morning;` → `morning` — occorrenze: 69
+- `"So` → `So` — occorrenze: 68
+- `children;` → `children` — occorrenze: 68
+- `person;` → `person` — occorrenze: 68
+- `so.”` → `so` — occorrenze: 68
+- `indeed;` → `indeed` — occorrenze: 67
+- `sight;` → `sight` — occorrenze: 67
+- `"Yes,` → `Yes` — occorrenze: 66
+- `thee!` → `thee` — occorrenze: 66
+- `this?”` → `this` — occorrenze: 66
+- `‘How` → `How` — occorrenze: 66
+- `‘If` → `If` — occorrenze: 66
+- `‘the` → `the` — occorrenze: 66
+- `him!”` → `him` — occorrenze: 65
+- `out.”` → `out` — occorrenze: 65
+- `seen;` → `seen` — occorrenze: 65
+- `‘Well,` → `Well` — occorrenze: 65
+- `’s` → `s` — occorrenze: 65
+- `'you` → `you` — occorrenze: 64
+- `again:` → `again` — occorrenze: 64
+- `also;` → `also` — occorrenze: 64
+- `here!` → `here` — occorrenze: 64
+- `last;` → `last` — occorrenze: 64
+- `little;` → `little` — occorrenze: 64
+- `still;` → `still` — occorrenze: 64
+- `you?"` → `you` — occorrenze: 64
+- `“Aye,` → `Aye` — occorrenze: 64
+- `heaven;` → `heaven` — occorrenze: 63
+- `“His` → `His` — occorrenze: 63
+- `“Would` → `Would` — occorrenze: 63
+- `die;` → `die` — occorrenze: 62
+- `eye;` → `eye` — occorrenze: 62
+- `Lord;` → `Lord` — occorrenze: 62
+- `much;` → `much` — occorrenze: 62
+- `peace;` → `peace` — occorrenze: 62
+- `view;` → `view` — occorrenze: 62
+- `‘but` → `but` — occorrenze: 62
+- `’em.` → `em` — occorrenze: 62
+- `"Not` → `Not` — occorrenze: 61
+- `"Your` → `Your` — occorrenze: 61
+- `_that_` → `that` — occorrenze: 61
+- `faith;` → `faith` — occorrenze: 61
+- `n.,` → `n` — occorrenze: 61
+- `pleasure;` → `pleasure` — occorrenze: 61
+- `were;` → `were` — occorrenze: 61
+- `wind;` → `wind` — occorrenze: 61
+- `"Is` → `Is` — occorrenze: 60
+- `"They` → `They` — occorrenze: 60
+- `answer;` → `answer` — occorrenze: 60
+- `are;` → `are` — occorrenze: 60
+- `best;` → `best` — occorrenze: 60
+- `it?"` → `it` — occorrenze: 60
+- `itself;` → `itself` — occorrenze: 60
+- `one.”` → `one` — occorrenze: 60
+- `purpose;` → `purpose` — occorrenze: 60
+- `shore;` → `shore` — occorrenze: 60
+- `‘But` → `But` — occorrenze: 60
+- `“Does` → `Does` — occorrenze: 60
+- `“Miss` → `Miss` — occorrenze: 60
+- `"Why,` → `Why` — occorrenze: 59
+- `'that` → `that` — occorrenze: 59
+- `_the` → `the` — occorrenze: 59
+- `fight;` → `fight` — occorrenze: 59
+- `is.”` → `is` — occorrenze: 59
+- `round;` → `round` — occorrenze: 59
+- `table;` → `table` — occorrenze: 59
+- `then;` → `then` — occorrenze: 59
+- `“do` → `do` — occorrenze: 59
+- `“Just` → `Just` — occorrenze: 59
+- `“let` → `let` — occorrenze: 59
+- `_I` → `I` — occorrenze: 58
+- `black;` → `black` — occorrenze: 58
+- `day.”` → `day` — occorrenze: 58
+- `do?”` → `do` — occorrenze: 58
+- `gold;` → `gold` — occorrenze: 58
+- `gone;` → `gone` — occorrenze: 58
+- `it.’` → `it` — occorrenze: 58
+- `point;` → `point` — occorrenze: 58
+- `ship;` → `ship` — occorrenze: 58
+- `society;` → `society` — occorrenze: 58
+- `there?”` → `there` — occorrenze: 58
+- `two;` → `two` — occorrenze: 58
+- `“Ah!”` → `Ah` — occorrenze: 58
+- `“as` → `as` — occorrenze: 58
+- `“Monsieur` → `Monsieur` — occorrenze: 58
+- `"it` → `it` — occorrenze: 57
+- `action;` → `action` — occorrenze: 57
+- `by;` → `by` — occorrenze: 57
+- `church;` → `church` — occorrenze: 57
+- `her?”` → `her` — occorrenze: 57
+- `lo!` → `lo` — occorrenze: 57
+- `Lord!` → `Lord` — occorrenze: 57
+- `times;` → `times` — occorrenze: 57
+- `way:` → `way` — occorrenze: 57
+- `you.'` → `you` — occorrenze: 57
+- `‘Not` → `Not` — occorrenze: 57
+- `“Never` → `Never` — occorrenze: 57
+- `'A` → `A` — occorrenze: 56
+- `'My` → `My` — occorrenze: 56
+- `account;` → `account` — occorrenze: 56
+- `all!` → `all` — occorrenze: 56
+- `battle;` → `battle` — occorrenze: 56
+- `character;` → `character` — occorrenze: 56
+- `Ha!` → `Ha` — occorrenze: 56
+- `mean?”` → `mean` — occorrenze: 56
+- `pain;` → `pain` — occorrenze: 56
+- `spirit;` → `spirit` — occorrenze: 56
+- `’twere` → `twere` — occorrenze: 56
+- `“Only` → `Only` — occorrenze: 56
+- `“when` → `when` — occorrenze: 56
+- `"is` → `is` — occorrenze: 55
+- `behind;` → `behind` — occorrenze: 55
+- `boy;` → `boy` — occorrenze: 55
+- `came;` → `came` — occorrenze: 55
+- `company;` → `company` — occorrenze: 55
+- `day:` → `day` — occorrenze: 55
+- `do,”` → `do` — occorrenze: 55
+- `gentleman;` → `gentleman` — occorrenze: 55
+- `horse;` → `horse` — occorrenze: 55
+- `Mansoul;` → `Mansoul` — occorrenze: 55
+- `Marius’` → `Marius` — occorrenze: 55
+- `“Shall` → `Shall` — occorrenze: 55
+- `“Yes;` → `Yes` — occorrenze: 55
+- `at;` → `at` — occorrenze: 54
+- `day!` → `day` — occorrenze: 54
+- `life.”` → `life` — occorrenze: 54
+- `master;` → `master` — occorrenze: 54
+- `night.”` → `night` — occorrenze: 54
+- `present;` → `present` — occorrenze: 54
+- `same;` → `same` — occorrenze: 54
+- `subject;` → `subject` — occorrenze: 54
+- `you?’` → `you` — occorrenze: 54
+- `’gainst` → `gainst` — occorrenze: 54
+- `“Nothing` → `Nothing` — occorrenze: 54
+- `“thou` → `thou` — occorrenze: 54
+- `"As` → `As` — occorrenze: 53
+- `case;` → `case` — occorrenze: 53
+- `days’` → `days` — occorrenze: 53
+- `friend,”` → `friend` — occorrenze: 53
+- `heart!` → `heart` — occorrenze: 53
+- `life?` → `life` — occorrenze: 53
+- `like;` → `like` — occorrenze: 53
+- `name?` → `name` — occorrenze: 53
+- `no,”` → `no` — occorrenze: 53
+- `us."` → `us` — occorrenze: 53
+- `a’` → `a` — occorrenze: 52
+- `be!` → `be` — occorrenze: 52
+- `dear;` → `dear` — occorrenze: 52
+- `else;` → `else` — occorrenze: 52
+- `father,”` → `father` — occorrenze: 52
+- `free;` → `free` — occorrenze: 52
+- `lady;` → `lady` — occorrenze: 52
+- `love?` → `love` — occorrenze: 52
+- `man:` → `man` — occorrenze: 52
+- `plain;` → `plain` — occorrenze: 52
+- `Sir.’` → `Sir` — occorrenze: 52
+- `thou?` → `thou` — occorrenze: 52
+- `tree;` → `tree` — occorrenze: 52
+- `true,”` → `true` — occorrenze: 52
+- `‘em` → `em` — occorrenze: 52
+- `"No` → `No` — occorrenze: 51
+- `attention;` → `attention` — occorrenze: 51
+- `city;` → `city` — occorrenze: 51
+- `found;` → `found` — occorrenze: 51
+- `lord!` → `lord` — occorrenze: 51
+- `myself.”` → `myself` — occorrenze: 51
+- `sir,'` → `sir` — occorrenze: 51
+- `so?”` → `so` — occorrenze: 51
+- `them?”` → `them` — occorrenze: 51
+- `Yes;` → `Yes` — occorrenze: 51
+- `‘Mr.` → `Mr` — occorrenze: 51
+- `‘That` → `That` — occorrenze: 51
+- `‘This` → `This` — occorrenze: 51
+- `’ull` → `ull` — occorrenze: 51
+- `books;` → `books` — occorrenze: 50
+- `ever;` → `ever` — occorrenze: 50
+- `forth;` → `forth` — occorrenze: 50
+- `God!”` → `God` — occorrenze: 50
+- `himself:` → `himself` — occorrenze: 50
+- `it.'` → `it` — occorrenze: 50
+- `‘No,` → `No` — occorrenze: 50
+- `“are` → `are` — occorrenze: 50
+- `"O` → `O` — occorrenze: 49
+- `_her_` → `her` — occorrenze: 49
+- `all,”` → `all` — occorrenze: 49
+- `breast;` → `breast` — occorrenze: 49
+- `G----` → `G` — occorrenze: 49
+- `go.”` → `go` — occorrenze: 49
+- `he!` → `he` — occorrenze: 49
+- `him,"` → `him` — occorrenze: 49
+- `is!` → `is` — occorrenze: 49
+- `more:` → `more` — occorrenze: 49
+- `possible;` → `possible` — occorrenze: 49
+- `us:` → `us` — occorrenze: 49
+- `use;` → `use` — occorrenze: 49
+- `years’` → `years` — occorrenze: 49
+- `“No.”` → `No` — occorrenze: 49
+- `“No;` → `No` — occorrenze: 49
+- `again?` → `again` — occorrenze: 48
+- `away!` → `away` — occorrenze: 48
+- `cried;` → `cried` — occorrenze: 48
+- `fall;` → `fall` — occorrenze: 48
+- `field;` → `field` — occorrenze: 48
+- `Hence:` → `Hence` — occorrenze: 48
+- `hour;` → `hour` — occorrenze: 48
+- `not.”` → `not` — occorrenze: 48
+- `see,”` → `see` — occorrenze: 48
+- `strength;` → `strength` — occorrenze: 48
+- `that,"` → `that` — occorrenze: 48
+- `what?` → `what` — occorrenze: 48
+- `wood;` → `wood` — occorrenze: 48
+- `world!` → `world` — occorrenze: 48
+- `wrong;` → `wrong` — occorrenze: 48
+- `youth;` → `youth` — occorrenze: 48
+- `“From` → `From` — occorrenze: 48
+- `“Pray` → `Pray` — occorrenze: 48
+- `'twas` → `twas` — occorrenze: 47
+- `_Myself_.` → `Myself` — occorrenze: 47
+- `be:` → `be` — occorrenze: 47
+- `child!` → `child` — occorrenze: 47
+- `command;` → `command` — occorrenze: 47
+- `court;` → `court` — occorrenze: 47
+- `force;` → `force` — occorrenze: 47
+- `me?"` → `me` — occorrenze: 47
+- `out:` → `out` — occorrenze: 47
+- `sir.’` → `sir` — occorrenze: 47
+- `speak;` → `speak` — occorrenze: 47
+- `voice:` → `voice` — occorrenze: 47
+- `‘In` → `In` — occorrenze: 47
+- `‘Why,` → `Why` — occorrenze: 47
+- `“Look` → `Look` — occorrenze: 47
+- `“of` → `of` — occorrenze: 47
+- `"God` → `God` — occorrenze: 46
+- `care;` → `care` — occorrenze: 46
+- `evil;` → `evil` — occorrenze: 46
+- `fair;` → `fair` — occorrenze: 46
+- `girl;` → `girl` — occorrenze: 46
+- `home.”` → `home` — occorrenze: 46
+- `life!` → `life` — occorrenze: 46
+- `marriage;` → `marriage` — occorrenze: 46
+- `order;` → `order` — occorrenze: 46
+- `past;` → `past` — occorrenze: 46
+- `Pickwick;` → `Pickwick` — occorrenze: 46
+- `sun;` → `sun` — occorrenze: 46
+- `sword;` → `sword` — occorrenze: 46
+- `“she` → `she` — occorrenze: 46
+- `"All` → `All` — occorrenze: 45
+- `3,` → `3` — occorrenze: 45
+- `boat;` → `boat` — occorrenze: 45
+- `boy!` → `boy` — occorrenze: 45
+- `cause;` → `cause` — occorrenze: 45
+- `child,”` → `child` — occorrenze: 45
+- `enemy;` → `enemy` — occorrenze: 45
+- `for?` → `for` — occorrenze: 45
+- `joy;` → `joy` — occorrenze: 45
+- `justice;` → `justice` — occorrenze: 45
+- `knight;` → `knight` — occorrenze: 45
+- `language;` → `language` — occorrenze: 45
+- `me.’` → `me` — occorrenze: 45
+- `morning.”` → `morning` — occorrenze: 45
+- `play;` → `play` — occorrenze: 45
+- `say.”` → `say` — occorrenze: 45
+- `sense;` → `sense` — occorrenze: 45
+- `there:` → `there` — occorrenze: 45
+- `this!` → `this` — occorrenze: 45
+- `time,”` → `time` — occorrenze: 45
+- `too!` → `too` — occorrenze: 45
+- `yes!` → `yes` — occorrenze: 45
+- `York:` → `York` — occorrenze: 45
+- `‘There` → `There` — occorrenze: 45
+- `“May` → `May` — occorrenze: 45
+- `“What!` → `What` — occorrenze: 45
+- `"Now,` → `Now` — occorrenze: 44
+- `&c.;` → `c` — occorrenze: 44
+- `'But` → `But` — occorrenze: 44
+- `'He` → `He` — occorrenze: 44
+- `_she_` → `she` — occorrenze: 44
+- `all?` → `all` — occorrenze: 44
+- `An’` → `An` — occorrenze: 44
+- `dear!` → `dear` — occorrenze: 44
+- `death!` → `death` — occorrenze: 44
+- `effect;` → `effect` — occorrenze: 44
+- `fellow;` → `fellow` — occorrenze: 44
+- `hand:` → `hand` — occorrenze: 44
+- `honour;` → `honour` — occorrenze: 44
+- `letter;` → `letter` — occorrenze: 44
+- `now:` → `now` — occorrenze: 44
+- `right,”` → `right` — occorrenze: 44
+- `service;` → `service` — occorrenze: 44
+- `soul!` → `soul` — occorrenze: 44
+- `wall;` → `wall` — occorrenze: 44
+- `‘ere` → `ere` — occorrenze: 44
+- `’Twas` → `Twas` — occorrenze: 44
+- `“After` → `After` — occorrenze: 44
+- `“an` → `an` — occorrenze: 44
+- `“But,”` → `But` — occorrenze: 44
+- `“Give` → `Give` — occorrenze: 44
+- `“Has` → `Has` — occorrenze: 44
+- `“who` → `who` — occorrenze: 44
+- `“why` → `why` — occorrenze: 44
+- `'Well,` → `Well` — occorrenze: 43
+- `_my_` → `my` — occorrenze: 43
+- `_Nautilus_,` → `Nautilus` — occorrenze: 43
+- `_not_` → `not` — occorrenze: 43
+- `degree;` → `degree` — occorrenze: 43
+- `doubt;` → `doubt` — occorrenze: 43
+- `France;` → `France` — occorrenze: 43
+- `grace;` → `grace` — occorrenze: 43
+- `happy;` → `happy` — occorrenze: 43
+- `have;` → `have` — occorrenze: 43
+- `high;` → `high` — occorrenze: 43
+- `it,’` → `it` — occorrenze: 43
+- `madam,”` → `madam` — occorrenze: 43
+- `mine.”` → `mine` — occorrenze: 43
+- `on.”` → `on` — occorrenze: 43
+- `parts;` → `parts` — occorrenze: 43
+- `pass;` → `pass` — occorrenze: 43
+- `road;` → `road` — occorrenze: 43
+- `say,”` → `say` — occorrenze: 43
+- `say?”` → `say` — occorrenze: 43
+- `Sir?’` → `Sir` — occorrenze: 43
+- `sister;` → `sister` — occorrenze: 43
+- `through;` → `through` — occorrenze: 43
+- `thus?` → `thus` — occorrenze: 43
+- `Well!` → `Well` — occorrenze: 43
+- `you.’` → `you` — occorrenze: 43
+- `"By` → `By` — occorrenze: 42
+- `"Here` → `Here` — occorrenze: 42
+- `"No,"` → `No` — occorrenze: 42
+- `all:` → `all` — occorrenze: 42
+- `danger;` → `danger` — occorrenze: 42
+- `ear;` → `ear` — occorrenze: 42
+- `for?”` → `for` — occorrenze: 42
+- `fortune;` → `fortune` — occorrenze: 42
+- `I’` → `I` — occorrenze: 42
+- `know?` → `know` — occorrenze: 42
+- `love!` → `love` — occorrenze: 42
+- `other.”` → `other` — occorrenze: 42
+- `question;` → `question` — occorrenze: 42
+- `said—` → `said` — occorrenze: 42
+- `they?` → `they` — occorrenze: 42
+- `too.”` → `too` — occorrenze: 42
+- `well:` → `well` — occorrenze: 42
+- `‘We` → `We` — occorrenze: 42
+- `“No.` → `No` — occorrenze: 42
+- `“Sir,”` → `Sir` — occorrenze: 42
+- `“Some` → `Some` — occorrenze: 42
+- `“Was` → `Was` — occorrenze: 42
+- `“which` → `which` — occorrenze: 42
+- `"Go` → `Go` — occorrenze: 41
+- `"what` → `what` — occorrenze: 41
+- `1,` → `1` — occorrenze: 41
+- `_was_` → `was` — occorrenze: 41
+- `anything;` → `anything` — occorrenze: 41
+- `are!` → `are` — occorrenze: 41
+- `book;` → `book` — occorrenze: 41
+- `dead?` → `dead` — occorrenze: 41
+- `from;` → `from` — occorrenze: 41
+- `had;` → `had` — occorrenze: 41
+- `hear;` → `hear` — occorrenze: 41
+- `her,”` → `her` — occorrenze: 41
+- `here."` → `here` — occorrenze: 41
+- `husband;` → `husband` — occorrenze: 41
+- `in.”` → `in` — occorrenze: 41
+- `is:` → `is` — occorrenze: 41
+- `known;` → `known` — occorrenze: 41
+- `not:` → `not` — occorrenze: 41
+- `reason;` → `reason` — occorrenze: 41
+- `so!` → `so` — occorrenze: 41
+- `sound;` → `sound` — occorrenze: 41
+- `‘Now,` → `Now` — occorrenze: 41
+- `“Yes.` → `Yes` — occorrenze: 41
+- `_Adam_` → `Adam` — occorrenze: 40
+- `daughter;` → `daughter` — occorrenze: 40
+- `dead!` → `dead` — occorrenze: 40
+- `duty;` → `duty` — occorrenze: 40
+- `God?` → `God` — occorrenze: 40
+- `he?”` → `he` — occorrenze: 40
+- `himself?` → `himself` — occorrenze: 40
+- `I,”` → `I` — occorrenze: 40
+- `it?’` → `it` — occorrenze: 40
+- `life:` → `life` — occorrenze: 40
+- `men?` → `men` — occorrenze: 40
+- `more!` → `more` — occorrenze: 40
+- `only;` → `only` — occorrenze: 40
+- `race;` → `race` — occorrenze: 40
+- `see.”` → `see` — occorrenze: 40
+- `spirits;` → `spirits` — occorrenze: 40
+- `yes,”` → `yes` — occorrenze: 40
+- `yet.”` → `yet` — occorrenze: 40
+- `yourself;` → `yourself` — occorrenze: 40
+- `“Then,` → `Then` — occorrenze: 40
+- `“These` → `These` — occorrenze: 40
+- `“will` → `will` — occorrenze: 40
+- `"Come` → `Come` — occorrenze: 39
+- `"Well,"` → `Well` — occorrenze: 39
+- `'Yes,` → `Yes` — occorrenze: 39
+- `_Bun._` → `Bun` — occorrenze: 39
+- `above;` → `above` — occorrenze: 39
+- `authority;` → `authority` — occorrenze: 39
+- `cried:` → `cried` — occorrenze: 39
+- `Davy,”` → `Davy` — occorrenze: 39
+- `enemies;` → `enemies` — occorrenze: 39
+- `foot;` → `foot` — occorrenze: 39
+- `government;` → `government` — occorrenze: 39
+- `hand.”` → `hand` — occorrenze: 39
+- `his;` → `his` — occorrenze: 39
+- `interest;` → `interest` — occorrenze: 39
+- `King;` → `King` — occorrenze: 39
+- `more?` → `more` — occorrenze: 39
+- `nothing.”` → `nothing` — occorrenze: 39
+- `open;` → `open` — occorrenze: 39
+- `Sam,’` → `Sam` — occorrenze: 39
+- `sir!”` → `sir` — occorrenze: 39
+- `sleep;` → `sleep` — occorrenze: 39
+- `world.”` → `world` — occorrenze: 39
+- `world?` → `world` — occorrenze: 39
+- `’t.` → `t` — occorrenze: 39
+- `’twixt` → `twixt` — occorrenze: 39
+- `“Our` → `Our` — occorrenze: 39
+- `'it` → `it` — occorrenze: 38
+- `_is_` → `is` — occorrenze: 38
+- `better.”` → `better` — occorrenze: 38
+- `Christ;` → `Christ` — occorrenze: 38
+- `countenance;` → `countenance` — occorrenze: 38
+- `death?` → `death` — occorrenze: 38
+- `delight;` → `delight` — occorrenze: 38
+- `form;` → `form` — occorrenze: 38
+- `grave;` → `grave` — occorrenze: 38
+- `hair;` → `hair` — occorrenze: 38
+- `hours;` → `hours` — occorrenze: 38
+- `house.”` → `house` — occorrenze: 38
+- `impossible;` → `impossible` — occorrenze: 38
+- `one,”` → `one` — occorrenze: 38
+- `own.”` → `own` — occorrenze: 38
+- `party;` → `party` — occorrenze: 38
+- `please;` → `please` — occorrenze: 38
+- `slain;` → `slain` — occorrenze: 38
+- `States;` → `States` — occorrenze: 38
+- `that:` → `that` — occorrenze: 38
+- `way?` → `way` — occorrenze: 38
+- `window;` → `window` — occorrenze: 38
+- `yet;` → `yet` — occorrenze: 38
+- `‘Do` → `Do` — occorrenze: 38
+- `‘Let` → `Let` — occorrenze: 38
+- `‘you` → `you` — occorrenze: 38
+- `“Sir` → `Sir` — occorrenze: 38
+- `“your` → `your` — occorrenze: 38
+- `"Have` → `Have` — occorrenze: 37
+- `"we` → `we` — occorrenze: 37
+- `'em` → `em` — occorrenze: 37
+- `beauty;` → `beauty` — occorrenze: 37
+- `both;` → `both` — occorrenze: 37
+- `can.”` → `can` — occorrenze: 37
+- `can;` → `can` — occorrenze: 37
+- `cold;` → `cold` — occorrenze: 37
+- `death.”` → `death` — occorrenze: 37
+- `do!` → `do` — occorrenze: 37
+- `food;` → `food` — occorrenze: 37
+- `go?` → `go` — occorrenze: 37
+- `indeed,”` → `indeed` — occorrenze: 37
+- `lord,”` → `lord` — occorrenze: 37
+- `love:` → `love` — occorrenze: 37
+- `means;` → `means` — occorrenze: 37
+- `neck;` → `neck` — occorrenze: 37
+- `return;` → `return` — occorrenze: 37
+- `sure;` → `sure` — occorrenze: 37
+- `thee.”` → `thee` — occorrenze: 37
+- `to?` → `to` — occorrenze: 37
+- `trade;` → `trade` — occorrenze: 37
+- `trees;` → `trees` — occorrenze: 37
+- `up.”` → `up` — occorrenze: 37
+- `“by` → `by` — occorrenze: 37
+- `“have` → `have` — occorrenze: 37
+- `"how` → `how` — occorrenze: 36
+- `"Of` → `Of` — occorrenze: 36
+- `'If` → `If` — occorrenze: 36
+- `'In` → `In` — occorrenze: 36
+- `2,` → `2` — occorrenze: 36
+- `army;` → `army` — occorrenze: 36
+- `art;` → `art` — occorrenze: 36
+- `bear;` → `bear` — occorrenze: 36
+- `blow;` → `blow` — occorrenze: 36
+- `breath;` → `breath` — occorrenze: 36
+- `conversation;` → `conversation` — occorrenze: 36
+- `forward;` → `forward` — occorrenze: 36
+- `go,”` → `go` — occorrenze: 36
+- `God:` → `God` — occorrenze: 36
+- `heard;` → `heard` — occorrenze: 36
+- `heart?` → `heart` — occorrenze: 36
+- `horses;` → `horses` — occorrenze: 36
+- `line;` → `line` — occorrenze: 36
+- `longer;` → `longer` — occorrenze: 36
+- `men:` → `men` — occorrenze: 36
+- `river;` → `river` — occorrenze: 36
+- `sake;` → `sake` — occorrenze: 36
+- `sir?’` → `sir` — occorrenze: 36
+- `so:` → `so` — occorrenze: 36
+- `take;` → `take` — occorrenze: 36
+- `there,”` → `there` — occorrenze: 36
+- `think,”` → `think` — occorrenze: 36
+- `time?` → `time` — occorrenze: 36
+- `viz.,` → `viz` — occorrenze: 36
+- `well?` → `well` — occorrenze: 36
+- `worse;` → `worse` — occorrenze: 36
+- `‘a` → `a` — occorrenze: 36
+- `‘Wery` → `Wery` — occorrenze: 36
+- `“because` → `because` — occorrenze: 36
+- `“so` → `so` — occorrenze: 36
+- `"Very` → `Very` — occorrenze: 35
+- `'Do` → `Do` — occorrenze: 35
+- `advantage;` → `advantage` — occorrenze: 35
+- `again,”` → `again` — occorrenze: 35
+- `answer:` → `answer` — occorrenze: 35
+- `are.”` → `are` — occorrenze: 35
+- `arm;` → `arm` — occorrenze: 35
+- `away.”` → `away` — occorrenze: 35
+- `before:` → `before` — occorrenze: 35
+- `could;` → `could` — occorrenze: 35
+- `dark;` → `dark` — occorrenze: 35
+- `direction;` → `direction` — occorrenze: 35
+- `fact;` → `fact` — occorrenze: 35
+- `fellow!` → `fellow` — occorrenze: 35
+- `live;` → `live` — occorrenze: 35
+- `moment.”` → `moment` — occorrenze: 35
+- `now."` → `now` — occorrenze: 35
+- `one?` → `one` — occorrenze: 35
+- `opinion;` → `opinion` — occorrenze: 35
+- `other?` → `other` — occorrenze: 35
+- `poor;` → `poor` — occorrenze: 35
+- `replied:—` → `replied` — occorrenze: 35
+- `reply;` → `reply` — occorrenze: 35
+- `say!` → `say` — occorrenze: 35
+- `taste;` → `taste` — occorrenze: 35
+- `them,”` → `them` — occorrenze: 35
+- `thing!` → `thing` — occorrenze: 35
+- `thing?` → `thing` — occorrenze: 35
+- `you,'` → `you` — occorrenze: 35
+- `‘They` → `They` — occorrenze: 35
+- `“An` → `An` — occorrenze: 35
+- `“Mrs.` → `Mrs` — occorrenze: 35
+- `“Why,”` → `Why` — occorrenze: 35
+- `“with` → `with` — occorrenze: 35
+- `"Are` → `Are` — occorrenze: 34
+- `"Good` → `Good` — occorrenze: 34
+- `"he` → `he` — occorrenze: 34
+- `"Tell` → `Tell` — occorrenze: 34
+- `"there` → `there` — occorrenze: 34
+- `'Is` → `Is` — occorrenze: 34
+- `7,` → `7` — occorrenze: 34
+- `ago;` → `ago` — occorrenze: 34
+- `answered;` → `answered` — occorrenze: 34
+- `be,”` → `be` — occorrenze: 34
+- `before.”` → `before` — occorrenze: 34
+- `bound;` → `bound` — occorrenze: 34
+- `come?` → `come` — occorrenze: 34
+- `country.”` → `country` — occorrenze: 34
+- `despair;` → `despair` — occorrenze: 34
+- `friend?` → `friend` — occorrenze: 34
+- `heart:` → `heart` — occorrenze: 34
+- `hope;` → `hope` — occorrenze: 34
+- `Lo!` → `Lo` — occorrenze: 34
+- `London;` → `London` — occorrenze: 34
+- `man!”` → `man` — occorrenze: 34
+- `man?”` → `man` — occorrenze: 34
+- `might;` → `might` — occorrenze: 34
+- `myself:` → `myself` — occorrenze: 34
+- `name:` → `name` — occorrenze: 34
+- `oneself;` → `oneself` — occorrenze: 34
+- `see!` → `see` — occorrenze: 34
+- `side:` → `side` — occorrenze: 34
+- `sin;` → `sin` — occorrenze: 34
+- `thee:` → `thee` — occorrenze: 34
+- `thoughts;` → `thoughts` — occorrenze: 34
+- `well!` → `well` — occorrenze: 34
+- `Yes!` → `Yes` — occorrenze: 34
+- `‘it` → `it` — occorrenze: 34
+- `“no` → `no` — occorrenze: 34
+- `“Nor` → `Nor` — occorrenze: 34
+- `“Quite` → `Quite` — occorrenze: 34
+- `"Yes,"` → `Yes` — occorrenze: 33
+- `_will_` → `will` — occorrenze: 33
+- `added:` → `added` — occorrenze: 33
+- `again."` → `again` — occorrenze: 33
+- `away?` → `away` — occorrenze: 33
+- `child.”` → `child` — occorrenze: 33
+- `companion;` → `companion` — occorrenze: 33
+- `distance;` → `distance` — occorrenze: 33
+- `done.”` → `done` — occorrenze: 33
+- `ears;` → `ears` — occorrenze: 33
+- `else.”` → `else` — occorrenze: 33
+- `exclaimed:` → `exclaimed` — occorrenze: 33
+- `grief;` → `grief` — occorrenze: 33
+- `Heaven;` → `Heaven` — occorrenze: 33
+- `left;` → `left` — occorrenze: 33
+- `man,"` → `man` — occorrenze: 33
+- `matter?”` → `matter` — occorrenze: 33
+- `me.'` → `me` — occorrenze: 33
+- `motion;` → `motion` — occorrenze: 33
+- `near;` → `near` — occorrenze: 33
+- `night:` → `night` — occorrenze: 33
+- `of?` → `of` — occorrenze: 33
+- `on:` → `on` — occorrenze: 33
+- `one:` → `one` — occorrenze: 33
+- `other:` → `other` — occorrenze: 33
+- `people?` → `people` — occorrenze: 33
+- `Rome;` → `Rome` — occorrenze: 33
+- `said:—` → `said` — occorrenze: 33
+- `spoke;` → `spoke` — occorrenze: 33
+- `tears;` → `tears` — occorrenze: 33
+- `to.”` → `to` — occorrenze: 33
+- `tone;` → `tone` — occorrenze: 33
+- `was!` → `was` — occorrenze: 33
+- `while;` → `while` — occorrenze: 33
+- `yourself.”` → `yourself` — occorrenze: 33
+- `‘Come` → `Come` — occorrenze: 33
+- `‘if` → `if` — occorrenze: 33
+- `“Now,”` → `Now` — occorrenze: 33
+- `“or` → `or` — occorrenze: 33
+- `“There,` → `There` — occorrenze: 33
+- `"At` → `At` — occorrenze: 32
+- `"Where` → `Where` — occorrenze: 32
+- `'How` → `How` — occorrenze: 32
+- `_Sect._` → `Sect` — occorrenze: 32
+- `are:` → `are` — occorrenze: 32
+- `be.”` → `be` — occorrenze: 32
+- `bosom;` → `bosom` — occorrenze: 32
+- `come.”` → `come` — occorrenze: 32
+- `condition;` → `condition` — occorrenze: 32
+- `dear?”` → `dear` — occorrenze: 32
+- `die!` → `die` — occorrenze: 32
+- `fell;` → `fell` — occorrenze: 32
+- `general;` → `general` — occorrenze: 32
+- `heat;` → `heat` — occorrenze: 32
+- `house,”` → `house` — occorrenze: 32
+- `journey;` → `journey` — occorrenze: 32
+- `lady!` → `lady` — occorrenze: 32
+- `life."` → `life` — occorrenze: 32
+- `master?` → `master` — occorrenze: 32
+- `mother?”` → `mother` — occorrenze: 32
+- `mouth;` → `mouth` — occorrenze: 32
+- `myself,”` → `myself` — occorrenze: 32
+- `news?` → `news` — occorrenze: 32
+- `now!”` → `now` — occorrenze: 32
+- `object;` → `object` — occorrenze: 32
+- `of.”` → `of` — occorrenze: 32
+- `passion;` → `passion` — occorrenze: 32
+- `prison;` → `prison` — occorrenze: 32
+- `Sammy,’` → `Sammy` — occorrenze: 32
+- `sky;` → `sky` — occorrenze: 32
+- `so,"` → `so` — occorrenze: 32
+- `Spain;` → `Spain` — occorrenze: 32
+- `speech;` → `speech` — occorrenze: 32
+- `stood;` → `stood` — occorrenze: 32
+- `success;` → `success` — occorrenze: 32
+- `that!` → `that` — occorrenze: 32
+- `then.”` → `then` — occorrenze: 32
+- `this,”` → `this` — occorrenze: 32
+- `us!”` → `us` — occorrenze: 32
+- `us,”` → `us` — occorrenze: 32
+- `value;` → `value` — occorrenze: 32
+- `word:` → `word` — occorrenze: 32
+- `you,’` → `you` — occorrenze: 32
+- `‘Is` → `Is` — occorrenze: 32
+- `“See` → `See` — occorrenze: 32
+- `“was` → `was` — occorrenze: 32
+- `"in` → `in` — occorrenze: 31
+- `"Our` → `Our` — occorrenze: 31
+- `"With` → `With` — occorrenze: 31
+- `'There` → `There` — occorrenze: 31
+- `'Who` → `Who` — occorrenze: 31
+- `_he_` → `he` — occorrenze: 31
+- `_your_` → `your` — occorrenze: 31
+- `again?”` → `again` — occorrenze: 31
+- `appear;` → `appear` — occorrenze: 31
+- `away:` → `away` — occorrenze: 31
+- `being;` → `being` — occorrenze: 31
+- `circumstances;` → `circumstances` — occorrenze: 31
+- `color;` → `color` — occorrenze: 31
+- `did.”` → `did` — occorrenze: 31
+- `do."` → `do` — occorrenze: 31
+- `do:` → `do` — occorrenze: 31
+- `expected;` → `expected` — occorrenze: 31
+- `eyes!` → `eyes` — occorrenze: 31
+- `fault;` → `fault` — occorrenze: 31
+- `foe;` → `foe` — occorrenze: 31
+- `go?”` → `go` — occorrenze: 31
+- `help;` → `help` — occorrenze: 31
+- `ill;` → `ill` — occorrenze: 31
+- `lay;` → `lay` — occorrenze: 31
+- `liberty;` → `liberty` — occorrenze: 31
+- `minutes’` → `minutes` — occorrenze: 31
+- `mother?` → `mother` — occorrenze: 31
+- `name.”` → `name` — occorrenze: 31
+- `nothin’` → `nothin` — occorrenze: 31
+- `out?` → `out` — occorrenze: 31
+- `persons;` → `persons` — occorrenze: 31
+- `question:` → `question` — occorrenze: 31
+- `shame;` → `shame` — occorrenze: 31
+- `sides;` → `sides` — occorrenze: 31
+- `situation;` → `situation` — occorrenze: 31
+- `State;` → `State` — occorrenze: 31
+- `surprise;` → `surprise` — occorrenze: 31
+- `that!”` → `that` — occorrenze: 31
+- `thee."` → `thee` — occorrenze: 31
+- `true?` → `true` — occorrenze: 31
+- `turn;` → `turn` — occorrenze: 31
+- `us?”` → `us` — occorrenze: 31
+- `women;` → `women` — occorrenze: 31
+- `world:` → `world` — occorrenze: 31
+- `‘Who` → `Who` — occorrenze: 31
+- `“Ah,”` → `Ah` — occorrenze: 31
+- `“Am` → `Am` — occorrenze: 31
+- `“at` → `at` — occorrenze: 31
+- `“Which` → `Which` — occorrenze: 31
+- `“Why?”` → `Why` — occorrenze: 31
+- `'No,` → `No` — occorrenze: 30
+- `'Then` → `Then` — occorrenze: 30
+- `10,` → `10` — occorrenze: 30
+- `11,` → `11` — occorrenze: 30
+- `_must_` → `must` — occorrenze: 30
+- `_Nautilus_.` → `Nautilus` — occorrenze: 30
+- `ah!` → `ah` — occorrenze: 30
+- `alive;` → `alive` — occorrenze: 30
+- `brother?` → `brother` — occorrenze: 30
+- `chance;` → `chance` — occorrenze: 30
+- `come!` → `come` — occorrenze: 30
+- `darkness;` → `darkness` — occorrenze: 30
+- `desire;` → `desire` — occorrenze: 30
+- `dinner;` → `dinner` — occorrenze: 30
+- `distress;` → `distress` — occorrenze: 30
+- `existence;` → `existence` — occorrenze: 30
+- `eyes:` → `eyes` — occorrenze: 30
+- `happiness;` → `happiness` — occorrenze: 30
+- `houses;` → `houses` — occorrenze: 30
+- `indeed!”` → `indeed` — occorrenze: 30
+- `is!”` → `is` — occorrenze: 30
+- `Madame,”` → `Madame` — occorrenze: 30
+- `men!` → `men` — occorrenze: 30
+- `move;` → `move` — occorrenze: 30
+- `nations;` → `nations` — occorrenze: 30
+- `occasion;` → `occasion` — occorrenze: 30
+- `off.”` → `off` — occorrenze: 30
+- `position;` → `position` — occorrenze: 30
+- `pounds;` → `pounds` — occorrenze: 30
+- `praise;` → `praise` — occorrenze: 30
+- `rich;` → `rich` — occorrenze: 30
+- `silence;` → `silence` — occorrenze: 30
+- `stone;` → `stone` — occorrenze: 30
+- `then,"` → `then` — occorrenze: 30
+- `together.”` → `together` — occorrenze: 30
+- `Tom;` → `Tom` — occorrenze: 30
+- `was:` → `was` — occorrenze: 30
+- `ways;` → `ways` — occorrenze: 30
+- `Weller;` → `Weller` — occorrenze: 30
+- `white;` → `white` — occorrenze: 30
+- `why?` → `why` — occorrenze: 30
+- `yes;` → `yes` — occorrenze: 30
+- `‘For` → `For` — occorrenze: 30
+- `‘O` → `O` — occorrenze: 30
+- `“Such` → `Such` — occorrenze: 30
+- `“Those` → `Those` — occorrenze: 30
+- `“Upon` → `Upon` — occorrenze: 30
+- `“where` → `where` — occorrenze: 30
+- `“Ye` → `Ye` — occorrenze: 30
+- `'if` → `if` — occorrenze: 29
+- `5,` → `5` — occorrenze: 29
+- `_that` → `that` — occorrenze: 29
+- `appeared;` → `appeared` — occorrenze: 29
+- `better,”` → `better` — occorrenze: 29
+- `drink;` → `drink` — occorrenze: 29
+- `fast;` → `fast` — occorrenze: 29
+- `father.”` → `father` — occorrenze: 29
+- `go!` → `go` — occorrenze: 29
+- `go:` → `go` — occorrenze: 29
+- `good.”` → `good` — occorrenze: 29
+- `great;` → `great` — occorrenze: 29
+- `head?` → `head` — occorrenze: 29
+- `Heaven!` → `Heaven` — occorrenze: 29
+- `here!”` → `here` — occorrenze: 29
+- `island;` → `island` — occorrenze: 29
+- `it,'` → `it` — occorrenze: 29
+- `knowledge;` → `knowledge` — occorrenze: 29
+- `lived;` → `lived` — occorrenze: 29
+- `lives;` → `lives` — occorrenze: 29
+- `many;` → `many` — occorrenze: 29
+- `me,'` → `me` — occorrenze: 29
+- `mine!` → `mine` — occorrenze: 29
+- `Monsieur,”` → `Monsieur` — occorrenze: 29
+- `more,”` → `more` — occorrenze: 29
+- `none;` → `none` — occorrenze: 29
+- `Paris;` → `Paris` — occorrenze: 29
+- `read;` → `read` — occorrenze: 29
+- `ring;` → `ring` — occorrenze: 29
+- `stay;` → `stay` — occorrenze: 29
+- `strong;` → `strong` — occorrenze: 29
+- `too,”` → `too` — occorrenze: 29
+- `trouble;` → `trouble` — occorrenze: 29
+- `up!` → `up` — occorrenze: 29
+- `week;` → `week` — occorrenze: 29
+- `Why?` → `Why` — occorrenze: 29
+- `woman!` → `woman` — occorrenze: 29
+- `‘Very` → `Very` — occorrenze: 29
+- `“Get` → `Get` — occorrenze: 29
+- `“Her` → `Her` — occorrenze: 29
+- `“Two` → `Two` — occorrenze: 29
+- `“Yet` → `Yet` — occorrenze: 29
+- `"Ye` → `Ye` — occorrenze: 28
+- `'to` → `to` — occorrenze: 28
+- `'We` → `We` — occorrenze: 28
+- `_Abraham` → `Abraham` — occorrenze: 28
+- `_me_` → `me` — occorrenze: 28
+- `after;` → `after` — occorrenze: 28
+- `again!”` → `again` — occorrenze: 28
+- `against;` → `against` — occorrenze: 28
+- `around;` → `around` — occorrenze: 28
+- `asleep;` → `asleep` — occorrenze: 28
+- `assistance;` → `assistance` — occorrenze: 28
+- `been;` → `been` — occorrenze: 28
+- `believe;` → `believe` — occorrenze: 28
+- `below;` → `below` — occorrenze: 28
+- `dear,"` → `dear` — occorrenze: 28
+- `died;` → `died` — occorrenze: 28
+- `done!` → `done` — occorrenze: 28
+- `e.,` → `e` — occorrenze: 28
+- `enough.”` → `enough` — occorrenze: 28
+- `fashion;` → `fashion` — occorrenze: 28
+- `flame;` → `flame` — occorrenze: 28
+- `friend.”` → `friend` — occorrenze: 28
+- `gentlemen;` → `gentlemen` — occorrenze: 28
+- `harm;` → `harm` — occorrenze: 28
+- `have.”` → `have` — occorrenze: 28
+- `he:` → `he` — occorrenze: 28
+- `heaven!` → `heaven` — occorrenze: 28
+- `him.'` → `him` — occorrenze: 28
+- `history;` → `history` — occorrenze: 28
+- `lady,”` → `lady` — occorrenze: 28
+- `late;` → `late` — occorrenze: 28
+- `less;` → `less` — occorrenze: 28
+- `like.”` → `like` — occorrenze: 28
+- `men."` → `men` — occorrenze: 28
+- `not,’` → `not` — occorrenze: 28
+- `ourselves;` → `ourselves` — occorrenze: 28
+- `place:` → `place` — occorrenze: 28
+- `places;` → `places` — occorrenze: 28
+- `ready;` → `ready` — occorrenze: 28
+- `religion;` → `religion` — occorrenze: 28
+- `servants’` → `servants` — occorrenze: 28
+- `story;` → `story` — occorrenze: 28
+- `street;` → `street` — occorrenze: 28
+- `sure,”` → `sure` — occorrenze: 28
+- `then!` → `then` — occorrenze: 28
+- `there!”` → `there` — occorrenze: 28
+- `thereof;` → `thereof` — occorrenze: 28
+- `thing,”` → `thing` — occorrenze: 28
+- `understand;` → `understand` — occorrenze: 28
+- `virtue;` → `virtue` — occorrenze: 28
+- `way,”` → `way` — occorrenze: 28
+- `wealth;` → `wealth` — occorrenze: 28
+- `wine;` → `wine` — occorrenze: 28
+- `‘So` → `So` — occorrenze: 28
+- `‘what` → `what` — occorrenze: 28
+- `“Before` → `Before` — occorrenze: 28
+- `“has` → `has` — occorrenze: 28
+- `“Indeed,` → `Indeed` — occorrenze: 28
+- `“What,` → `What` — occorrenze: 28
+- `"Thank` → `Thank` — occorrenze: 27
+- `'for` → `for` — occorrenze: 27
+- `'mid` → `mid` — occorrenze: 27
+- `'what` → `what` — occorrenze: 27
+- `'Why,` → `Why` — occorrenze: 27
+- `_in` → `in` — occorrenze: 27
+- `act;` → `act` — occorrenze: 27
+- `ago.”` → `ago` — occorrenze: 27
+- `aid;` → `aid` — occorrenze: 27
+- `another.”` → `another` — occorrenze: 27
+- `board;` → `board` — occorrenze: 27
+- `brother,”` → `brother` — occorrenze: 27
+- `England.”` → `England` — occorrenze: 27
+- `evening;` → `evening` — occorrenze: 27
+- `feelings;` → `feelings` — occorrenze: 27
+- `fellow,”` → `fellow` — occorrenze: 27
+- `first.”` → `first` — occorrenze: 27
+- `fool;` → `fool` — occorrenze: 27
+- `good?` → `good` — occorrenze: 27
+- `head:` → `head` — occorrenze: 27
+- `hear?` → `hear` — occorrenze: 27
+- `her!”` → `her` — occorrenze: 27
+- `him?"` → `him` — occorrenze: 27
+- `himself.”` → `himself` — occorrenze: 27
+- `house?` → `house` — occorrenze: 27
+- `indeed.”` → `indeed` — occorrenze: 27
+- `ladies’` → `ladies` — occorrenze: 27
+- `lies;` → `lies` — occorrenze: 27
+- `lips;` → `lips` — occorrenze: 27
+- `M----` → `M` — occorrenze: 27
+- `mad;` → `mad` — occorrenze: 27
+- `maid;` → `maid` — occorrenze: 27
+- `man."` → `man` — occorrenze: 27
+- `me,’` → `me` — occorrenze: 27
+- `Norway;` → `Norway` — occorrenze: 27
+- `reply:` → `reply` — occorrenze: 27
+- `run;` → `run` — occorrenze: 27
+- `said--` → `said` — occorrenze: 27
+- `Sam;` → `Sam` — occorrenze: 27
+- `she?` → `she` — occorrenze: 27
+- `smile;` → `smile` — occorrenze: 27
+- `something;` → `something` — occorrenze: 27
+- `sorrow;` → `sorrow` — occorrenze: 27
+- `speak?` → `speak` — occorrenze: 27
+- `spoke:` → `spoke` — occorrenze: 27
+- `surface;` → `surface` — occorrenze: 27
+- `teeth;` → `teeth` — occorrenze: 27
+- `temper;` → `temper` — occorrenze: 27
+- `time!` → `time` — occorrenze: 27
+- `time:` → `time` — occorrenze: 27
+- `tongue;` → `tongue` — occorrenze: 27
+- `walls;` → `walls` — occorrenze: 27
+- `went;` → `went` — occorrenze: 27
+- `within;` → `within` — occorrenze: 27
+- `woman.”` → `woman` — occorrenze: 27
+- `wound;` → `wound` — occorrenze: 27
+- `yours.”` → `yours` — occorrenze: 27
+- `“before` → `before` — occorrenze: 27
+- `“Well` → `Well` — occorrenze: 27
+- `“Were` → `Were` — occorrenze: 27
+- `"as` → `as` — occorrenze: 26
+- `"His` → `His` — occorrenze: 26
+- `"One` → `One` — occorrenze: 26
+- `15,` → `15` — occorrenze: 26
+- `1788.` → `1788` — occorrenze: 26
+- `4,` → `4` — occorrenze: 26
+- `affection;` → `affection` — occorrenze: 26
+- `along;` → `along` — occorrenze: 26
+- `am;` → `am` — occorrenze: 26
+- `back.”` → `back` — occorrenze: 26
+- `boy,”` → `boy` — occorrenze: 26
+- `brain;` → `brain` — occorrenze: 26
+- `bright;` → `bright` — occorrenze: 26
+- `cavalier;` → `cavalier` — occorrenze: 26
+- `change;` → `change` — occorrenze: 26
+- `clear;` → `clear` — occorrenze: 26
+- `come,”` → `come` — occorrenze: 26
+- `conscience;` → `conscience` — occorrenze: 26
+- `crime;` → `crime` — occorrenze: 26
+- `dead.”` → `dead` — occorrenze: 26
+- `deep;` → `deep` — occorrenze: 26
+- `do,"` → `do` — occorrenze: 26
+- `ease;` → `ease` — occorrenze: 26
+- `escape;` → `escape` — occorrenze: 26
+- `everything;` → `everything` — occorrenze: 26
+- `eyes?` → `eyes` — occorrenze: 26
+- `flowers;` → `flowers` — occorrenze: 26
+- `fool!` → `fool` — occorrenze: 26
+- `for.”` → `for` — occorrenze: 26
+- `friends,”` → `friends` — occorrenze: 26
+- `given;` → `given` — occorrenze: 26
+- `health;` → `health` — occorrenze: 26
+- `here:` → `here` — occorrenze: 26
+- `hill;` → `hill` — occorrenze: 26
+- `him.’` → `him` — occorrenze: 26
+- `home?` → `home` — occorrenze: 26
+- `hours’` → `hours` — occorrenze: 26
+- `however;` → `however` — occorrenze: 26
+- `I?”` → `I` — occorrenze: 26
+- `is?` → `is` — occorrenze: 26
+- `it!"` → `it` — occorrenze: 26
+- `it?'` → `it` — occorrenze: 26
+- `judgment;` → `judgment` — occorrenze: 26
+- `king:` → `king` — occorrenze: 26
+- `lie;` → `lie` — occorrenze: 26
+- `life,”` → `life` — occorrenze: 26
+- `live?` → `live` — occorrenze: 26
+- `look;` → `look` — occorrenze: 26
+- `minutes;` → `minutes` — occorrenze: 26
+- `mistress;` → `mistress` — occorrenze: 26
+- `moon;` → `moon` — occorrenze: 26
+- `myself?` → `myself` — occorrenze: 26
+- `name!` → `name` — occorrenze: 26
+- `now,"` → `now` — occorrenze: 26
+- `one!` → `one` — occorrenze: 26
+- `out!` → `out` — occorrenze: 26
+- `received;` → `received` — occorrenze: 26
+- `self;` → `self` — occorrenze: 26
+- `Sir;` → `Sir` — occorrenze: 26
+- `suppose,”` → `suppose` — occorrenze: 26
+- `tell;` → `tell` — occorrenze: 26
+- `thus;` → `thus` — occorrenze: 26
+- `too?` → `too` — occorrenze: 26
+- `whom?` → `whom` — occorrenze: 26
+- `will.”` → `will` — occorrenze: 26
+- `will?` → `will` — occorrenze: 26
+- `‘At` → `At` — occorrenze: 26
+- `‘Never` → `Never` — occorrenze: 26
+- `‘No` → `No` — occorrenze: 26
+- `‘Take` → `Take` — occorrenze: 26
+- `“Since` → `Since` — occorrenze: 26
+- `“though` → `though` — occorrenze: 26
+- `“Thy` → `Thy` — occorrenze: 26
+- `“’Tis` → `Tis` — occorrenze: 26
+- `"my` → `my` — occorrenze: 25
+- `"Oh!` → `Oh` — occorrenze: 25
+- `"On` → `On` — occorrenze: 25
+- `"Take` → `Take` — occorrenze: 25
+- `"when` → `when` — occorrenze: 25
+- `"which` → `which` — occorrenze: 25
+- `'O` → `O` — occorrenze: 25
+- `'Why` → `Why` — occorrenze: 25
+- `'Yes,'` → `Yes` — occorrenze: 25
+- `8,` → `8` — occorrenze: 25
+- `_his_` → `his` — occorrenze: 25
+- `_one_` → `one` — occorrenze: 25
+- `_Smeaton_` → `Smeaton` — occorrenze: 25
+- `admiration;` → `admiration` — occorrenze: 25
+- `advice;` → `advice` — occorrenze: 25
+- `all."` → `all` — occorrenze: 25
+- `already;` → `already` — occorrenze: 25
+- `am!` → `am` — occorrenze: 25
+- `appearance;` → `appearance` — occorrenze: 25
+- `bad;` → `bad` — occorrenze: 25
+- `be?”` → `be` — occorrenze: 25
+- `born;` → `born` — occorrenze: 25
+- `bread;` → `bread` — occorrenze: 25
+- `charge;` → `charge` — occorrenze: 25
+- `conduct;` → `conduct` — occorrenze: 25
+- `contrary;` → `contrary` — occorrenze: 25
+- `daughter?` → `daughter` — occorrenze: 25
+- `day?` → `day` — occorrenze: 25
+- `dear!”` → `dear` — occorrenze: 25
+- `difficulty;` → `difficulty` — occorrenze: 25
+- `done?”` → `done` — occorrenze: 25
+- `dress;` → `dress` — occorrenze: 25
+- `dust;` → `dust` — occorrenze: 25
+- `esp.,` → `esp` — occorrenze: 25
+- `fate;` → `fate` — occorrenze: 25
+- `father?”` → `father` — occorrenze: 25
+- `flesh;` → `flesh` — occorrenze: 25
+- `flight;` → `flight` — occorrenze: 25
+- `garden;` → `garden` — occorrenze: 25
+- `heads;` → `heads` — occorrenze: 25
+- `heart.”` → `heart` — occorrenze: 25
+- `her."` → `her` — occorrenze: 25
+- `hold;` → `hold` — occorrenze: 25
+- `house:` → `house` — occorrenze: 25
+- `I:` → `I` — occorrenze: 25
+- `in?` → `in` — occorrenze: 25
+- `just;` → `just` — occorrenze: 25
+- `king?` → `king` — occorrenze: 25
+- `know?”` → `know` — occorrenze: 25
+- `labor;` → `labor` — occorrenze: 25
+- `ladies;` → `ladies` — occorrenze: 25
+- `lady?` → `lady` — occorrenze: 25
+- `manner:` → `manner` — occorrenze: 25
+- `me!"` → `me` — occorrenze: 25
+- `me?’` → `me` — occorrenze: 25
+- `mind!` → `mind` — occorrenze: 25
+- `mind,”` → `mind` — occorrenze: 25
+- `mind:` → `mind` — occorrenze: 25
+- `misery;` → `misery` — occorrenze: 25
+- `much.”` → `much` — occorrenze: 25
+- `notice;` → `notice` — occorrenze: 25
+- `on,”` → `on` — occorrenze: 25
+- `once.”` → `once` — occorrenze: 25
+- `one?”` → `one` — occorrenze: 25
+- `origin;` → `origin` — occorrenze: 25
+- `people.”` → `people` — occorrenze: 25
+- `place.”` → `place` — occorrenze: 25
+- `presence;` → `presence` — occorrenze: 25
+- `pride;` → `pride` — occorrenze: 25
+- `respect;` → `respect` — occorrenze: 25
+- `ruin;` → `ruin` — occorrenze: 25
+- `servant;` → `servant` — occorrenze: 25
+- `show;` → `show` — occorrenze: 25
+- `speed;` → `speed` — occorrenze: 25
+- `suppose?”` → `suppose` — occorrenze: 25
+- `that?"` → `that` — occorrenze: 25
+- `them.’` → `them` — occorrenze: 25
+- `thing.”` → `thing` — occorrenze: 25
+- `things,”` → `things` — occorrenze: 25
+- `things?` → `things` — occorrenze: 25
+- `ye?”` → `ye` — occorrenze: 25
+- `‘Dear` → `Dear` — occorrenze: 25
+- `‘Here` → `Here` — occorrenze: 25
+- `‘Where` → `Where` — occorrenze: 25
+- `‘Why` → `Why` — occorrenze: 25
+- `’twill` → `twill` — occorrenze: 25
+- `“not` → `not` — occorrenze: 25
+- `“since` → `since` — occorrenze: 25
+- `“Sir,` → `Sir` — occorrenze: 25
+- `'a` → `a` — occorrenze: 24
+- `'Not` → `Not` — occorrenze: 24
+- `'Oh,` → `Oh` — occorrenze: 24
+- `'That` → `That` — occorrenze: 24
+- `'Well,'` → `Well` — occorrenze: 24
+- `abroad;` → `abroad` — occorrenze: 24
+- `all!”` → `all` — occorrenze: 24
+- `all?”` → `all` — occorrenze: 24
+- `attack;` → `attack` — occorrenze: 24
+- `Belle;` → `Belle` — occorrenze: 24
+- `certain;` → `certain` — occorrenze: 24
+- `comfort;` → `comfort` — occorrenze: 24
+- `coming;` → `coming` — occorrenze: 24
+- `continued:` → `continued` — occorrenze: 24
+- `courage;` → `courage` — occorrenze: 24
+- `day."` → `day` — occorrenze: 24
+- `death:` → `death` — occorrenze: 24
+- `each;` → `each` — occorrenze: 24
+- `English;` → `English` — occorrenze: 24
+- `estate;` → `estate` — occorrenze: 24
+- `favour;` → `favour` — occorrenze: 24
+- `feeling;` → `feeling` — occorrenze: 24
+- `fly;` → `fly` — occorrenze: 24
+- `gods!` → `gods` — occorrenze: 24
+- `goin’` → `goin` — occorrenze: 24
+- `gone!` → `gone` — occorrenze: 24
+- `hard;` → `hard` — occorrenze: 24
+- `hearts;` → `hearts` — occorrenze: 24
+- `heavens!` → `heavens` — occorrenze: 24
+- `horses’` → `horses` — occorrenze: 24
+- `I.,` → `I` — occorrenze: 24
+- `in,”` → `in` — occorrenze: 24
+- `influence;` → `influence` — occorrenze: 24
+- `know,"` → `know` — occorrenze: 24
+- `Lamanites;` → `Lamanites` — occorrenze: 24
+- `last?` → `last` — occorrenze: 24
+- `make;` → `make` — occorrenze: 24
+- `memory;` → `memory` — occorrenze: 24
+- `mind?` → `mind` — occorrenze: 24
+- `months;` → `months` — occorrenze: 24
+- `not!` → `not` — occorrenze: 24
+- `number;` → `number` — occorrenze: 24
+- `one."` → `one` — occorrenze: 24
+- `otherwise;` → `otherwise` — occorrenze: 24
+- `paper;` → `paper` — occorrenze: 24
+- `pieces;` → `pieces` — occorrenze: 24
+- `Prince;` → `Prince` — occorrenze: 24
+- `rest:` → `rest` — occorrenze: 24
+- `right.”` → `right` — occorrenze: 24
+- `right?` → `right` — occorrenze: 24
+- `rise;` → `rise` — occorrenze: 24
+- `says;` → `says` — occorrenze: 24
+- `servants;` → `servants` — occorrenze: 24
+- `shoulders;` → `shoulders` — occorrenze: 24
+- `sons;` → `sons` — occorrenze: 24
+- `spring;` → `spring` — occorrenze: 24
+- `steel;` → `steel` — occorrenze: 24
+- `tale;` → `tale` — occorrenze: 24
+- `that,’` → `that` — occorrenze: 24
+- `these;` → `these` — occorrenze: 24
+- `things.”` → `things` — occorrenze: 24
+- `think.”` → `think` — occorrenze: 24
+- `usual;` → `usual` — occorrenze: 24
+- `welcome;` → `welcome` — occorrenze: 24
+- `wise:` → `wise` — occorrenze: 24
+- `words?` → `words` — occorrenze: 24
+- `yourself?` → `yourself` — occorrenze: 24
+- `‘No,’` → `No` — occorrenze: 24
+- `‘Yes,’` → `Yes` — occorrenze: 24
+- `“And,` → `And` — occorrenze: 24
+- `“Davy,”` → `Davy` — occorrenze: 24
+- `“Oh!”` → `Oh` — occorrenze: 24
+- `“Well!` → `Well` — occorrenze: 24
+- `"they` → `they` — occorrenze: 23
+- `'No,'` → `No` — occorrenze: 23
+- `'This` → `This` — occorrenze: 23
+- `28,` → `28` — occorrenze: 23
+- `_a` → `a` — occorrenze: 23
+- `_did_` → `did` — occorrenze: 23
+- `_Hungarian_.` → `Hungarian` — occorrenze: 23
+- `_to` → `to` — occorrenze: 23
+- `acquaintance;` → `acquaintance` — occorrenze: 23
+- `affairs;` → `affairs` — occorrenze: 23
+- `alone.”` → `alone` — occorrenze: 23
+- `another:` → `another` — occorrenze: 23
+- `began:` → `began` — occorrenze: 23
+- `Bible;` → `Bible` — occorrenze: 23
+- `birth;` → `birth` — occorrenze: 23
+- `bold;` → `bold` — occorrenze: 23
+- `brother."` → `brother` — occorrenze: 23
+- `child!”` → `child` — occorrenze: 23
+- `child?` → `child` — occorrenze: 23
+- `clothes;` → `clothes` — occorrenze: 23
+- `cry;` → `cry` — occorrenze: 23
+- `dear?` → `dear` — occorrenze: 23
+- `design;` → `design` — occorrenze: 23
+- `done,”` → `done` — occorrenze: 23
+- `eh?` → `eh` — occorrenze: 23
+- `end?` → `end` — occorrenze: 23
+- `ended;` → `ended` — occorrenze: 23
+- `England?` → `England` — occorrenze: 23
+- `Esq.,` → `Esq` — occorrenze: 23
+- `faces;` → `faces` — occorrenze: 23
+- `father!` → `father` — occorrenze: 23
+- `following:` → `following` — occorrenze: 23
+- `friend!` → `friend` — occorrenze: 23
+- `gate;` → `gate` — occorrenze: 23
+- `glory;` → `glory` — occorrenze: 23
+- `grass;` → `grass` — occorrenze: 23
+- `her,"` → `her` — occorrenze: 23
+- `horse!` → `horse` — occorrenze: 23
+- `house?”` → `house` — occorrenze: 23
+- `II.,` → `II` — occorrenze: 23
+- `King?` → `King` — occorrenze: 23
+- `kingdom;` → `kingdom` — occorrenze: 23
+- `laugh;` → `laugh` — occorrenze: 23
+- `length;` → `length` — occorrenze: 23
+- `letters;` → `letters` — occorrenze: 23
+- `love.”` → `love` — occorrenze: 23
+- `matter,”` → `matter` — occorrenze: 23
+- `meet;` → `meet` — occorrenze: 23
+- `mercy;` → `mercy` — occorrenze: 23
+- `mistress’` → `mistress` — occorrenze: 23
+- `money.”` → `money` — occorrenze: 23
+- `names;` → `names` — occorrenze: 23
+- `necessary;` → `necessary` — occorrenze: 23
+- `need;` → `need` — occorrenze: 23
+- `next?` → `next` — occorrenze: 23
+- `now?"` → `now` — occorrenze: 23
+- `office;` → `office` — occorrenze: 23
+- `on!` → `on` — occorrenze: 23
+- `out!”` → `out` — occorrenze: 23
+- `passed;` → `passed` — occorrenze: 23
+- `powers;` → `powers` — occorrenze: 23
+- `progress;` → `progress` — occorrenze: 23
+- `see:` → `see` — occorrenze: 23
+- `shop;` → `shop` — occorrenze: 23
+- `silent;` → `silent` — occorrenze: 23
+- `son!` → `son` — occorrenze: 23
+- `Specifically:` → `Specifically` — occorrenze: 23
+- `step;` → `step` — occorrenze: 23
+- `streets;` → `streets` — occorrenze: 23
+- `thee,"` → `thee` — occorrenze: 23
+- `these?` → `these` — occorrenze: 23
+- `Tom,”` → `Tom` — occorrenze: 23
+- `train;` → `train` — occorrenze: 23
+- `true!` → `true` — occorrenze: 23
+- `truth?` → `truth` — occorrenze: 23
+- `up,”` → `up` — occorrenze: 23
+- `want?` → `want` — occorrenze: 23
+- `watch;` → `watch` — occorrenze: 23
+- `way!` → `way` — occorrenze: 23
+- `what?”` → `what` — occorrenze: 23
+- `word,”` → `word` — occorrenze: 23
+- `ye?` → `ye` — occorrenze: 23
+- `yet,”` → `yet` — occorrenze: 23
+- `young;` → `young` — occorrenze: 23
+- `‘Oh!` → `Oh` — occorrenze: 23
+- `‘we` → `we` — occorrenze: 23
+- `‘Well,’` → `Well` — occorrenze: 23
+- `“Faith,` → `Faith` — occorrenze: 23
+- `“good` → `good` — occorrenze: 23
+- `“Here,` → `Here` — occorrenze: 23
+- `“his` → `his` — occorrenze: 23
+- `“No!”` → `No` — occorrenze: 23
+- `“only` → `only` — occorrenze: 23
+- `“Or` → `Or` — occorrenze: 23
+- `“then` → `then` — occorrenze: 23
+- `“Wait` → `Wait` — occorrenze: 23
+- `“Well?”` → `Well` — occorrenze: 23
+- `"Come,` → `Come` — occorrenze: 22
+- `"Did` → `Did` — occorrenze: 22
+- `"From` → `From` — occorrenze: 22
+- `"Oh` → `Oh` — occorrenze: 22
+- `"Sir,` → `Sir` — occorrenze: 22
+- `'Twas` → `Twas` — occorrenze: 22
+- `12,` → `12` — occorrenze: 22
+- `<--										p.` → `p` — occorrenze: 22
+- `_but` → `but` — occorrenze: 22
+- `animals;` → `animals` — occorrenze: 22
+- `another?` → `another` — occorrenze: 22
+- `blood:` → `blood` — occorrenze: 22
+- `brethren;` → `brethren` — occorrenze: 22
+- `call;` → `call` — occorrenze: 22
+- `dear,’` → `dear` — occorrenze: 22
+- `delay;` → `delay` — occorrenze: 22
+- `destruction;` → `destruction` — occorrenze: 22
+- `die.”` → `die` — occorrenze: 22
+- `down.”` → `down` — occorrenze: 22
+- `earth?` → `earth` — occorrenze: 22
+- `either;` → `either` — occorrenze: 22
+- `exclaimed:—` → `exclaimed` — occorrenze: 22
+- `expression;` → `expression` — occorrenze: 22
+- `father:` → `father` — occorrenze: 22
+- `figure;` → `figure` — occorrenze: 22
+- `follows:--` → `follows` — occorrenze: 22
+- `friend:` → `friend` — occorrenze: 22
+- `gone?` → `gone` — occorrenze: 22
+- `ground:` → `ground` — occorrenze: 22
+- `here,’` → `here` — occorrenze: 22
+- `hour.”` → `hour` — occorrenze: 22
+- `in?”` → `in` — occorrenze: 22
+- `iron;` → `iron` — occorrenze: 22
+- `is,’` → `is` — occorrenze: 22
+- `it!’` → `it` — occorrenze: 22
+- `Italy;` → `Italy` — occorrenze: 22
+- `judge;` → `judge` — occorrenze: 22
+- `kings;` → `kings` — occorrenze: 22
+- `last.”` → `last` — occorrenze: 22
+- `loss;` → `loss` — occorrenze: 22
+- `low;` → `low` — occorrenze: 22
+- `matter.”` → `matter` — occorrenze: 22
+- `me?'` → `me` — occorrenze: 22
+- `money?` → `money` — occorrenze: 22
+- `mother!` → `mother` — occorrenze: 22
+- `mother.”` → `mother` — occorrenze: 22
+- `mountains;` → `mountains` — occorrenze: 22
+- `myself."` → `myself` — occorrenze: 22
+- `nation;` → `nation` — occorrenze: 22
+- `night?` → `night` — occorrenze: 22
+- `opinions;` → `opinions` — occorrenze: 22
+- `pace;` → `pace` — occorrenze: 22
+- `pale;` → `pale` — occorrenze: 22
+- `please.”` → `please` — occorrenze: 22
+- `price;` → `price` — occorrenze: 22
+- `property?` → `property` — occorrenze: 22
+- `rage;` → `rage` — occorrenze: 22
+- `rear;` → `rear` — occorrenze: 22
+- `sail;` → `sail` — occorrenze: 22
+- `sang:--` → `sang` — occorrenze: 22
+- `seat;` → `seat` — occorrenze: 22
+- `seide:` → `seide` — occorrenze: 22
+- `shield;` → `shield` — occorrenze: 22
+- `study;` → `study` — occorrenze: 22
+- `support;` → `support` — occorrenze: 22
+- `thing:` → `thing` — occorrenze: 22
+- `this,"` → `this` — occorrenze: 22
+- `voice:—` → `voice` — occorrenze: 22
+- `wise;` → `wise` — occorrenze: 22
+- `without;` → `without` — occorrenze: 22
+- `woe;` → `woe` — occorrenze: 22
+- `work.”` → `work` — occorrenze: 22
+- `works;` → `works` — occorrenze: 22
+- `yours;` → `yours` — occorrenze: 22
+- `yourself,”` → `yourself` — occorrenze: 22
+- `‘Just` → `Just` — occorrenze: 22
+- `‘Tis` → `Tis` — occorrenze: 22
+- `‘To` → `To` — occorrenze: 22
+- `“About` → `About` — occorrenze: 22
+- `“Had` → `Had` — occorrenze: 22
+- `“More` → `More` — occorrenze: 22
+- `“None` → `None` — occorrenze: 22
+- `“Old` → `Old` — occorrenze: 22
+- `“one` → `one` — occorrenze: 22
+- `“Say` → `Say` — occorrenze: 22
+- `“Think` → `Think` — occorrenze: 22
+- `“What!”` → `What` — occorrenze: 22
+- `"Mr.` → `Mr` — occorrenze: 21
+- `'By` → `By` — occorrenze: 21
+- `25,` → `25` — occorrenze: 21
+- `_Clerk_.` → `Clerk` — occorrenze: 21
+- `_do_` → `do` — occorrenze: 21
+- `_for` → `for` — occorrenze: 21
+- `_Le` → `Le` — occorrenze: 21
+- `_Robinson` → `Robinson` — occorrenze: 21
+- `_Satan_` → `Satan` — occorrenze: 21
+- `already.”` → `already` — occorrenze: 21
+- `are!”` → `are` — occorrenze: 21
+- `array;` → `array` — occorrenze: 21
+- `ball;` → `ball` — occorrenze: 21
+- `bar;` → `bar` — occorrenze: 21
+- `blood?` → `blood` — occorrenze: 21
+- `boy.”` → `boy` — occorrenze: 21
+- `chair;` → `chair` — occorrenze: 21
+- `chase;` → `chase` — occorrenze: 21
+- `class;` → `class` — occorrenze: 21
+- `close;` → `close` — occorrenze: 21
+- `consideration;` → `consideration` — occorrenze: 21
+- `desires;` → `desires` — occorrenze: 21
+- `die?` → `die` — occorrenze: 21
+- `discourse;` → `discourse` — occorrenze: 21
+- `doors;` → `doors` — occorrenze: 21
+- `dream;` → `dream` — occorrenze: 21
+- `effect:` → `effect` — occorrenze: 21
+- `eh?”` → `eh` — occorrenze: 21
+- `ever!` → `ever` — occorrenze: 21
+- `ever.”` → `ever` — occorrenze: 21
+- `face!` → `face` — occorrenze: 21
+- `face:` → `face` — occorrenze: 21
+- `far;` → `far` — occorrenze: 21
+- `father?` → `father` — occorrenze: 21
+- `friends!` → `friends` — occorrenze: 21
+- `front;` → `front` — occorrenze: 21
+- `full;` → `full` — occorrenze: 21
+- `game;` → `game` — occorrenze: 21
+- `girl!` → `girl` — occorrenze: 21
+- `going;` → `going` — occorrenze: 21
+- `going?”` → `going` — occorrenze: 21
+- `height;` → `height` — occorrenze: 21
+- `hue;` → `hue` — occorrenze: 21
+- `I!` → `I` — occorrenze: 21
+- `I.”` → `I` — occorrenze: 21
+- `is?”` → `is` — occorrenze: 21
+- `land."` → `land` — occorrenze: 21
+- `land?` → `land` — occorrenze: 21
+- `long.”` → `long` — occorrenze: 21
+- `lover;` → `lover` — occorrenze: 21
+- `manners;` → `manners` — occorrenze: 21
+- `may;` → `may` — occorrenze: 21
+- `men,”` → `men` — occorrenze: 21
+- `men.”` → `men` — occorrenze: 21
+- `mine?` → `mine` — occorrenze: 21
+- `months’` → `months` — occorrenze: 21
+- `more."` → `more` — occorrenze: 21
+- `mother,”` → `mother` — occorrenze: 21
+- `Nephites;` → `Nephites` — occorrenze: 21
+- `night,”` → `night` — occorrenze: 21
+- `no!”` → `no` — occorrenze: 21
+- `north;` → `north` — occorrenze: 21
+- `nothing:` → `nothing` — occorrenze: 21
+- `of:` → `of` — occorrenze: 21
+- `passage;` → `passage` — occorrenze: 21
+- `place?` → `place` — occorrenze: 21
+- `profession;` → `profession` — occorrenze: 21
+- `remain;` → `remain` — occorrenze: 21
+- `rights;` → `rights` — occorrenze: 21
+- `room.”` → `room` — occorrenze: 21
+- `shore:` → `shore` — occorrenze: 21
+- `silver;` → `silver` — occorrenze: 21
+- `sir!’` → `sir` — occorrenze: 21
+- `slavery;` → `slavery` — occorrenze: 21
+- `so."` → `so` — occorrenze: 21
+- `son:` → `son` — occorrenze: 21
+- `song;` → `song` — occorrenze: 21
+- `sort;` → `sort` — occorrenze: 21
+- `space;` → `space` — occorrenze: 21
+- `speak:` → `speak` — occorrenze: 21
+- `stand;` → `stand` — occorrenze: 21
+- `stranger;` → `stranger` — occorrenze: 21
+- `summer;` → `summer` — occorrenze: 21
+- `sure.”` → `sure` — occorrenze: 21
+- `them.'` → `them` — occorrenze: 21
+- `time."` → `time` — occorrenze: 21
+- `time?”` → `time` — occorrenze: 21
+- `to?”` → `to` — occorrenze: 21
+- `too:` → `too` — occorrenze: 21
+- `two.”` → `two` — occorrenze: 21
+- `violence;` → `violence` — occorrenze: 21
+- `war?` → `war` — occorrenze: 21
+- `waters;` → `waters` — occorrenze: 21
+- `weight;` → `weight` — occorrenze: 21
+- `well."` → `well` — occorrenze: 21
+- `whale;` → `whale` — occorrenze: 21
+- `will!` → `will` — occorrenze: 21
+- `won;` → `won` — occorrenze: 21
+- `would;` → `would` — occorrenze: 21
+- `‘Ah!` → `Ah` — occorrenze: 21
+- `‘in` → `in` — occorrenze: 21
+- `‘Now` → `Now` — occorrenze: 21
+- `“Any` → `Any` — occorrenze: 21
+- `“Even` → `Even` — occorrenze: 21
+- `“Father,` → `Father` — occorrenze: 21
+- `“Hold` → `Hold` — occorrenze: 21
+- `“M.` → `M` — occorrenze: 21
+- `“on` → `on` — occorrenze: 21
+- `“our` → `our` — occorrenze: 21
+- `"Look` → `Look` — occorrenze: 20
+- `"May` → `May` — occorrenze: 20
+- `"Nor` → `Nor` — occorrenze: 20
+- `"O,` → `O` — occorrenze: 20
+- `"Since` → `Since` — occorrenze: 20
+- `"These` → `These` — occorrenze: 20
+- `"with` → `with` — occorrenze: 20
+- `'in` → `in` — occorrenze: 20
+- `'So` → `So` — occorrenze: 20
+- `'twixt` → `twixt` — occorrenze: 20
+- `18,` → `18` — occorrenze: 20
+- `1838,` → `1838` — occorrenze: 20
+- `_Adam_,` → `Adam` — occorrenze: 20
+- `_are_` → `are` — occorrenze: 20
+- `_Eve_` → `Eve` — occorrenze: 20
+- `_him_` → `him` — occorrenze: 20
+- `aloud:` → `aloud` — occorrenze: 20
+- `angry;` → `angry` — occorrenze: 20
+- `are,”` → `are` — occorrenze: 20
+- `aside;` → `aside` — occorrenze: 20
+- `back?` → `back` — occorrenze: 20
+- `back?”` → `back` — occorrenze: 20
+- `be!”` → `be` — occorrenze: 20
+- `be,"` → `be` — occorrenze: 20
+- `bodies;` → `bodies` — occorrenze: 20
+- `Bucklaw;` → `Bucklaw` — occorrenze: 20
+- `charity;` → `charity` — occorrenze: 20
+- `confidence;` → `confidence` — occorrenze: 20
+- `did,”` → `did` — occorrenze: 20
+- `done:` → `done` — occorrenze: 20
+- `education;` → `education` — occorrenze: 20
+- `Emperor;` → `Emperor` — occorrenze: 20
+- `enough,”` → `enough` — occorrenze: 20
+- `fathers;` → `fathers` — occorrenze: 20
+- `Fig.:` → `Fig` — occorrenze: 20
+- `fire!` → `fire` — occorrenze: 20
+- `floor;` → `floor` — occorrenze: 20
+- `followed;` → `followed` — occorrenze: 20
+- `friendship;` → `friendship` — occorrenze: 20
+- `fruit;` → `fruit` — occorrenze: 20
+- `George;` → `George` — occorrenze: 20
+- `gone.”` → `gone` — occorrenze: 20
+- `good,”` → `good` — occorrenze: 20
+- `guide;` → `guide` — occorrenze: 20
+- `hands:` → `hands` — occorrenze: 20
+- `happened;` → `happened` — occorrenze: 20
+- `Hark!` → `Hark` — occorrenze: 20
+- `haste;` → `haste` — occorrenze: 20
+- `home!` → `home` — occorrenze: 20
+- `Israel;` → `Israel` — occorrenze: 20
+- `king!` → `king` — occorrenze: 20
+- `know."` → `know` — occorrenze: 20
+- `love,”` → `love` — occorrenze: 20
+- `loved;` → `loved` — occorrenze: 20
+- `mind.”` → `mind` — occorrenze: 20
+- `more!”` → `more` — occorrenze: 20
+- `music;` → `music` — occorrenze: 20
+- `no?` → `no` — occorrenze: 20
+- `note;` → `note` — occorrenze: 20
+- `nothing,”` → `nothing` — occorrenze: 20
+- `on?` → `on` — occorrenze: 20
+- `ones;` → `ones` — occorrenze: 20
+- `others’` → `others` — occorrenze: 20
+- `peace!` → `peace` — occorrenze: 20
+- `pleased;` → `pleased` — occorrenze: 20
+- `pocket;` → `pocket` — occorrenze: 20
+- `prey;` → `prey` — occorrenze: 20
+- `quiet;` → `quiet` — occorrenze: 20
+- `rate;` → `rate` — occorrenze: 20
+- `resolution;` → `resolution` — occorrenze: 20
+- `satisfied;` → `satisfied` — occorrenze: 20
+- `season;` → `season` — occorrenze: 20
+- `set;` → `set` — occorrenze: 20
+- `ships;` → `ships` — occorrenze: 20
+- `sight!` → `sight` — occorrenze: 20
+- `sleep?` → `sleep` — occorrenze: 20
+- `soil;` → `soil` — occorrenze: 20
+- `suit;` → `suit` — occorrenze: 20
+- `thee!”` → `thee` — occorrenze: 20
+- `this.”` → `this` — occorrenze: 20
+- `three;` → `three` — occorrenze: 20
+- `tide;` → `tide` — occorrenze: 20
+- `told;` → `told` — occorrenze: 20
+- `unknown;` → `unknown` — occorrenze: 20
+- `used;` → `used` — occorrenze: 20
+- `villain!` → `villain` — occorrenze: 20
+- `walk;` → `walk` — occorrenze: 20
+- `want;` → `want` — occorrenze: 20
+- `was.”` → `was` — occorrenze: 20
+- `water.”` → `water` — occorrenze: 20
+- `way."` → `way` — occorrenze: 20
+- `well,"` → `well` — occorrenze: 20
+- `whatever;` → `whatever` — occorrenze: 20
+- `wings;` → `wings` — occorrenze: 20
+- `worse.”` → `worse` — occorrenze: 20
+- `‘Come,` → `Come` — occorrenze: 20
+- `‘is` → `is` — occorrenze: 20
+- `‘Nothing` → `Nothing` — occorrenze: 20
+- `‘She` → `She` — occorrenze: 20
+- `‘ud` → `ud` — occorrenze: 20
+- `‘“I` → `I` — occorrenze: 20
+- `“be` → `be` — occorrenze: 20
+- `“Certainly,”` → `Certainly` — occorrenze: 20
+- `“Keep` → `Keep` — occorrenze: 20
+- `“Madame` → `Madame` — occorrenze: 20
+- `“Really,` → `Really` — occorrenze: 20
+- `“Surely` → `Surely` — occorrenze: 20
+- `“Yea,` → `Yea` — occorrenze: 20
+- `"Be` → `Be` — occorrenze: 19
+- `"Dear` → `Dear` — occorrenze: 19
+- `"so` → `so` — occorrenze: 19
+- `"who` → `who` — occorrenze: 19
+- `'he` → `he` — occorrenze: 19
+- `'twould` → `twould` — occorrenze: 19
+- `1848,` → `1848` — occorrenze: 19
+- `6,` → `6` — occorrenze: 19
+- `9,` → `9` — occorrenze: 19
+- `<--								p.` → `p` — occorrenze: 19
+- `_A` → `A` — occorrenze: 19
+- `_Eve_,` → `Eve` — occorrenze: 19
+- `_La` → `La` — occorrenze: 19
+- `affair;` → `affair` — occorrenze: 19
+- `B.,` → `B` — occorrenze: 19
+- `back,”` → `back` — occorrenze: 19
+- `before?` → `before` — occorrenze: 19
+- `began;` → `began` — occorrenze: 19
+- `best.”` → `best` — occorrenze: 19
+- `blows;` → `blows` — occorrenze: 19
+- `branches;` → `branches` — occorrenze: 19
+- `brother!` → `brother` — occorrenze: 19
+- `brother,"` → `brother` — occorrenze: 19
+- `changed;` → `changed` — occorrenze: 19
+- `Church;` → `Church` — occorrenze: 19
+- `colour;` → `colour` — occorrenze: 19
+- `continued;` → `continued` — occorrenze: 19
+- `country?` → `country` — occorrenze: 19
+- `crown;` → `crown` — occorrenze: 19
+- `death."` → `death` — occorrenze: 19
+- `defence;` → `defence` — occorrenze: 19
+- `Diamond?”` → `Diamond` — occorrenze: 19
+- `disposition;` → `disposition` — occorrenze: 19
+- `do!”` → `do` — occorrenze: 19
+- `down:` → `down` — occorrenze: 19
+- `enough:` → `enough` — occorrenze: 19
+- `ever?` → `ever` — occorrenze: 19
+- `Father;` → `Father` — occorrenze: 19
+- `fie!` → `fie` — occorrenze: 19
+- `fish;` → `fish` — occorrenze: 19
+- `fled;` → `fled` — occorrenze: 19
+- `friend?”` → `friend` — occorrenze: 19
+- `girl,”` → `girl` — occorrenze: 19
+- `guard;` → `guard` — occorrenze: 19
+- `hand?` → `hand` — occorrenze: 19
+- `happen;` → `happen` — occorrenze: 19
+- `hat;` → `hat` — occorrenze: 19
+- `here,"` → `here` — occorrenze: 19
+- `him,’` → `him` — occorrenze: 19
+- `home."` → `home` — occorrenze: 19
+- `house!` → `house` — occorrenze: 19
+- `idea;` → `idea` — occorrenze: 19
+- `immediately;` → `immediately` — occorrenze: 19
+- `in:` → `in` — occorrenze: 19
+- `increased;` → `increased` — occorrenze: 19
+- `intelligence;` → `intelligence` — occorrenze: 19
+- `joy!` → `joy` — occorrenze: 19
+- `killed;` → `killed` — occorrenze: 19
+- `knees;` → `knees` — occorrenze: 19
+- `knew;` → `knew` — occorrenze: 19
+- `Knight,”` → `Knight` — occorrenze: 19
+- `lady,"` → `lady` — occorrenze: 19
+- `last!”` → `last` — occorrenze: 19
+- `least;` → `least` — occorrenze: 19
+- `look!` → `look` — occorrenze: 19
+- `Madam,"` → `Madam` — occorrenze: 19
+- `madam;` → `madam` — occorrenze: 19
+- `married;` → `married` — occorrenze: 19
+- `me!’` → `me` — occorrenze: 19
+- `meaning;` → `meaning` — occorrenze: 19
+- `measure;` → `measure` — occorrenze: 19
+- `name,”` → `name` — occorrenze: 19
+- `not?"` → `not` — occorrenze: 19
+- `now,’` → `now` — occorrenze: 19
+- `out,”` → `out` — occorrenze: 19
+- `pause;` → `pause` — occorrenze: 19
+- `people:` → `people` — occorrenze: 19
+- `promise;` → `promise` — occorrenze: 19
+- `repair;` → `repair` — occorrenze: 19
+- `restraint;` → `restraint` — occorrenze: 19
+- `rule;` → `rule` — occorrenze: 19
+- `saw;` → `saw` — occorrenze: 19
+- `sea.”` → `sea` — occorrenze: 19
+- `see?` → `see` — occorrenze: 19
+- `slaves;` → `slaves` — occorrenze: 19
+- `so!”` → `so` — occorrenze: 19
+- `son?` → `son` — occorrenze: 19
+- `soul:` → `soul` — occorrenze: 19
+- `spoken;` → `spoken` — occorrenze: 19
+- `subjects;` → `subjects` — occorrenze: 19
+- `sum;` → `sum` — occorrenze: 19
+- `supper;` → `supper` — occorrenze: 19
+- `tent;` → `tent` — occorrenze: 19
+- `them,"` → `them` — occorrenze: 19
+- `then!”` → `then` — occorrenze: 19
+- `then?"` → `then` — occorrenze: 19
+- `they?”` → `they` — occorrenze: 19
+- `things:` → `things` — occorrenze: 19
+- `true,"` → `true` — occorrenze: 19
+- `vessel;` → `vessel` — occorrenze: 19
+- `visit;` → `visit` — occorrenze: 19
+- `waves;` → `waves` — occorrenze: 19
+- `Weller,’` → `Weller` — occorrenze: 19
+- `What?` → `What` — occorrenze: 19
+- `whole;` → `whole` — occorrenze: 19
+- `wife.”` → `wife` — occorrenze: 19
+- `wilderness;` → `wilderness` — occorrenze: 19
+- `winter;` → `winter` — occorrenze: 19
+- `woman?` → `woman` — occorrenze: 19
+- `wonder;` → `wonder` — occorrenze: 19
+- `work:` → `work` — occorrenze: 19
+- `world."` → `world` — occorrenze: 19
+- `wrong.”` → `wrong` — occorrenze: 19
+- `you?'` → `you` — occorrenze: 19
+- `‘Ah,` → `Ah` — occorrenze: 19
+- `‘Good` → `Good` — occorrenze: 19
+- `‘Have` → `Have` — occorrenze: 19
+- `‘he` → `he` — occorrenze: 19
+- `‘my` → `my` — occorrenze: 19
+- `‘Then` → `Then` — occorrenze: 19
+- `‘to` → `to` — occorrenze: 19
+- `’em;` → `em` — occorrenze: 19
+- `“all` → `all` — occorrenze: 19
+- `“Father` → `Father` — occorrenze: 19
+- `“Holy` → `Holy` — occorrenze: 19
+- `“look` → `look` — occorrenze: 19
+- `“Pardon` → `Pardon` — occorrenze: 19
+- `“So,` → `So` — occorrenze: 19
+- `“What?”` → `What` — occorrenze: 19
+- `"all` → `all` — occorrenze: 18
+- `"because` → `because` — occorrenze: 18
+- `"Perhaps` → `Perhaps` — occorrenze: 18
+- `"Sire,` → `Sire` — occorrenze: 18
+- `"Thy` → `Thy` — occorrenze: 18
+- `"will` → `will` — occorrenze: 18
+- `"Wilt` → `Wilt` — occorrenze: 18
+- `'As` → `As` — occorrenze: 18
+- `1793,` → `1793` — occorrenze: 18
+- `1832,` → `1832` — occorrenze: 18
+- `19,` → `19` — occorrenze: 18
+- `_we_` → `we` — occorrenze: 18
+- `_you_,` → `you` — occorrenze: 18
+- `Adj.;` → `Adj` — occorrenze: 18
+- `afterwards;` → `afterwards` — occorrenze: 18
+- `all,"` → `all` — occorrenze: 18
+- `am,”` → `am` — occorrenze: 18
+- `appetite;` → `appetite` — occorrenze: 18
+- `asked:` → `asked` — occorrenze: 18
+- `away,”` → `away` — occorrenze: 18
+- `bed:` → `bed` — occorrenze: 18
+- `bed?` → `bed` — occorrenze: 18
+- `broken;` → `broken` — occorrenze: 18
+- `brother?"` → `brother` — occorrenze: 18
+- `called;` → `called` — occorrenze: 18
+- `case,”` → `case` — occorrenze: 18
+- `cheer;` → `cheer` — occorrenze: 18
+- `content;` → `content` — occorrenze: 18
+- `creature;` → `creature` — occorrenze: 18
+- `days.”` → `days` — occorrenze: 18
+- `deal;` → `deal` — occorrenze: 18
+- `due;` → `due` — occorrenze: 18
+- `easy;` → `easy` — occorrenze: 18
+- `else?` → `else` — occorrenze: 18
+- `entrance;` → `entrance` — occorrenze: 18
+- `exchange;` → `exchange` — occorrenze: 18
+- `experience;` → `experience` — occorrenze: 18
+- `face?` → `face` — occorrenze: 18
+- `false;` → `false` — occorrenze: 18
+- `families;` → `families` — occorrenze: 18
+- `father!”` → `father` — occorrenze: 18
+- `fellow!”` → `fellow` — occorrenze: 18
+- `fight:` → `fight` — occorrenze: 18
+- `finished;` → `finished` — occorrenze: 18
+- `France.”` → `France` — occorrenze: 18
+- `France?` → `France` — occorrenze: 18
+- `glass;` → `glass` — occorrenze: 18
+- `hands.”` → `hands` — occorrenze: 18
+- `heaven?` → `heaven` — occorrenze: 18
+- `hell;` → `hell` — occorrenze: 18
+- `hence;` → `hence` — occorrenze: 18
+- `hills;` → `hills` — occorrenze: 18
+- `him:—` → `him` — occorrenze: 18
+- `hope!` → `hope` — occorrenze: 18
+- `hopes;` → `hopes` — occorrenze: 18
+- `in!` → `in` — occorrenze: 18
+- `is."` → `is` — occorrenze: 18
+- `large;` → `large` — occorrenze: 18
+- `light?` → `light` — occorrenze: 18
+- `living;` → `living` — occorrenze: 18
+- `mad?` → `mad` — occorrenze: 18
+- `matter?’` → `matter` — occorrenze: 18
+- `means,”` → `means` — occorrenze: 18
+- `melancholy;` → `melancholy` — occorrenze: 18
+- `mine:` → `mine` — occorrenze: 18
+- `mistake;` → `mistake` — occorrenze: 18
+- `Nephi;` → `Nephi` — occorrenze: 18
+- `next;` → `next` — occorrenze: 18
+- `off!` → `off` — occorrenze: 18
+- `offence;` → `offence` — occorrenze: 18
+- `pain?` → `pain` — occorrenze: 18
+- `path;` → `path` — occorrenze: 18
+- `place,”` → `place` — occorrenze: 18
+- `plain:` → `plain` — occorrenze: 18
+- `possible?` → `possible` — occorrenze: 18
+- `practice;` → `practice` — occorrenze: 18
+- `public;` → `public` — occorrenze: 18
+- `reach;` → `reach` — occorrenze: 18
+- `red;` → `red` — occorrenze: 18
+- `safe;` → `safe` — occorrenze: 18
+- `school;` → `school` — occorrenze: 18
+- `short;` → `short` — occorrenze: 18
+- `shot;` → `shot` — occorrenze: 18
+- `shoulder;` → `shoulder` — occorrenze: 18
+- `sing;` → `sing` — occorrenze: 18
+- `sir:` → `sir` — occorrenze: 18
+- `small;` → `small` — occorrenze: 18
+- `spot;` → `spot` — occorrenze: 18
+- `stones;` → `stones` — occorrenze: 18
+- `storm;` → `storm` — occorrenze: 18
+- `system;` → `system` — occorrenze: 18
+- `think?` → `think` — occorrenze: 18
+- `Thiodolf:--` → `Thiodolf` — occorrenze: 18
+- `throne;` → `throne` — occorrenze: 18
+- `trial;` → `trial` — occorrenze: 18
+- `up:` → `up` — occorrenze: 18
+- `upo’` → `upo` — occorrenze: 18
+- `view:` → `view` — occorrenze: 18
+- `weather;` → `weather` — occorrenze: 18
+- `will:` → `will` — occorrenze: 18
+- `wretch!` → `wretch` — occorrenze: 18
+- `write;` → `write` — occorrenze: 18
+- `yourself?”` → `yourself` — occorrenze: 18
+- `‘As` → `As` — occorrenze: 18
+- `‘Thou` → `Thou` — occorrenze: 18
+- `‘tis` → `tis` — occorrenze: 18
+- `’em.”` → `em` — occorrenze: 18
+- `“Alas!”` → `Alas` — occorrenze: 18
+- `“Ask` → `Ask` — occorrenze: 18
+- `“Ay,”` → `Ay` — occorrenze: 18
+- `“Bless` → `Bless` — occorrenze: 18
+- `“Certainly,` → `Certainly` — occorrenze: 18
+- `“Ha,` → `Ha` — occorrenze: 18
+- `“O!` → `O` — occorrenze: 18
+- `“Pray,` → `Pray` — occorrenze: 18
+- `“Thee` → `Thee` — occorrenze: 18
+- `“Three` → `Three` — occorrenze: 18
+- `"Ah!` → `Ah` — occorrenze: 17
+- `"Her` → `Her` — occorrenze: 17
+- `"Poor` → `Poor` — occorrenze: 17
+- `"Some` → `Some` — occorrenze: 17
+- `"Well` → `Well` — occorrenze: 17
+- `"Yet` → `Yet` — occorrenze: 17
+- `'They` → `They` — occorrenze: 17
+- `'Where` → `Where` — occorrenze: 17
+- `14,` → `14` — occorrenze: 17
+- `1815,` → `1815` — occorrenze: 17
+- `23,` → `23` — occorrenze: 17
+- `27,` → `27` — occorrenze: 17
+- `_can_` → `can` — occorrenze: 17
+- `_me_.` → `me` — occorrenze: 17
+- `_Shih` → `Shih` — occorrenze: 17
+- `_To` → `To` — occorrenze: 17
+- `absolute;` → `absolute` — occorrenze: 17
+- `adj.,` → `adj` — occorrenze: 17
+- `advance;` → `advance` — occorrenze: 17
+- `again.’` → `again` — occorrenze: 17
+- `air!` → `air` — occorrenze: 17
+- `alarm;` → `alarm` — occorrenze: 17
+- `altogether;` → `altogether` — occorrenze: 17
+- `am.”` → `am` — occorrenze: 17
+- `America;` → `America` — occorrenze: 17
+- `any;` → `any` — occorrenze: 17
+- `anything.”` → `anything` — occorrenze: 17
+- `are?` → `are` — occorrenze: 17
+- `bargain;` → `bargain` — occorrenze: 17
+- `been!` → `been` — occorrenze: 17
+- `behold!` → `behold` — occorrenze: 17
+- `blame;` → `blame` — occorrenze: 17
+- `bore;` → `bore` — occorrenze: 17
+- `boy!”` → `boy` — occorrenze: 17
+- `bride;` → `bride` — occorrenze: 17
+- `brother.'` → `brother` — occorrenze: 17
+- `brow;` → `brow` — occorrenze: 17
+- `building;` → `building` — occorrenze: 17
+- `calm;` → `calm` — occorrenze: 17
+- `cap;` → `cap` — occorrenze: 17
+- `cheek;` → `cheek` — occorrenze: 17
+- `Co.,` → `Co` — occorrenze: 17
+- `comes;` → `comes` — occorrenze: 17
+- `confusion;` → `confusion` — occorrenze: 17
+- `corner;` → `corner` — occorrenze: 17
+- `creatures;` → `creatures` — occorrenze: 17
+- `credit;` → `credit` — occorrenze: 17
+- `cross;` → `cross` — occorrenze: 17
+- `curse;` → `curse` — occorrenze: 17
+- `dear.”` → `dear` — occorrenze: 17
+- `devil!”` → `devil` — occorrenze: 17
+- `Diamond.”` → `Diamond` — occorrenze: 17
+- `disappeared;` → `disappeared` — occorrenze: 17
+- `divine;` → `divine` — occorrenze: 17
+- `do?’` → `do` — occorrenze: 17
+- `doing;` → `doing` — occorrenze: 17
+- `equal;` → `equal` — occorrenze: 17
+- `event;` → `event` — occorrenze: 17
+- `eye:` → `eye` — occorrenze: 17
+- `fancy;` → `fancy` — occorrenze: 17
+- `fine;` → `fine` — occorrenze: 17
+- `fire:` → `fire` — occorrenze: 17
+- `fool?` → `fool` — occorrenze: 17
+- `for?’` → `for` — occorrenze: 17
+- `forces;` → `forces` — occorrenze: 17
+- `forgotten;` → `forgotten` — occorrenze: 17
+- `French;` → `French` — occorrenze: 17
+- `friend,"` → `friend` — occorrenze: 17
+- `friend,’` → `friend` — occorrenze: 17
+- `friends?` → `friends` — occorrenze: 17
+- `gates;` → `gates` — occorrenze: 17
+- `go,"` → `go` — occorrenze: 17
+- `God,”` → `God` — occorrenze: 17
+- `goes;` → `goes` — occorrenze: 17
+- `good!` → `good` — occorrenze: 17
+- `good,’` → `good` — occorrenze: 17
+- `happened?` → `happened` — occorrenze: 17
+- `hate;` → `hate` — occorrenze: 17
+- `have,”` → `have` — occorrenze: 17
+- `help!` → `help` — occorrenze: 17
+- `hers;` → `hers` — occorrenze: 17
+- `Highness’` → `Highness` — occorrenze: 17
+- `home:` → `home` — occorrenze: 17
+- `horizon;` → `horizon` — occorrenze: 17
+- `husband?` → `husband` — occorrenze: 17
+- `Jack;` → `Jack` — occorrenze: 17
+- `Jerusalem;` → `Jerusalem` — occorrenze: 17
+- `John;` → `John` — occorrenze: 17
+- `King!` → `King` — occorrenze: 17
+- `knee;` → `knee` — occorrenze: 17
+- `lance;` → `lance` — occorrenze: 17
+- `landlord;` → `landlord` — occorrenze: 17
+- `last!` → `last` — occorrenze: 17
+- `laws;` → `laws` — occorrenze: 17
+- `leave;` → `leave` — occorrenze: 17
+- `legs;` → `legs` — occorrenze: 17
+- `like?` → `like` — occorrenze: 17
+- `lord,"` → `lord` — occorrenze: 17
+- `Lord:` → `Lord` — occorrenze: 17
+- `lore;` → `lore` — occorrenze: 17
+- `lost!` → `lost` — occorrenze: 17
+- `madam?` → `madam` — occorrenze: 17
+- `mean,”` → `mean` — occorrenze: 17
+- `mean;` → `mean` — occorrenze: 17
+- `meat;` → `meat` — occorrenze: 17
+- `mentioned;` → `mentioned` — occorrenze: 17
+- `mine,”` → `mine` — occorrenze: 17
+- `moment!` → `moment` — occorrenze: 17
+- `morning,”` → `morning` — occorrenze: 17
+- `naught;` → `naught` — occorrenze: 17
+- `night!` → `night` — occorrenze: 17
+- `not,"` → `not` — occorrenze: 17
+- `not,'` → `not` — occorrenze: 17
+- `nothing!` → `nothing` — occorrenze: 17
+- `Nuns’` → `Nuns` — occorrenze: 17
+- `on:—` → `on` — occorrenze: 17
+- `out?”` → `out` — occorrenze: 17
+- `over.”` → `over` — occorrenze: 17
+- `own?` → `own` — occorrenze: 17
+- `paid;` → `paid` — occorrenze: 17
+- `palace;` → `palace` — occorrenze: 17
+- `pen;` → `pen` — occorrenze: 17
+- `period;` → `period` — occorrenze: 17
+- `Petulengro;` → `Petulengro` — occorrenze: 17
+- `Pickwick,’` → `Pickwick` — occorrenze: 17
+- `place!` → `place` — occorrenze: 17
+- `place?”` → `place` — occorrenze: 17
+- `profit;` → `profit` — occorrenze: 17
+- `purposes;` → `purposes` — occorrenze: 17
+- `rain;` → `rain` — occorrenze: 17
+- `repose;` → `repose` — occorrenze: 17
+- `resumed:—` → `resumed` — occorrenze: 17
+- `said,--` → `said` — occorrenze: 17
+- `satisfaction;` → `satisfaction` — occorrenze: 17
+- `science;` → `science` — occorrenze: 17
+- `services;` → `services` — occorrenze: 17
+- `since;` → `since` — occorrenze: 17
+- `slave;` → `slave` — occorrenze: 17
+- `sometimes;` → `sometimes` — occorrenze: 17
+- `son.”` → `son` — occorrenze: 17
+- `sore;` → `sore` — occorrenze: 17
+- `speech:` → `speech` — occorrenze: 17
+- `stars;` → `stars` — occorrenze: 17
+- `stop;` → `stop` — occorrenze: 17
+- `store;` → `store` — occorrenze: 17
+- `stream;` → `stream` — occorrenze: 17
+- `suddenly;` → `suddenly` — occorrenze: 17
+- `talk;` → `talk` — occorrenze: 17
+- `Templar;` → `Templar` — occorrenze: 17
+- `them!”` → `them` — occorrenze: 17
+- `then:` → `then` — occorrenze: 17
+- `these:` → `these` — occorrenze: 17
+- `thither;` → `thither` — occorrenze: 17
+- `thought:` → `thought` — occorrenze: 17
+- `tho’` → `tho` — occorrenze: 17
+- `throat;` → `throat` — occorrenze: 17
+- `to!` → `to` — occorrenze: 17
+- `understand,”` → `understand` — occorrenze: 17
+- `verse:` → `verse` — occorrenze: 17
+- `want?”` → `want` — occorrenze: 17
+- `war:` → `war` — occorrenze: 17
+- `well,’` → `well` — occorrenze: 17
+- `Welsh?”` → `Welsh` — occorrenze: 17
+- `wife?` → `wife` — occorrenze: 17
+- `with.”` → `with` — occorrenze: 17
+- `woman,”` → `woman` — occorrenze: 17
+- `woods;` → `woods` — occorrenze: 17
+- `word.”` → `word` — occorrenze: 17
+- `word?` → `word` — occorrenze: 17
+- `work?` → `work` — occorrenze: 17
+- `years.”` → `years` — occorrenze: 17
+- `yes!”` → `yes` — occorrenze: 17
+- `yet?` → `yet` — occorrenze: 17
+- `York;` → `York` — occorrenze: 17
+- `‘All` → `All` — occorrenze: 17
+- `‘Bless` → `Bless` — occorrenze: 17
+- `‘Of` → `Of` — occorrenze: 17
+- `’fore` → `fore` — occorrenze: 17
+- `’Twill` → `Twill` — occorrenze: 17
+- `“Eh,` → `Eh` — occorrenze: 17
+- `“here` → `here` — occorrenze: 17
+- `“Mon` → `Mon` — occorrenze: 17
+- `“Monsieur,”` → `Monsieur` — occorrenze: 17
+- `“Most` → `Most` — occorrenze: 17
+- `“Nay,”` → `Nay` — occorrenze: 17
+- `“now` → `now` — occorrenze: 17
+- `“Suppose` → `Suppose` — occorrenze: 17
+- `“Then,”` → `Then` — occorrenze: 17
+- `“these` → `these` — occorrenze: 17
+- `“would` → `would` — occorrenze: 17
+- `“‘I` → `I` — occorrenze: 17
+- `"But,` → `But` — occorrenze: 16
+- `"do` → `do` — occorrenze: 16
+- `"Give` → `Give` — occorrenze: 16
+- `"King` → `King` — occorrenze: 16
+- `"let` → `let` — occorrenze: 16
+- `"or` → `or` — occorrenze: 16
+- `"thou` → `thou` — occorrenze: 16
+- `'Let` → `Let` — occorrenze: 16
+- `'No` → `No` — occorrenze: 16
+- `'there` → `there` — occorrenze: 16
+- `'To` → `To` — occorrenze: 16
+- `'twere` → `twere` — occorrenze: 16
+- `16,` → `16` — occorrenze: 16
+- `1830,` → `1830` — occorrenze: 16
+- `_O` → `O` — occorrenze: 16
+- `about?` → `about` — occorrenze: 16
+- `added:—` → `added` — occorrenze: 16
+- `allas!` → `allas` — occorrenze: 16
+- `astonishment;` → `astonishment` — occorrenze: 16
+- `away?”` → `away` — occorrenze: 16
+- `back!` → `back` — occorrenze: 16
+- `band;` → `band` — occorrenze: 16
+- `bank;` → `bank` — occorrenze: 16
+- `base;` → `base` — occorrenze: 16
+- `bed.”` → `bed` — occorrenze: 16
+- `bird;` → `bird` — occorrenze: 16
+- `bounds;` → `bounds` — occorrenze: 16
+- `box;` → `box` — occorrenze: 16
+- `boy?` → `boy` — occorrenze: 16
+- `brought;` → `brought` — occorrenze: 16
+- `Caleb;` → `Caleb` — occorrenze: 16
+- `castle;` → `castle` — occorrenze: 16
+- `child?”` → `child` — occorrenze: 16
+- `children!` → `children` — occorrenze: 16
+- `children.”` → `children` — occorrenze: 16
+- `cold.”` → `cold` — occorrenze: 16
+- `consequence;` → `consequence` — occorrenze: 16
+- `counsel;` → `counsel` — occorrenze: 16
+- `Court;` → `Court` — occorrenze: 16
+- `cries:` → `cries` — occorrenze: 16
+- `dead."` → `dead` — occorrenze: 16
+- `deed;` → `deed` — occorrenze: 16
+- `die:` → `die` — occorrenze: 16
+- `different;` → `different` — occorrenze: 16
+- `do,’` → `do` — occorrenze: 16
+- `down!` → `down` — occorrenze: 16
+- `earth.”` → `earth` — occorrenze: 16
+- `empty;` → `empty` — occorrenze: 16
+- `England!` → `England` — occorrenze: 16
+- `enterprise;` → `enterprise` — occorrenze: 16
+- `exceedingly;` → `exceedingly` — occorrenze: 16
+- `expense;` → `expense` — occorrenze: 16
+- `extent;` → `extent` — occorrenze: 16
+- `farewell!` → `farewell` — occorrenze: 16
+- `fear?` → `fear` — occorrenze: 16
+- `fears;` → `fears` — occorrenze: 16
+- `find;` → `find` — occorrenze: 16
+- `fit;` → `fit` — occorrenze: 16
+- `fury;` → `fury` — occorrenze: 16
+- `genius;` → `genius` — occorrenze: 16
+- `green;` → `green` — occorrenze: 16
+- `Harry,”` → `Harry` — occorrenze: 16
+- `hearing;` → `hearing` — occorrenze: 16
+- `heart,”` → `heart` — occorrenze: 16
+- `home?”` → `home` — occorrenze: 16
+- `hot;` → `hot` — occorrenze: 16
+- `ideas;` → `ideas` — occorrenze: 16
+- `in!”` → `in` — occorrenze: 16
+- `Ireland;` → `Ireland` — occorrenze: 16
+- `Jasper."` → `Jasper` — occorrenze: 16
+- `King:` → `King` — occorrenze: 16
+- `know!` → `know` — occorrenze: 16
+- `know:` → `know` — occorrenze: 16
+- `la!` → `la` — occorrenze: 16
+- `lady.”` → `lady` — occorrenze: 16
+- `laid;` → `laid` — occorrenze: 16
+- `lands;` → `lands` — occorrenze: 16
+- `law?` → `law` — occorrenze: 16
+- `lead;` → `lead` — occorrenze: 16
+- `led;` → `led` — occorrenze: 16
+- `letter?` → `letter` — occorrenze: 16
+- `live:` → `live` — occorrenze: 16
+- `looks;` → `looks` — occorrenze: 16
+- `Lord,”` → `Lord` — occorrenze: 16
+- `master!` → `master` — occorrenze: 16
+- `Master;` → `Master` — occorrenze: 16
+- `meeting;` → `meeting` — occorrenze: 16
+- `mistaken;` → `mistaken` — occorrenze: 16
+- `much,”` → `much` — occorrenze: 16
+- `noise;` → `noise` — occorrenze: 16
+- `noon;` → `noon` — occorrenze: 16
+- `nothing?` → `nothing` — occorrenze: 16
+- `orders;` → `orders` — occorrenze: 16
+- `others:` → `others` — occorrenze: 16
+- `own!` → `own` — occorrenze: 16
+- `patience;` → `patience` — occorrenze: 16
+- `pay;` → `pay` — occorrenze: 16
+- `people!` → `people` — occorrenze: 16
+- `plan;` → `plan` — occorrenze: 16
+- `plants;` → `plants` — occorrenze: 16
+- `prince;` → `prince` — occorrenze: 16
+- `Ravenswood;` → `Ravenswood` — occorrenze: 16
+- `read:` → `read` — occorrenze: 16
+- `Rebecca;` → `Rebecca` — occorrenze: 16
+- `reflection;` → `reflection` — occorrenze: 16
+- `required;` → `required` — occorrenze: 16
+- `return.”` → `return` — occorrenze: 16
+- `returned;` → `returned` — occorrenze: 16
+- `right!` → `right` — occorrenze: 16
+- `rose;` → `rose` — occorrenze: 16
+- `Sam?’` → `Sam` — occorrenze: 16
+- `says:--` → `says` — occorrenze: 16
+- `scale;` → `scale` — occorrenze: 16
+- `security;` → `security` — occorrenze: 16
+- `shade;` → `shade` — occorrenze: 16
+- `she?”` → `she` — occorrenze: 16
+- `sick;` → `sick` — occorrenze: 16
+- `Sir,”` → `Sir` — occorrenze: 16
+- `so,'` → `so` — occorrenze: 16
+- `soon.”` → `soon` — occorrenze: 16
+- `speaking;` → `speaking` — occorrenze: 16
+- `stock;` → `stock` — occorrenze: 16
+- `style;` → `style` — occorrenze: 16
+- `that."` → `that` — occorrenze: 16
+- `that?’` → `that` — occorrenze: 16
+- `thine;` → `thine` — occorrenze: 16
+- `this."` → `this` — occorrenze: 16
+- `though;` → `though` — occorrenze: 16
+- `Thro’` → `Thro` — occorrenze: 16
+- `thus:--` → `thus` — occorrenze: 16
+- `time,"` → `time` — occorrenze: 16
+- `together:` → `together` — occorrenze: 16
+- `too!”` → `too` — occorrenze: 16
+- `true.”` → `true` — occorrenze: 16
+- `T’` → `T` — occorrenze: 16
+- `Union;` → `Union` — occorrenze: 16
+- `upward;` → `upward` — occorrenze: 16
+- `victory;` → `victory` — occorrenze: 16
+- `voyage;` → `voyage` — occorrenze: 16
+- `wars;` → `wars` — occorrenze: 16
+- `was?` → `was` — occorrenze: 16
+- `we?` → `we` — occorrenze: 16
+- `weak;` → `weak` — occorrenze: 16
+- `wear;` → `wear` — occorrenze: 16
+- `well!”` → `well` — occorrenze: 16
+- `will."` → `will` — occorrenze: 16
+- `wisdom;` → `wisdom` — occorrenze: 16
+- `wish;` → `wish` — occorrenze: 16
+- `wishes;` → `wishes` — occorrenze: 16
+- `woman?”` → `woman` — occorrenze: 16
+- `world!”` → `world` — occorrenze: 16
+- `worth;` → `worth` — occorrenze: 16
+- `writing;` → `writing` — occorrenze: 16
+- `wrong?` → `wrong` — occorrenze: 16
+- `ye!` → `ye` — occorrenze: 16
+- `year.”` → `year` — occorrenze: 16
+- `yesterday;` → `yesterday` — occorrenze: 16
+- `‘em,` → `em` — occorrenze: 16
+- `‘Go` → `Go` — occorrenze: 16
+- `‘Your` → `Your` — occorrenze: 16
+- `’ere` → `ere` — occorrenze: 16
+- `’Twixt` → `Twixt` — occorrenze: 16
+- `“after` → `after` — occorrenze: 16
+- `“Bah!”` → `Bah` — occorrenze: 16
+- `“Behold` → `Behold` — occorrenze: 16
+- `“can` → `can` — occorrenze: 16
+- `“Certainly` → `Certainly` — occorrenze: 16
+- `“Davy,` → `Davy` — occorrenze: 16
+- `“did` → `did` — occorrenze: 16
+- `“even` → `even` — occorrenze: 16
+- `“Farewell,` → `Farewell` — occorrenze: 16
+- `“go` → `go` — occorrenze: 16
+- `“I,` → `I` — occorrenze: 16
+- `“Indeed` → `Indeed` — occorrenze: 16
+- `“Like` → `Like` — occorrenze: 16
+- `“Long` → `Long` — occorrenze: 16
+- `“Much` → `Much` — occorrenze: 16
+- `“No!` → `No` — occorrenze: 16
+- `“Oh,”` → `Oh` — occorrenze: 16
+- `“Please` → `Please` — occorrenze: 16
+- `“Should` → `Should` — occorrenze: 16
+- `“take` → `take` — occorrenze: 16
+- `“There,”` → `There` — occorrenze: 16
+- `“Too` → `Too` — occorrenze: 16
+- `“True,` → `True` — occorrenze: 16
+- `“very` → `very` — occorrenze: 16
+- `“You,` → `You` — occorrenze: 16
+- `"'Tis` → `Tis` — occorrenze: 15
+- `"Many` → `Many` — occorrenze: 15
+- `"Nay,` → `Nay` — occorrenze: 15
+- `"no` → `no` — occorrenze: 15
+- `"this` → `this` — occorrenze: 15
+- `"though` → `though` — occorrenze: 15
+- `"Und` → `Und` — occorrenze: 15
+- `'we` → `we` — occorrenze: 15
+- `'Your` → `Your` — occorrenze: 15
+- `17,` → `17` — occorrenze: 15
+- `22,` → `22` — occorrenze: 15
+- `29,` → `29` — occorrenze: 15
+- `30,` → `30` — occorrenze: 15
+- `475;` → `475` — occorrenze: 15
+- `_had_` → `had` — occorrenze: 15
+- `_le` → `le` — occorrenze: 15
+- `_Les` → `Les` — occorrenze: 15
+- `_May_` → `May` — occorrenze: 15
+- `abode;` → `abode` — occorrenze: 15
+- `air.”` → `air` — occorrenze: 15
+- `apartment;` → `apartment` — occorrenze: 15
+- `argument;` → `argument` — occorrenze: 15
+- `back:` → `back` — occorrenze: 15
+- `bare;` → `bare` — occorrenze: 15
+- `bay;` → `bay` — occorrenze: 15
+- `before?”` → `before` — occorrenze: 15
+- `beginning;` → `beginning` — occorrenze: 15
+- `behold;` → `behold` — occorrenze: 15
+- `body?` → `body` — occorrenze: 15
+- `bones;` → `bones` — occorrenze: 15
+- `boy,"` → `boy` — occorrenze: 15
+- `boy?”` → `boy` — occorrenze: 15
+- `business.”` → `business` — occorrenze: 15
+- `by.”` → `by` — occorrenze: 15
+- `captain;` → `captain` — occorrenze: 15
+- `carriage;` → `carriage` — occorrenze: 15
+- `case?` → `case` — occorrenze: 15
+- `cast;` → `cast` — occorrenze: 15
+- `chamber;` → `chamber` — occorrenze: 15
+- `closed;` → `closed` — occorrenze: 15
+- `clouds;` → `clouds` — occorrenze: 15
+- `coat;` → `coat` — occorrenze: 15
+- `Come!` → `Come` — occorrenze: 15
+- `come!”` → `come` — occorrenze: 15
+- `come:` → `come` — occorrenze: 15
+- `common;` → `common` — occorrenze: 15
+- `control;` → `control` — occorrenze: 15
+- `country:` → `country` — occorrenze: 15
+- `course.”` → `course` — occorrenze: 15
+- `crew;` → `crew` — occorrenze: 15
+- `cry:` → `cry` — occorrenze: 15
+- `daughter.”` → `daughter` — occorrenze: 15
+- `departure;` → `departure` — occorrenze: 15
+- `dignity;` → `dignity` — occorrenze: 15
+- `Dinah;` → `Dinah` — occorrenze: 15
+- `dispute;` → `dispute` — occorrenze: 15
+- `D——` → `D` — occorrenze: 15
+- `eat;` → `eat` — occorrenze: 15
+- `effort;` → `effort` — occorrenze: 15
+- `elsewhere;` → `elsewhere` — occorrenze: 15
+- `ends;` → `ends` — occorrenze: 15
+- `enough,"` → `enough` — occorrenze: 15
+- `estimation;` → `estimation` — occorrenze: 15
+- `everywhere;` → `everywhere` — occorrenze: 15
+- `example;` → `example` — occorrenze: 15
+- `faith?` → `faith` — occorrenze: 15
+- `fame;` → `fame` — occorrenze: 15
+- `favor;` → `favor` — occorrenze: 15
+- `fear:` → `fear` — occorrenze: 15
+- `feast;` → `feast` — occorrenze: 15
+- `fellow,’` → `fellow` — occorrenze: 15
+- `fellow?` → `fellow` — occorrenze: 15
+- `fellows;` → `fellows` — occorrenze: 15
+- `fever;` → `fever` — occorrenze: 15
+- `freely;` → `freely` — occorrenze: 15
+- `from?”` → `from` — occorrenze: 15
+- `future;` → `future` — occorrenze: 15
+- `gain;` → `gain` — occorrenze: 15
+- `garments;` → `garments` — occorrenze: 15
+- `gentleman,”` → `gentleman` — occorrenze: 15
+- `girl.”` → `girl` — occorrenze: 15
+- `gold:` → `gold` — occorrenze: 15
+- `Gott!` → `Gott` — occorrenze: 15
+- `hand!` → `hand` — occorrenze: 15
+- `hands?` → `hands` — occorrenze: 15
+- `hanner;` → `hanner` — occorrenze: 15
+- `have?` → `have` — occorrenze: 15
+- `He;` → `He` — occorrenze: 15
+- `head.”` → `head` — occorrenze: 15
+- `here.’` → `here` — occorrenze: 15
+- `herself:` → `herself` — occorrenze: 15
+- `hold?` → `hold` — occorrenze: 15
+- `hope,”` → `hope` — occorrenze: 15
+- `How?` → `How` — occorrenze: 15
+- `hurt;` → `hurt` — occorrenze: 15
+- `inhabitants;` → `inhabitants` — occorrenze: 15
+- `instrument;` → `instrument` — occorrenze: 15
+- `John!` → `John` — occorrenze: 15
+- `kind.”` → `kind` — occorrenze: 15
+- `kindness;` → `kindness` — occorrenze: 15
+- `late!` → `late` — occorrenze: 15
+- `light:` → `light` — occorrenze: 15
+- `London.”` → `London` — occorrenze: 15
+- `longer.”` → `longer` — occorrenze: 15
+- `lord:` → `lord` — occorrenze: 15
+- `made:` → `made` — occorrenze: 15
+- `main;` → `main` — occorrenze: 15
+- `march;` → `march` — occorrenze: 15
+- `mark;` → `mark` — occorrenze: 15
+- `market;` → `market` — occorrenze: 15
+- `Mary;` → `Mary` — occorrenze: 15
+- `matter:` → `matter` — occorrenze: 15
+- `matters;` → `matters` — occorrenze: 15
+- `miles;` → `miles` — occorrenze: 15
+- `mine."` → `mine` — occorrenze: 15
+- `mother!”` → `mother` — occorrenze: 15
+- `Mother,”` → `Mother` — occorrenze: 15
+- `neither;` → `neither` — occorrenze: 15
+- `night?”` → `night` — occorrenze: 15
+- `note:` → `note` — occorrenze: 15
+- `offer;` → `offer` — occorrenze: 15
+- `often;` → `often` — occorrenze: 15
+- `on?”` → `on` — occorrenze: 15
+- `others?` → `others` — occorrenze: 15
+- `pain:` → `pain` — occorrenze: 15
+- `parents;` → `parents` — occorrenze: 15
+- `parents’` → `parents` — occorrenze: 15
+- `part:` → `part` — occorrenze: 15
+- `people,”` → `people` — occorrenze: 15
+- `perfection;` → `perfection` — occorrenze: 15
+- `person.”` → `person` — occorrenze: 15
+- `power:` → `power` — occorrenze: 15
+- `priest;` → `priest` — occorrenze: 15
+- `principles;` → `principles` — occorrenze: 15
+- `prize;` → `prize` — occorrenze: 15
+- `reason?` → `reason` — occorrenze: 15
+- `regard;` → `regard` — occorrenze: 15
+- `removed;` → `removed` — occorrenze: 15
+- `repeated;` → `repeated` — occorrenze: 15
+- `rest?` → `rest` — occorrenze: 15
+- `revenge;` → `revenge` — occorrenze: 15
+- `right:` → `right` — occorrenze: 15
+- `same?` → `same` — occorrenze: 15
+- `SCENE:` → `SCENE` — occorrenze: 15
+- `seas;` → `seas` — occorrenze: 15
+- `see?”` → `see` — occorrenze: 15
+- `shame?` → `shame` — occorrenze: 15
+- `sight:` → `sight` — occorrenze: 15
+- `so,’` → `so` — occorrenze: 15
+- `so?"` → `so` — occorrenze: 15
+- `soldiers;` → `soldiers` — occorrenze: 15
+- `son,”` → `son` — occorrenze: 15
+- `song:` → `song` — occorrenze: 15
+- `south;` → `south` — occorrenze: 15
+- `steps;` → `steps` — occorrenze: 15
+- `still?` → `still` — occorrenze: 15
+- `substance;` → `substance` — occorrenze: 15
+- `taken;` → `taken` — occorrenze: 15
+- `thee?”` → `thee` — occorrenze: 15
+- `there."` → `there` — occorrenze: 15
+- `there?’` → `there` — occorrenze: 15
+- `to:` → `to` — occorrenze: 15
+- `today?` → `today` — occorrenze: 15
+- `Tom?”` → `Tom` — occorrenze: 15
+- `too?”` → `too` — occorrenze: 15
+- `true:` → `true` — occorrenze: 15
+- `twain;` → `twain` — occorrenze: 15
+- `vain!` → `vain` — occorrenze: 15
+- `vain:` → `vain` — occorrenze: 15
+- `visible;` → `visible` — occorrenze: 15
+- `wanted;` → `wanted` — occorrenze: 15
+- `west;` → `west` — occorrenze: 15
+- `Whale;` → `Whale` — occorrenze: 15
+- `will,"` → `will` — occorrenze: 15
+- `will,”` → `will` — occorrenze: 15
+- `with:` → `with` — occorrenze: 15
+- `words!` → `words` — occorrenze: 15
+- `worship;` → `worship` — occorrenze: 15
+- `worst;` → `worst` — occorrenze: 15
+- `ye;` → `ye` — occorrenze: 15
+- `yourself:` → `yourself` — occorrenze: 15
+- `‘An` → `An` — occorrenze: 15
+- `‘With` → `With` — occorrenze: 15
+- `‘Wot` → `Wot` — occorrenze: 15
+- `’t,` → `t` — occorrenze: 15
+- `“but,` → `but` — occorrenze: 15
+- `“Excuse` → `Excuse` — occorrenze: 15
+- `“from` → `from` — occorrenze: 15
+- `“her` → `her` — occorrenze: 15
+- `“Leave` → `Leave` — occorrenze: 15
+- `“Make` → `Make` — occorrenze: 15
+- `“Many` → `Many` — occorrenze: 15
+- `“nor` → `nor` — occorrenze: 15
+- `“some` → `some` — occorrenze: 15
+- `“Speak` → `Speak` — occorrenze: 15
+- `“than` → `than` — occorrenze: 15
+- `“Though` → `Though` — occorrenze: 15
+- `“Whatever` → `Whatever` — occorrenze: 15
+- `“whether` → `whether` — occorrenze: 15
+- `“ye` → `ye` — occorrenze: 15
+- `"Because` → `Because` — occorrenze: 14
+- `"But,"` → `But` — occorrenze: 14
+- `"Can` → `Can` — occorrenze: 14
+- `"Great` → `Great` — occorrenze: 14
+- `"of` → `of` — occorrenze: 14
+- `"Only` → `Only` — occorrenze: 14
+- `"Will` → `Will` — occorrenze: 14
+- `"Would` → `Would` — occorrenze: 14
+- `'Are` → `Are` — occorrenze: 14
+- `'do` → `do` — occorrenze: 14
+- `'Here` → `Here` — occorrenze: 14
+- `1836.` → `1836` — occorrenze: 14
+- `1837.` → `1837` — occorrenze: 14
+- `1839,` → `1839` — occorrenze: 14
+- `1839.` → `1839` — occorrenze: 14
+- `1845,` → `1845` — occorrenze: 14
+- `<gr>` → `gr` — occorrenze: 14
+- `_Chaos_` → `Chaos` — occorrenze: 14
+- `_Cho_.` → `Cho` — occorrenze: 14
+- `_Cobb_.` → `Cobb` — occorrenze: 14
+- `_he` → `he` — occorrenze: 14
+- `_they_` → `they` — occorrenze: 14
+- `about?”` → `about` — occorrenze: 14
+- `actions;` → `actions` — occorrenze: 14
+- `address;` → `address` — occorrenze: 14
+- `alive?` → `alive` — occorrenze: 14
+- `all.’` → `all` — occorrenze: 14
+- `altered;` → `altered` — occorrenze: 14
+- `ambition;` → `ambition` — occorrenze: 14
+- `anger;` → `anger` — occorrenze: 14
+- `apart;` → `apart` — occorrenze: 14
+- `approach;` → `approach` — occorrenze: 14
+- `arms:` → `arms` — occorrenze: 14
+- `aspect;` → `aspect` — occorrenze: 14
+- `Away!` → `Away` — occorrenze: 14
+- `away!”` → `away` — occorrenze: 14
+- `back."` → `back` — occorrenze: 14
+- `Barbicane;` → `Barbicane` — occorrenze: 14
+- `be."` → `be` — occorrenze: 14
+- `beast;` → `beast` — occorrenze: 14
+- `beautiful;` → `beautiful` — occorrenze: 14
+- `bein’` → `bein` — occorrenze: 14
+- `believe,”` → `believe` — occorrenze: 14
+- `bill;` → `bill` — occorrenze: 14
+- `birds;` → `birds` — occorrenze: 14
+- `blind;` → `blind` — occorrenze: 14
+- `blood!` → `blood` — occorrenze: 14
+- `blue;` → `blue` — occorrenze: 14
+- `bottom;` → `bottom` — occorrenze: 14
+- `bow;` → `bow` — occorrenze: 14
+- `break;` → `break` — occorrenze: 14
+- `breakfast;` → `breakfast` — occorrenze: 14
+- `bred;` → `bred` — occorrenze: 14
+- `camp;` → `camp` — occorrenze: 14
+- `cart;` → `cart` — occorrenze: 14
+- `change?` → `change` — occorrenze: 14
+- `circle;` → `circle` — occorrenze: 14
+- `colors;` → `colors` — occorrenze: 14
+- `consent;` → `consent` — occorrenze: 14
+- `continued:—` → `continued` — occorrenze: 14
+- `course,”` → `course` — occorrenze: 14
+- `cries;` → `cries` — occorrenze: 14
+- `curiosity;` → `curiosity` — occorrenze: 14
+- `cut;` → `cut` — occorrenze: 14
+- `dangerous;` → `dangerous` — occorrenze: 14
+- `daughter!` → `daughter` — occorrenze: 14
+- `daughters;` → `daughters` — occorrenze: 14
+- `day,”` → `day` — occorrenze: 14
+- `day?”` → `day` — occorrenze: 14
+- `days!` → `days` — occorrenze: 14
+- `dead!”` → `dead` — occorrenze: 14
+- `dead:` → `dead` — occorrenze: 14
+- `deceived;` → `deceived` — occorrenze: 14
+- `deeds;` → `deeds` — occorrenze: 14
+- `destiny;` → `destiny` — occorrenze: 14
+- `destroyed;` → `destroyed` — occorrenze: 14
+- `did:` → `did` — occorrenze: 14
+- `dight;` → `dight` — occorrenze: 14
+- `dollars;` → `dollars` — occorrenze: 14
+- `done."` → `done` — occorrenze: 14
+- `dry;` → `dry` — occorrenze: 14
+- `earnest;` → `earnest` — occorrenze: 14
+- `earth!` → `earth` — occorrenze: 14
+- `encounter;` → `encounter` — occorrenze: 14
+- `engagement;` → `engagement` — occorrenze: 14
+- `error;` → `error` — occorrenze: 14
+- `excellent;` → `excellent` — occorrenze: 14
+- `execution;` → `execution` — occorrenze: 14
+- `eyes.”` → `eyes` — occorrenze: 14
+- `fair?` → `fair` — occorrenze: 14
+- `family.”` → `family` — occorrenze: 14
+- `fellow.”` → `fellow` — occorrenze: 14
+- `fires;` → `fires` — occorrenze: 14
+- `firm;` → `firm` — occorrenze: 14
+- `first:` → `first` — occorrenze: 14
+- `for,”` → `for` — occorrenze: 14
+- `forest;` → `forest` — occorrenze: 14
+- `found:` → `found` — occorrenze: 14
+- `free!` → `free` — occorrenze: 14
+- `garden.”` → `garden` — occorrenze: 14
+- `gift;` → `gift` — occorrenze: 14
+- `God."` → `God` — occorrenze: 14
+- `gone:` → `gone` — occorrenze: 14
+- `goods;` → `goods` — occorrenze: 14
+- `gratitude;` → `gratitude` — occorrenze: 14
+- `ha?` → `ha` — occorrenze: 14
+- `hand."` → `hand` — occorrenze: 14
+- `handsome;` → `handsome` — occorrenze: 14
+- `head!` → `head` — occorrenze: 14
+- `hence!` → `hence` — occorrenze: 14
+- `Hiawatha!”` → `Hiawatha` — occorrenze: 14
+- `Ho!` → `Ho` — occorrenze: 14
+- `how?` → `how` — occorrenze: 14
+- `humor;` → `humor` — occorrenze: 14
+- `indeed?` → `indeed` — occorrenze: 14
+- `instant;` → `instant` — occorrenze: 14
+- `is,"` → `is` — occorrenze: 14
+- `itself:` → `itself` — occorrenze: 14
+- `know,'` → `know` — occorrenze: 14
+- `know,’` → `know` — occorrenze: 14
+- `lad,”` → `lad` — occorrenze: 14
+- `lad;` → `lad` — occorrenze: 14
+- `land.”` → `land` — occorrenze: 14
+- `leaves;` → `leaves` — occorrenze: 14
+- `life!”` → `life` — occorrenze: 14
+- `like."` → `like` — occorrenze: 14
+- `linen;` → `linen` — occorrenze: 14
+- `lines:` → `lines` — occorrenze: 14
+- `little:` → `little` — occorrenze: 14
+- `London:` → `London` — occorrenze: 14
+- `Lord,’` → `Lord` — occorrenze: 14
+- `M.,` → `M` — occorrenze: 14
+- `made?` → `made` — occorrenze: 14
+- `man.’` → `man` — occorrenze: 14
+- `mankind;` → `mankind` — occorrenze: 14
+- `Mansoul!` → `Mansoul` — occorrenze: 14
+- `match;` → `match` — occorrenze: 14
+- `met;` → `met` — occorrenze: 14
+- `Michel;` → `Michel` — occorrenze: 14
+- `midnight;` → `midnight` — occorrenze: 14
+- `mind,’` → `mind` — occorrenze: 14
+- `minister;` → `minister` — occorrenze: 14
+- `Monsieur?”` → `Monsieur` — occorrenze: 14
+- `more?”` → `more` — occorrenze: 14
+- `Nay;` → `Nay` — occorrenze: 14
+- `news;` → `news` — occorrenze: 14
+- `nigh;` → `nigh` — occorrenze: 14
+- `nonsense!` → `nonsense` — occorrenze: 14
+- `not?’` → `not` — occorrenze: 14
+- `now?’` → `now` — occorrenze: 14
+- `numbers;` → `numbers` — occorrenze: 14
+- `occupation;` → `occupation` — occorrenze: 14
+- `of,”` → `of` — occorrenze: 14
+- `offended;` → `offended` — occorrenze: 14
+- `on!”` → `on` — occorrenze: 14
+- `outside;` → `outside` — occorrenze: 14
+- `own:` → `own` — occorrenze: 14
+- `Peace!` → `Peace` — occorrenze: 14
+- `peace?` → `peace` — occorrenze: 14
+- `peer;` → `peer` — occorrenze: 14
+- `Peterkin,"` → `Peterkin` — occorrenze: 14
+- `place."` → `place` — occorrenze: 14
+- `please,”` → `please` — occorrenze: 14
+- `points;` → `points` — occorrenze: 14
+- `pray;` → `pray` — occorrenze: 14
+- `principle;` → `principle` — occorrenze: 14
+- `prisoner;` → `prisoner` — occorrenze: 14
+- `prisoners;` → `prisoners` — occorrenze: 14
+- `protection;` → `protection` — occorrenze: 14
+- `quarters;` → `quarters` — occorrenze: 14
+- `Queen;` → `Queen` — occorrenze: 14
+- `question,”` → `question` — occorrenze: 14
+- `quietly;` → `quietly` — occorrenze: 14
+- `rare;` → `rare` — occorrenze: 14
+- `ready.”` → `ready` — occorrenze: 14
+- `reality;` → `reality` — occorrenze: 14
+- `reason:` → `reason` — occorrenze: 14
+- `record;` → `record` — occorrenze: 14
+- `relations;` → `relations` — occorrenze: 14
+- `remember;` → `remember` — occorrenze: 14
+- `repent;` → `repent` — occorrenze: 14
+- `reverence.”` → `reverence` — occorrenze: 14
+- `Ritchie,”` → `Ritchie` — occorrenze: 14
+- `rock;` → `rock` — occorrenze: 14
+- `roof;` → `roof` — occorrenze: 14
+- `sad;` → `sad` — occorrenze: 14
+- `safety;` → `safety` — occorrenze: 14
+- `said:--` → `said` — occorrenze: 14
+- `said?` → `said` — occorrenze: 14
+- `sake.”` → `sake` — occorrenze: 14
+- `Sammy.’` → `Sammy` — occorrenze: 14
+- `sand;` → `sand` — occorrenze: 14
+- `scene;` → `scene` — occorrenze: 14
+- `scorn;` → `scorn` — occorrenze: 14
+- `second;` → `second` — occorrenze: 14
+- `See!` → `See` — occorrenze: 14
+- `see!”` → `see` — occorrenze: 14
+- `senses;` → `senses` — occorrenze: 14
+- `serve;` → `serve` — occorrenze: 14
+- `sex;` → `sex` — occorrenze: 14
+- `shadow;` → `shadow` — occorrenze: 14
+- `shame!` → `shame` — occorrenze: 14
+- `side.”` → `side` — occorrenze: 14
+- `sigh;` → `sigh` — occorrenze: 14
+- `sister,”` → `sister` — occorrenze: 14
+- `sister.”` → `sister` — occorrenze: 14
+- `size;` → `size` — occorrenze: 14
+- `skies;` → `skies` — occorrenze: 14
+- `smoke;` → `smoke` — occorrenze: 14
+- `somethin’` → `somethin` — occorrenze: 14
+- `sought;` → `sought` — occorrenze: 14
+- `soul?` → `soul` — occorrenze: 14
+- `stairs;` → `stairs` — occorrenze: 14
+- `stood:` → `stood` — occorrenze: 14
+- `stopped;` → `stopped` — occorrenze: 14
+- `subject.”` → `subject` — occorrenze: 14
+- `suppose;` → `suppose` — occorrenze: 14
+- `t.,` → `t` — occorrenze: 14
+- `tail;` → `tail` — occorrenze: 14
+- `tell?` → `tell` — occorrenze: 14
+- `Temple,”` → `Temple` — occorrenze: 14
+- `terms:` → `terms` — occorrenze: 14
+- `terms;` → `terms` — occorrenze: 14
+- `think?”` → `think` — occorrenze: 14
+- `to,”` → `to` — occorrenze: 14
+- `together?` → `together` — occorrenze: 14
+- `tone:` → `tone` — occorrenze: 14
+- `top;` → `top` — occorrenze: 14
+- `trouble.”` → `trouble` — occorrenze: 14
+- `trust;` → `trust` — occorrenze: 14
+- `truth.”` → `truth` — occorrenze: 14
+- `truth:` → `truth` — occorrenze: 14
+- `understanding;` → `understanding` — occorrenze: 14
+- `up!”` → `up` — occorrenze: 14
+- `up?` → `up` — occorrenze: 14
+- `voice!` → `voice` — occorrenze: 14
+- `why?”` → `why` — occorrenze: 14
+- `wife:` → `wife` — occorrenze: 14
+- `winds;` → `winds` — occorrenze: 14
+- `woman!”` → `woman` — occorrenze: 14
+- `wonder?` → `wonder` — occorrenze: 14
+- `work!` → `work` — occorrenze: 14
+- `world,”` → `world` — occorrenze: 14
+- `written;` → `written` — occorrenze: 14
+- `‘Are` → `Are` — occorrenze: 14
+- `‘as` → `as` — occorrenze: 14
+- `‘By` → `By` — occorrenze: 14
+- `‘for` → `for` — occorrenze: 14
+- `‘When` → `When` — occorrenze: 14
+- `‘Will` → `Will` — occorrenze: 14
+- `“_I_` → `I` — occorrenze: 14
+- `“and,` → `and` — occorrenze: 14
+- `“Captain` → `Captain` — occorrenze: 14
+- `“come` → `come` — occorrenze: 14
+- `“Every` → `Every` — occorrenze: 14
+- `“Follow` → `Follow` — occorrenze: 14
+- `“Indeed!”` → `Indeed` — occorrenze: 14
+- `“Lady` → `Lady` — occorrenze: 14
+- `“Lord` → `Lord` — occorrenze: 14
+- `“perhaps` → `perhaps` — occorrenze: 14
+- `“Perhaps,”` → `Perhaps` — occorrenze: 14
+- `“Please,` → `Please` — occorrenze: 14
+- `“pray` → `pray` — occorrenze: 14
+- `“Put` → `Put` — occorrenze: 14
+- `“Remember` → `Remember` — occorrenze: 14
+- `“Something` → `Something` — occorrenze: 14
+- `“Stop,` → `Stop` — occorrenze: 14
+- `“tell` → `tell` — occorrenze: 14
+- `“those` → `those` — occorrenze: 14
+- `“Wal,` → `Wal` — occorrenze: 14
+- `"'I` → `I` — occorrenze: 13
+- `"After` → `After` — occorrenze: 13
+- `"an'` → `an` — occorrenze: 13
+- `"Hold` → `Hold` — occorrenze: 13
+- `"Le` → `Le` — occorrenze: 13
+- `"Now,"` → `Now` — occorrenze: 13
+- `'Good` → `Good` — occorrenze: 13
+- `'One` → `One` — occorrenze: 13
+- `'When` → `When` — occorrenze: 13
+- `1838.` → `1838` — occorrenze: 13
+- `20,` → `20` — occorrenze: 13
+- `_could_` → `could` — occorrenze: 13
+- `_Item,` → `Item` — occorrenze: 13
+- `_June_` → `June` — occorrenze: 13
+- `_me_,` → `me` — occorrenze: 13
+- `_She_` → `She` — occorrenze: 13
+- `_Smeaton_,` → `Smeaton` — occorrenze: 13
+- `_That` → `That` — occorrenze: 13
+- `_this_` → `this` — occorrenze: 13
+- `_You_` → `You` — occorrenze: 13
+- `Adam;` → `Adam` — occorrenze: 13
+- `afraid;` → `afraid` — occorrenze: 13
+- `again,"` → `again` — occorrenze: 13
+- `alone?` → `alone` — occorrenze: 13
+- `animal;` → `animal` — occorrenze: 13
+- `anything?` → `anything` — occorrenze: 13
+- `arms!` → `arms` — occorrenze: 13
+- `ask;` → `ask` — occorrenze: 13
+- `awake;` → `awake` — occorrenze: 13
+- `away."` → `away` — occorrenze: 13
+- `baby;` → `baby` — occorrenze: 13
+- `back!”` → `back` — occorrenze: 13
+- `been?` → `been` — occorrenze: 13
+- `before."` → `before` — occorrenze: 13
+- `besides;` → `besides` — occorrenze: 13
+- `bone;` → `bone` — occorrenze: 13
+- `bore:` → `bore` — occorrenze: 13
+- `boys;` → `boys` — occorrenze: 13
+- `Bracy;` → `Bracy` — occorrenze: 13
+- `brother:` → `brother` — occorrenze: 13
+- `burn;` → `burn` — occorrenze: 13
+- `cease;` → `cease` — occorrenze: 13
+- `chain;` → `chain` — occorrenze: 13
+- `chance.”` → `chance` — occorrenze: 13
+- `Chi_,` → `Chi` — occorrenze: 13
+- `children,”` → `children` — occorrenze: 13
+- `commands;` → `commands` — occorrenze: 13
+- `companions;` → `companions` — occorrenze: 13
+- `company?` → `company` — occorrenze: 13
+- `concerned;` → `concerned` — occorrenze: 13
+- `contempt;` → `contempt` — occorrenze: 13
+- `cousin,”` → `cousin` — occorrenze: 13
+- `cure;` → `cure` — occorrenze: 13
+- `Davy?”` → `Davy` — occorrenze: 13
+- `death!”` → `death` — occorrenze: 13
+- `debt;` → `debt` — occorrenze: 13
+- `deck;` → `deck` — occorrenze: 13
+- `demand;` → `demand` — occorrenze: 13
+- `description;` → `description` — occorrenze: 13
+- `desired;` → `desired` — occorrenze: 13
+- `did!` → `did` — occorrenze: 13
+- `die."` → `die` — occorrenze: 13
+- `Dieu!` → `Dieu` — occorrenze: 13
+- `difficulties;` → `difficulties` — occorrenze: 13
+- `dinner.”` → `dinner` — occorrenze: 13
+- `directions;` → `directions` — occorrenze: 13
+- `does;` → `does` — occorrenze: 13
+- `door:` → `door` — occorrenze: 13
+- `doubt,”` → `doubt` — occorrenze: 13
+- `down,”` → `down` — occorrenze: 13
+- `down?` → `down` — occorrenze: 13
+- `dread;` → `dread` — occorrenze: 13
+- `drowned;` → `drowned` — occorrenze: 13
+- `dwell;` → `dwell` — occorrenze: 13
+- `edge;` → `edge` — occorrenze: 13
+- `eh?’` → `eh` — occorrenze: 13
+- `Emma;` → `Emma` — occorrenze: 13
+- `emotion;` → `emotion` — occorrenze: 13
+- `enough!` → `enough` — occorrenze: 13
+- `entered;` → `entered` — occorrenze: 13
+- `evil?` → `evil` — occorrenze: 13
+- `exclaimed;` → `exclaimed` — occorrenze: 13
+- `exhausted;` → `exhausted` — occorrenze: 13
+- `eye?` → `eye` — occorrenze: 13
+- `face!”` → `face` — occorrenze: 13
+- `Fanny,”` → `Fanny` — occorrenze: 13
+- `farewell;` → `farewell` — occorrenze: 13
+- `Father!` → `Father` — occorrenze: 13
+- `fellow:` → `fellow` — occorrenze: 13
+- `foe:` → `foe` — occorrenze: 13
+- `four;` → `four` — occorrenze: 13
+- `free?` → `free` — occorrenze: 13
+- `friends:` → `friends` — occorrenze: 13
+- `gentlemen,’` → `gentlemen` — occorrenze: 13
+- `George!` → `George` — occorrenze: 13
+- `go!”` → `go` — occorrenze: 13
+- `God.”` → `God` — occorrenze: 13
+- `going?` → `going` — occorrenze: 13
+- `gold.”` → `gold` — occorrenze: 13
+- `good:` → `good` — occorrenze: 13
+- `grain;` → `grain` — occorrenze: 13
+- `ha!’` → `ha` — occorrenze: 13
+- `hand,”` → `hand` — occorrenze: 13
+- `hands!` → `hands` — occorrenze: 13
+- `hark!` → `hark` — occorrenze: 13
+- `he?’` → `he` — occorrenze: 13
+- `head,”` → `head` — occorrenze: 13
+- `heels;` → `heels` — occorrenze: 13
+- `hell!` → `hell` — occorrenze: 13
+- `here?"` → `here` — occorrenze: 13
+- `here?'` → `here` — occorrenze: 13
+- `highness’` → `highness` — occorrenze: 13
+- `Him;` → `Him` — occorrenze: 13
+- `hope?` → `hope` — occorrenze: 13
+- `horror;` → `horror` — occorrenze: 13
+- `host;` → `host` — occorrenze: 13
+- `husband.”` → `husband` — occorrenze: 13
+- `ice;` → `ice` — occorrenze: 13
+- `ignorant;` → `ignorant` — occorrenze: 13
+- `importance;` → `importance` — occorrenze: 13
+- `increase;` → `increase` — occorrenze: 13
+- `indeed,’` → `indeed` — occorrenze: 13
+- `individual;` → `individual` — occorrenze: 13
+- `justice?` → `justice` — occorrenze: 13
+- `Katy;` → `Katy` — occorrenze: 13
+- `Katy?"` → `Katy` — occorrenze: 13
+- `kinds;` → `kinds` — occorrenze: 13
+- `knows?` → `knows` — occorrenze: 13
+- `least.”` → `least` — occorrenze: 13
+- `like,”` → `like` — occorrenze: 13
+- `literature;` → `literature` — occorrenze: 13
+- `London?` → `London` — occorrenze: 13
+- `lords;` → `lords` — occorrenze: 13
+- `luck;` → `luck` — occorrenze: 13
+- `madness;` → `madness` — occorrenze: 13
+- `Madrid;` → `Madrid` — occorrenze: 13
+- `man!’` → `man` — occorrenze: 13
+- `manner?` → `manner` — occorrenze: 13
+- `Mansoul:` → `Mansoul` — occorrenze: 13
+- `Marie;` → `Marie` — occorrenze: 13
+- `mass;` → `mass` — occorrenze: 13
+- `master,”` → `master` — occorrenze: 13
+- `mercy!` → `mercy` — occorrenze: 13
+- `milk;` → `milk` — occorrenze: 13
+- `mirth;` → `mirth` — occorrenze: 13
+- `moment:` → `moment` — occorrenze: 13
+- `monster!` → `monster` — occorrenze: 13
+- `most;` → `most` — occorrenze: 13
+- `much."` → `much` — occorrenze: 13
+- `myself!` → `myself` — occorrenze: 13
+- `mystery;` → `mystery` — occorrenze: 13
+- `nature:` → `nature` — occorrenze: 13
+- `nay,”` → `nay` — occorrenze: 13
+- `necessity;` → `necessity` — occorrenze: 13
+- `neighbourhood;` → `neighbourhood` — occorrenze: 13
+- `No:` → `No` — occorrenze: 13
+- `nose;` → `nose` — occorrenze: 13
+- `not!”` → `not` — occorrenze: 13
+- `objects;` → `objects` — occorrenze: 13
+- `obtained;` → `obtained` — occorrenze: 13
+- `opened;` → `opened` — occorrenze: 13
+- `ours;` → `ours` — occorrenze: 13
+- `O’` → `O` — occorrenze: 13
+- `part.”` → `part` — occorrenze: 13
+- `pity!` → `pity` — occorrenze: 13
+- `pl.,` → `pl` — occorrenze: 13
+- `poet;` → `poet` — occorrenze: 13
+- `point:` → `point` — occorrenze: 13
+- `possession;` → `possession` — occorrenze: 13
+- `power?` → `power` — occorrenze: 13
+- `press;` → `press` — occorrenze: 13
+- `pretty;` → `pretty` — occorrenze: 13
+- `provisions;` → `provisions` — occorrenze: 13
+- `purpose.”` → `purpose` — occorrenze: 13
+- `purse;` → `purse` — occorrenze: 13
+- `pursue;` → `pursue` — occorrenze: 13
+- `quarrel;` → `quarrel` — occorrenze: 13
+- `queen;` → `queen` — occorrenze: 13
+- `reasons:` → `reasons` — occorrenze: 13
+- `remedy;` → `remedy` — occorrenze: 13
+- `repentance;` → `repentance` — occorrenze: 13
+- `reputation;` → `reputation` — occorrenze: 13
+- `rest.”` → `rest` — occorrenze: 13
+- `result;` → `result` — occorrenze: 13
+- `retreat;` → `retreat` — occorrenze: 13
+- `reverence;` → `reverence` — occorrenze: 13
+- `ride;` → `ride` — occorrenze: 13
+- `room:` → `room` — occorrenze: 13
+- `sake!` → `sake` — occorrenze: 13
+- `salvation;` → `salvation` — occorrenze: 13
+- `Sammy?’` → `Sammy` — occorrenze: 13
+- `see,"` → `see` — occorrenze: 13
+- `servant:` → `servant` — occorrenze: 13
+- `should;` → `should` — occorrenze: 13
+- `side!` → `side` — occorrenze: 13
+- `side?` → `side` — occorrenze: 13
+- `sire;` → `sire` — occorrenze: 13
+- `sister!` → `sister` — occorrenze: 13
+- `skald:--` → `skald` — occorrenze: 13
+- `something.”` → `something` — occorrenze: 13
+- `soul,”` → `soul` — occorrenze: 13
+- `spent;` → `spent` — occorrenze: 13
+- `star;` → `star` — occorrenze: 13
+- `States?` → `States` — occorrenze: 13
+- `straight;` → `straight` — occorrenze: 13
+- `strain;` → `strain` — occorrenze: 13
+- `stroke;` → `stroke` — occorrenze: 13
+- `succeed;` → `succeed` — occorrenze: 13
+- `supplied;` → `supplied` — occorrenze: 13
+- `sustain;` → `sustain` — occorrenze: 13
+- `task;` → `task` — occorrenze: 13
+- `ten;` → `ten` — occorrenze: 13
+- `tender;` → `tender` — occorrenze: 13
+- `terror;` → `terror` — occorrenze: 13
+- `thee,”` → `thee` — occorrenze: 13
+- `thee?"` → `thee` — occorrenze: 13
+- `theirs;` → `theirs` — occorrenze: 13
+- `themselves:` → `themselves` — occorrenze: 13
+- `then,'` → `then` — occorrenze: 13
+- `then,’` → `then` — occorrenze: 13
+- `thing?”` → `thing` — occorrenze: 13
+- `things!` → `things` — occorrenze: 13
+- `think,"` → `think` — occorrenze: 13
+- `think,’` → `think` — occorrenze: 13
+- `town!` → `town` — occorrenze: 13
+- `town?` → `town` — occorrenze: 13
+- `truth,”` → `truth` — occorrenze: 13
+- `try;` → `try` — occorrenze: 13
+- `under;` → `under` — occorrenze: 13
+- `up."` → `up` — occorrenze: 13
+- `v.,` → `v` — occorrenze: 13
+- `void;` → `void` — occorrenze: 13
+- `wait;` → `wait` — occorrenze: 13
+- `want.”` → `want` — occorrenze: 13
+- `way!”` → `way` — occorrenze: 13
+- `way?”` → `way` — occorrenze: 13
+- `we?”` → `we` — occorrenze: 13
+- `wide;` → `wide` — occorrenze: 13
+- `wit;` → `wit` — occorrenze: 13
+- `withal;` → `withal` — occorrenze: 13
+- `woe!` → `woe` — occorrenze: 13
+- `word!` → `word` — occorrenze: 13
+- `wrath;` → `wrath` — occorrenze: 13
+- `year:` → `year` — occorrenze: 13
+- `years:` → `years` — occorrenze: 13
+- `you!"` → `you` — occorrenze: 13
+- `youth!` → `youth` — occorrenze: 13
+- `you—` → `you` — occorrenze: 13
+- `‘Ah!’` → `Ah` — occorrenze: 13
+- `‘Certainly` → `Certainly` — occorrenze: 13
+- `‘God` → `God` — occorrenze: 13
+- `‘Look` → `Look` — occorrenze: 13
+- `‘One` → `One` — occorrenze: 13
+- `‘Our` → `Our` — occorrenze: 13
+- `‘there` → `there` — occorrenze: 13
+- `’Gainst` → `Gainst` — occorrenze: 13
+- `’ll` → `ll` — occorrenze: 13
+- `’T` → `T` — occorrenze: 13
+- `’Twere` → `Twere` — occorrenze: 13
+- `“Alas!` → `Alas` — occorrenze: 13
+- `“Hush,` → `Hush` — occorrenze: 13
+- `“John` → `John` — occorrenze: 13
+- `“Must` → `Must` — occorrenze: 13
+- `“Nobody` → `Nobody` — occorrenze: 13
+- `“Stand` → `Stand` — occorrenze: 13
+- `“that,` → `that` — occorrenze: 13
+- `“Thus` → `Thus` — occorrenze: 13
+- `“unless` → `unless` — occorrenze: 13
+- `“why,` → `why` — occorrenze: 13
+- `“Yes!` → `Yes` — occorrenze: 13
+- `“Yes!”` → `Yes` — occorrenze: 13
+- `	2.` → `2` — occorrenze: 12
+- `"Ah,` → `Ah` — occorrenze: 12
+- `"Never` → `Never` — occorrenze: 12
+- `"not` → `not` — occorrenze: 12
+- `"See` → `See` — occorrenze: 12
+- `"Shall` → `Shall` — occorrenze: 12
+- `"she` → `she` — occorrenze: 12
+- `"Sir,"` → `Sir` — occorrenze: 12
+- `"While` → `While` — occorrenze: 12
+- `'An'` → `An` — occorrenze: 12
+- `'as` → `as` — occorrenze: 12
+- `'At` → `At` — occorrenze: 12
+- `'is` → `is` — occorrenze: 12
+- `'Mid` → `Mid` — occorrenze: 12
+- `'my` → `my` — occorrenze: 12
+- `'Now` → `Now` — occorrenze: 12
+- `'She` → `She` — occorrenze: 12
+- `'Sir,'` → `Sir` — occorrenze: 12
+- `'who` → `who` — occorrenze: 12
+- `1814,` → `1814` — occorrenze: 12
+- `1841,` → `1841` — occorrenze: 12
+- `21,` → `21` — occorrenze: 12
+- `459;` → `459` — occorrenze: 12
+- `636;` → `636` — occorrenze: 12
+- `_as` → `as` — occorrenze: 12
+- `_have_` → `have` — occorrenze: 12
+- `_He_` → `He` — occorrenze: 12
+- `_Histoire` → `Histoire` — occorrenze: 12
+- `_if` → `if` — occorrenze: 12
+- `_la` → `la` — occorrenze: 12
+- `_Satan_,` → `Satan` — occorrenze: 12
+- `_That_` → `That` — occorrenze: 12
+- `_would_` → `would` — occorrenze: 12
+- `about!` → `about` — occorrenze: 12
+- `acid;` → `acid` — occorrenze: 12
+- `added;` → `added` — occorrenze: 12
+- `adv.;` → `adv` — occorrenze: 12
+- `age.”` → `age` — occorrenze: 12
+- `ages;` → `ages` — occorrenze: 12
+- `agony;` → `agony` — occorrenze: 12
+- `agreeable;` → `agreeable` — occorrenze: 12
+- `am!”` → `am` — occorrenze: 12
+- `Aronnax,”` → `Aronnax` — occorrenze: 12
+- `arrived;` → `arrived` — occorrenze: 12
+- `association;` → `association` — occorrenze: 12
+- `attempt;` → `attempt` — occorrenze: 12
+- `awe;` → `awe` — occorrenze: 12
+- `aye,”` → `aye` — occorrenze: 12
+- `bad,”` → `bad` — occorrenze: 12
+- `Basil,”` → `Basil` — occorrenze: 12
+- `beard;` → `beard` — occorrenze: 12
+- `beat;` → `beat` — occorrenze: 12
+- `before!` → `before` — occorrenze: 12
+- `bell;` → `bell` — occorrenze: 12
+- `beneath;` → `beneath` — occorrenze: 12
+- `boats;` → `boats` — occorrenze: 12
+- `bridge;` → `bridge` — occorrenze: 12
+- `bush;` → `bush` — occorrenze: 12
+- `business?` → `business` — occorrenze: 12
+- `can."` → `can` — occorrenze: 12
+- `capital;` → `capital` — occorrenze: 12
+- `Captain;` → `Captain` — occorrenze: 12
+- `cards;` → `cards` — occorrenze: 12
+- `cases;` → `cases` — occorrenze: 12
+- `cattle;` → `cattle` — occorrenze: 12
+- `ceased;` → `ceased` — occorrenze: 12
+- `cent.,` → `cent` — occorrenze: 12
+- `century;` → `century` — occorrenze: 12
+- `child:` → `child` — occorrenze: 12
+- `choice;` → `choice` — occorrenze: 12
+- `claim;` → `claim` — occorrenze: 12
+- `clergyman;` → `clergyman` — occorrenze: 12
+- `cloth;` → `cloth` — occorrenze: 12
+- `cloud;` → `cloud` — occorrenze: 12
+- `come."` → `come` — occorrenze: 12
+- `complete;` → `complete` — occorrenze: 12
+- `composition;` → `composition` — occorrenze: 12
+- `concern;` → `concern` — occorrenze: 12
+- `coolly;` → `coolly` — occorrenze: 12
+- `country,”` → `country` — occorrenze: 12
+- `court?` → `court` — occorrenze: 12
+- `cousin;` → `cousin` — occorrenze: 12
+- `cousin?` → `cousin` — occorrenze: 12
+- `crowd;` → `crowd` — occorrenze: 12
+- `current;` → `current` — occorrenze: 12
+- `date;` → `date` — occorrenze: 12
+- `days?` → `days` — occorrenze: 12
+- `dead,”` → `dead` — occorrenze: 12
+- `dead?”` → `dead` — occorrenze: 12
+- `Death!` → `Death` — occorrenze: 12
+- `death,”` → `death` — occorrenze: 12
+- `deny;` → `deny` — occorrenze: 12
+- `depart;` → `depart` — occorrenze: 12
+- `departed;` → `departed` — occorrenze: 12
+- `describe;` → `describe` — occorrenze: 12
+- `determined;` → `determined` — occorrenze: 12
+- `devil!` → `devil` — occorrenze: 12
+- `die!”` → `die` — occorrenze: 12
+- `disgrace;` → `disgrace` — occorrenze: 12
+- `do?"` → `do` — occorrenze: 12
+- `done!”` → `done` — occorrenze: 12
+- `door.’` → `door` — occorrenze: 12
+- `Dorian,”` → `Dorian` — occorrenze: 12
+- `Edmund;` → `Edmund` — occorrenze: 12
+- `enthusiasm;` → `enthusiasm` — occorrenze: 12
+- `equality;` → `equality` — occorrenze: 12
+- `escape.”` → `escape` — occorrenze: 12
+- `Europe;` → `Europe` — occorrenze: 12
+- `evening.”` → `evening` — occorrenze: 12
+- `events;` → `events` — occorrenze: 12
+- `example:` → `example` — occorrenze: 12
+- `exercise;` → `exercise` — occorrenze: 12
+- `expectation;` → `expectation` — occorrenze: 12
+- `eyes."` → `eyes` — occorrenze: 12
+- `fact,”` → `fact` — occorrenze: 12
+- `fare;` → `fare` — occorrenze: 12
+- `Father,”` → `Father` — occorrenze: 12
+- `faults;` → `faults` — occorrenze: 12
+- `feet.”` → `feet` — occorrenze: 12
+- `fields;` → `fields` — occorrenze: 12
+- `fingers;` → `fingers` — occorrenze: 12
+- `flies;` → `flies` — occorrenze: 12
+- `foes;` → `foes` — occorrenze: 12
+- `Fogg;` → `Fogg` — occorrenze: 12
+- `forever;` → `forever` — occorrenze: 12
+- `forget;` → `forget` — occorrenze: 12
+- `forth:` → `forth` — occorrenze: 12
+- `frame;` → `frame` — occorrenze: 12
+- `friends.”` → `friends` — occorrenze: 12
+- `from?` → `from` — occorrenze: 12
+- `gained;` → `gained` — occorrenze: 12
+- `general:` → `general` — occorrenze: 12
+- `gentleman!` → `gentleman` — occorrenze: 12
+- `gentleman.”` → `gentleman` — occorrenze: 12
+- `gentlemen,”` → `gentlemen` — occorrenze: 12
+- `Germany;` → `Germany` — occorrenze: 12
+- `give;` → `give` — occorrenze: 12
+- `good."` → `good` — occorrenze: 12
+- `grace!` → `grace` — occorrenze: 12
+- `hall;` → `hall` — occorrenze: 12
+- `hammer;` → `hammer` — occorrenze: 12
+- `happy!` → `happy` — occorrenze: 12
+- `happy.”` → `happy` — occorrenze: 12
+- `happy:` → `happy` — occorrenze: 12
+- `Harry?”` → `Harry` — occorrenze: 12
+- `hear?”` → `hear` — occorrenze: 12
+- `here?’` → `here` — occorrenze: 12
+- `herself.”` → `herself` — occorrenze: 12
+- `hide;` → `hide` — occorrenze: 12
+- `himself!` → `himself` — occorrenze: 12
+- `himself."` → `himself` — occorrenze: 12
+- `home,”` → `home` — occorrenze: 12
+- `honour!` → `honour` — occorrenze: 12
+- `hope.”` → `hope` — occorrenze: 12
+- `hospital;` → `hospital` — occorrenze: 12
+- `house."` → `house` — occorrenze: 12
+- `humanity;` → `humanity` — occorrenze: 12
+- `hungry;` → `hungry` — occorrenze: 12
+- `ignorance;` → `ignorance` — occorrenze: 12
+- `indeed!’` → `indeed` — occorrenze: 12
+- `iniquity;` → `iniquity` — occorrenze: 12
+- `instance;` → `instance` — occorrenze: 12
+- `into;` → `into` — occorrenze: 12
+- `is!"` → `is` — occorrenze: 12
+- `IV.,` → `IV` — occorrenze: 12
+- `Jane;` → `Jane` — occorrenze: 12
+- `Kate;` → `Kate` — occorrenze: 12
+- `keep;` → `keep` — occorrenze: 12
+- `kitchen;` → `kitchen` — occorrenze: 12
+- `knows;` → `knows` — occorrenze: 12
+- `lady:` → `lady` — occorrenze: 12
+- `larv‘` → `larv` — occorrenze: 12
+- `last:` → `last` — occorrenze: 12
+- `late.”` → `late` — occorrenze: 12
+- `latter;` → `latter` — occorrenze: 12
+- `laughter;` → `laughter` — occorrenze: 12
+- `learn;` → `learn` — occorrenze: 12
+- `lie?` → `lie` — occorrenze: 12
+- `light!` → `light` — occorrenze: 12
+- `limbs;` → `limbs` — occorrenze: 12
+- `Lincoln_` → `Lincoln` — occorrenze: 12
+- `lines:--` → `lines` — occorrenze: 12
+- `listened;` → `listened` — occorrenze: 12
+- `long?` → `long` — occorrenze: 12
+- `loose;` → `loose` — occorrenze: 12
+- `lose;` → `lose` — occorrenze: 12
+- `lot;` → `lot` — occorrenze: 12
+- `Mademoiselle,”` → `Mademoiselle` — occorrenze: 12
+- `man,'` → `man` — occorrenze: 12
+- `man,’` → `man` — occorrenze: 12
+- `Mansoul.’` → `Mansoul` — occorrenze: 12
+- `marry;` → `marry` — occorrenze: 12
+- `master:` → `master` — occorrenze: 12
+- `members;` → `members` — occorrenze: 12
+- `merit;` → `merit` — occorrenze: 12
+- `me—` → `me` — occorrenze: 12
+- `minute.”` → `minute` — occorrenze: 12
+- `minute;` → `minute` — occorrenze: 12
+- `moments’` → `moments` — occorrenze: 12
+- `morning?` → `morning` — occorrenze: 12
+- `morning?”` → `morning` — occorrenze: 12
+- `mother."` → `mother` — occorrenze: 12
+- `mother?"` → `mother` — occorrenze: 12
+- `much:` → `much` — occorrenze: 12
+- `much?` → `much` — occorrenze: 12
+- `murder!` → `murder` — occorrenze: 12
+- `must;` → `must` — occorrenze: 12
+- `neighbour;` → `neighbour` — occorrenze: 12
+- `new;` → `new` — occorrenze: 12
+- `nought;` → `nought` — occorrenze: 12
+- `oath;` → `oath` — occorrenze: 12
+- `ocean;` → `ocean` — occorrenze: 12
+- `of?”` → `of` — occorrenze: 12
+- `off,”` → `off` — occorrenze: 12
+- `off:` → `off` — occorrenze: 12
+- `oil;` → `oil` — occorrenze: 12
+- `Olaf;` → `Olaf` — occorrenze: 12
+- `once:` → `once` — occorrenze: 12
+- `opinion.”` → `opinion` — occorrenze: 12
+- `out."` → `out` — occorrenze: 12
+- `peace:` → `peace` — occorrenze: 12
+- `Pickwick.’` → `Pickwick` — occorrenze: 12
+- `pity;` → `pity` — occorrenze: 12
+- `point.”` → `point` — occorrenze: 12
+- `port;` → `port` — occorrenze: 12
+- `power.”` → `power` — occorrenze: 12
+- `Poyser;` → `Poyser` — occorrenze: 12
+- `process;` → `process` — occorrenze: 12
+- `production;` → `production` — occorrenze: 12
+- `proof;` → `proof` — occorrenze: 12
+- `property."` → `property` — occorrenze: 12
+- `proposal;` → `proposal` — occorrenze: 12
+- `qualities;` → `qualities` — occorrenze: 12
+- `quarter;` → `quarter` — occorrenze: 12
+- `rays;` → `rays` — occorrenze: 12
+- `reasoning;` → `reasoning` — occorrenze: 12
+- `receive;` → `receive` — occorrenze: 12
+- `relation;` → `relation` — occorrenze: 12
+- `relief;` → `relief` — occorrenze: 12
+- `remained;` → `remained` — occorrenze: 12
+- `report;` → `report` — occorrenze: 12
+- `reserve;` → `reserve` — occorrenze: 12
+- `Rev.,` → `Rev` — occorrenze: 12
+- `riches;` → `riches` — occorrenze: 12
+- `rogue!` → `rogue` — occorrenze: 12
+- `Rome?` → `Rome` — occorrenze: 12
+- `saved;` → `saved` — occorrenze: 12
+- `say,’` → `say` — occorrenze: 12
+- `secret;` → `secret` — occorrenze: 12
+- `sent;` → `sent` — occorrenze: 12
+- `sentence;` → `sentence` — occorrenze: 12
+- `settled;` → `settled` — occorrenze: 12
+- `shadows;` → `shadows` — occorrenze: 12
+- `shape;` → `shape` — occorrenze: 12
+- `sheep;` → `sheep` — occorrenze: 12
+- `sight?` → `sight` — occorrenze: 12
+- `sister?` → `sister` — occorrenze: 12
+- `sky:` → `sky` — occorrenze: 12
+- `slain:` → `slain` — occorrenze: 12
+- `slowly;` → `slowly` — occorrenze: 12
+- `so?'` → `so` — occorrenze: 12
+- `soon;` → `soon` — occorrenze: 12
+- `soul!”` → `soul` — occorrenze: 12
+- `souls;` → `souls` — occorrenze: 12
+- `sport;` → `sport` — occorrenze: 12
+- `State?` → `State` — occorrenze: 12
+- `station;` → `station` — occorrenze: 12
+- `stay:` → `stay` — occorrenze: 12
+- `stead;` → `stead` — occorrenze: 12
+- `succession;` → `succession` — occorrenze: 12
+- `such;` → `such` — occorrenze: 12
+- `sufficient;` → `sufficient` — occorrenze: 12
+- `sun!` → `sun` — occorrenze: 12
+- `sunshine;` → `sunshine` — occorrenze: 12
+- `superior;` → `superior` — occorrenze: 12
+- `supply;` → `supply` — occorrenze: 12
+- `T----` → `T` — occorrenze: 12
+- `than;` → `than` — occorrenze: 12
+- `that.’` → `that` — occorrenze: 12
+- `them?"` → `them` — occorrenze: 12
+- `thine!` → `thine` — occorrenze: 12
+- `thing!”` → `thing` — occorrenze: 12
+- `this!”` → `this` — occorrenze: 12
+- `this:--` → `this` — occorrenze: 12
+- `thread;` → `thread` — occorrenze: 12
+- `thyself;` → `thyself` — occorrenze: 12
+- `tired;` → `tired` — occorrenze: 12
+- `title;` → `title` — occorrenze: 12
+- `toil;` → `toil` — occorrenze: 12
+- `tools;` → `tools` — occorrenze: 12
+- `town:` → `town` — occorrenze: 12
+- `train:` → `train` — occorrenze: 12
+- `true."` → `true` — occorrenze: 12
+- `Tupman;` → `Tupman` — occorrenze: 12
+- `uncle;` → `uncle` — occorrenze: 12
+- `understand.”` → `understand` — occorrenze: 12
+- `understand?”` → `understand` — occorrenze: 12
+- `use.”` → `use` — occorrenze: 12
+- `useless;` → `useless` — occorrenze: 12
+- `valiant;` → `valiant` — occorrenze: 12
+- `wanting;` → `wanting` — occorrenze: 12
+- `warmth;` → `warmth` — occorrenze: 12
+- `weapons;` → `weapons` — occorrenze: 12
+- `weeks;` → `weeks` — occorrenze: 12
+- `weep;` → `weep` — occorrenze: 12
+- `well?”` → `well` — occorrenze: 12
+- `Weller?’` → `Weller` — occorrenze: 12
+- `Welsh.”` → `Welsh` — occorrenze: 12
+- `were:` → `were` — occorrenze: 12
+- `wife,”` → `wife` — occorrenze: 12
+- `windows;` → `windows` — occorrenze: 12
+- `wore;` → `wore` — occorrenze: 12
+- `wrong:` → `wrong` — occorrenze: 12
+- `ye!”` → `ye` — occorrenze: 12
+- `years,”` → `years` — occorrenze: 12
+- `yesterday.”` → `yesterday` — occorrenze: 12
+- `yours?` → `yours` — occorrenze: 12
+- `y’` → `y` — occorrenze: 12
+- `‘Mrs.` → `Mrs` — occorrenze: 12
+- `‘O,` → `O` — occorrenze: 12
+- `‘Oh` → `Oh` — occorrenze: 12
+- `‘this` → `this` — occorrenze: 12
+- `‘Two` → `Two` — occorrenze: 12
+- `“An’` → `An` — occorrenze: 12
+- `“Call` → `Call` — occorrenze: 12
+- `“Come,”` → `Come` — occorrenze: 12
+- `“Dost` → `Dost` — occorrenze: 12
+- `“Fear` → `Fear` — occorrenze: 12
+- `“Friend` → `Friend` — occorrenze: 12
+- `“Go,` → `Go` — occorrenze: 12
+- `“Good!”` → `Good` — occorrenze: 12
+- `“Ha!` → `Ha` — occorrenze: 12
+- `“Heaven` → `Heaven` — occorrenze: 12
+- `“Little` → `Little` — occorrenze: 12
+- `“Master` → `Master` — occorrenze: 12
+- `“Mi` → `Mi` — occorrenze: 12
+- `“Mother` → `Mother` — occorrenze: 12
+- `“must` → `must` — occorrenze: 12
+- `“shall` → `shall` — occorrenze: 12
+- `“Show` → `Show` — occorrenze: 12
+- `“Sit` → `Sit` — occorrenze: 12
+- `“There!` → `There` — occorrenze: 12
+- `“This,”` → `This` — occorrenze: 12
+- `“Trust` → `Trust` — occorrenze: 12
+- `"And,` → `And` — occorrenze: 11
+- `"by` → `by` — occorrenze: 11
+- `"Get` → `Get` — occorrenze: 11
+- `"Mrs.` → `Mrs` — occorrenze: 11
+- `"None` → `None` — occorrenze: 11
+- `"Old` → `Old` — occorrenze: 11
+- `"Such` → `Such` — occorrenze: 11
+- `"Though` → `Though` — occorrenze: 11
+- `"Were` → `Were` — occorrenze: 11
+- `"would` → `would` — occorrenze: 11
+- `'All` → `All` — occorrenze: 11
+- `'an'` → `an` — occorrenze: 11
+- `'Be` → `Be` — occorrenze: 11
+- `'Did` → `Did` — occorrenze: 11
+- `'Go` → `Go` — occorrenze: 11
+- `'God` → `God` — occorrenze: 11
+- `'how` → `how` — occorrenze: 11
+- `'On` → `On` — occorrenze: 11
+- `'or` → `or` — occorrenze: 11
+- `'they` → `they` — occorrenze: 11
+- `'Thou` → `Thou` — occorrenze: 11
+- `'with` → `with` — occorrenze: 11
+- `--th` → `th` — occorrenze: 11
+- `13,` → `13` — occorrenze: 11
+- `1835,` → `1835` — occorrenze: 11
+- `23;` → `23` — occorrenze: 11
+- `24,` → `24` — occorrenze: 11
+- `460;` → `460` — occorrenze: 11
+- `484;` → `484` — occorrenze: 11
+- `83;` → `83` — occorrenze: 11
+- `_her_.` → `her` — occorrenze: 11
+- `_him_.` → `him` — occorrenze: 11
+- `_Popular` → `Popular` — occorrenze: 11
+- `_reals_` → `reals` — occorrenze: 11
+- `_very_` → `very` — occorrenze: 11
+- `_you` → `you` — occorrenze: 11
+- `_you_.` → `you` — occorrenze: 11
+- `about:` → `about` — occorrenze: 11
+- `Adam,”` → `Adam` — occorrenze: 11
+- `addition;` → `addition` — occorrenze: 11
+- `adventure;` → `adventure` — occorrenze: 11
+- `affright;` → `affright` — occorrenze: 11
+- `Africa;` → `Africa` — occorrenze: 11
+- `afternoon;` → `afternoon` — occorrenze: 11
+- `agreement;` → `agreement` — occorrenze: 11
+- `all,’` → `all` — occorrenze: 11
+- `allow;` → `allow` — occorrenze: 11
+- `alone."` → `alone` — occorrenze: 11
+- `amusement;` → `amusement` — occorrenze: 11
+- `answer?` → `answer` — occorrenze: 11
+- `Antonio;` → `Antonio` — occorrenze: 11
+- `anythin’` → `anythin` — occorrenze: 11
+- `arise;` → `arise` — occorrenze: 11
+- `art:` → `art` — occorrenze: 11
+- `assault;` → `assault` — occorrenze: 11
+- `attachment;` → `attachment` — occorrenze: 11
+- `author;` → `author` — occorrenze: 11
+- `away.’` → `away` — occorrenze: 11
+- `baptized;` → `baptized` — occorrenze: 11
+- `been?”` → `been` — occorrenze: 11
+- `beg;` → `beg` — occorrenze: 11
+- `begin;` → `begin` — occorrenze: 11
+- `begun;` → `begun` — occorrenze: 11
+- `behalf;` → `behalf` — occorrenze: 11
+- `believe?` → `believe` — occorrenze: 11
+- `benefit;` → `benefit` — occorrenze: 11
+- `bent;` → `bent` — occorrenze: 11
+- `best:` → `best` — occorrenze: 11
+- `bliss;` → `bliss` — occorrenze: 11
+- `bondes;` → `bondes` — occorrenze: 11
+- `both!` → `both` — occorrenze: 11
+- `brandy;` → `brandy` — occorrenze: 11
+- `bring;` → `bring` — occorrenze: 11
+- `brother,'` → `brother` — occorrenze: 11
+- `brother.”` → `brother` — occorrenze: 11
+- `brother?'` → `brother` — occorrenze: 11
+- `brows;` → `brows` — occorrenze: 11
+- `Brutus’` → `Brutus` — occorrenze: 11
+- `business,”` → `business` — occorrenze: 11
+- `business:` → `business` — occorrenze: 11
+- `but—”` → `but` — occorrenze: 11
+- `by:` → `by` — occorrenze: 11
+- `came:` → `came` — occorrenze: 11
+- `Captain,”` → `Captain` — occorrenze: 11
+- `cave;` → `cave` — occorrenze: 11
+- `cell;` → `cell` — occorrenze: 11
+- `change!` → `change` — occorrenze: 11
+- `characters;` → `characters` — occorrenze: 11
+- `cheerful;` → `cheerful` — occorrenze: 11
+- `children?` → `children` — occorrenze: 11
+- `China;` → `China` — occorrenze: 11
+- `clothing;` → `clothing` — occorrenze: 11
+- `come?”` → `come` — occorrenze: 11
+- `compass;` → `compass` — occorrenze: 11
+- `conditions;` → `conditions` — occorrenze: 11
+- `construction;` → `construction` — occorrenze: 11
+- `continually;` → `continually` — occorrenze: 11
+- `corn;` → `corn` — occorrenze: 11
+- `D----` → `D` — occorrenze: 11
+- `dance;` → `dance` — occorrenze: 11
+- `Davy.”` → `Davy` — occorrenze: 11
+- `day!”` → `day` — occorrenze: 11
+- `days:` → `days` — occorrenze: 11
+- `decay;` → `decay` — occorrenze: 11
+- `degrees;` → `degrees` — occorrenze: 11
+- `devil;` → `devil` — occorrenze: 11
+- `devotion;` → `devotion` — occorrenze: 11
+- `Diamond,”` → `Diamond` — occorrenze: 11
+- `die,”` → `die` — occorrenze: 11
+- `directly;` → `directly` — occorrenze: 11
+- `disease;` → `disease` — occorrenze: 11
+- `dislike;` → `dislike` — occorrenze: 11
+- `dispatch;` → `dispatch` — occorrenze: 11
+- `distinction;` → `distinction` — occorrenze: 11
+- `dog!` → `dog` — occorrenze: 11
+- `dog;` → `dog` — occorrenze: 11
+- `door!` → `door` — occorrenze: 11
+- `dream?` → `dream` — occorrenze: 11
+- `duties;` → `duties` — occorrenze: 11
+- `early;` → `early` — occorrenze: 11
+- `economy;` → `economy` — occorrenze: 11
+- `Elinor;` → `Elinor` — occorrenze: 11
+- `else,”` → `else` — occorrenze: 11
+- `else?”` → `else` — occorrenze: 11
+- `empire;` → `empire` — occorrenze: 11
+- `employed;` → `employed` — occorrenze: 11
+- `endure;` → `endure` — occorrenze: 11
+- `energy;` → `energy` — occorrenze: 11
+- `England."` → `England` — occorrenze: 11
+- `English,”` → `English` — occorrenze: 11
+- `enough."` → `enough` — occorrenze: 11
+- `everything.”` → `everything` — occorrenze: 11
+- `excess;` → `excess` — occorrenze: 11
+- `excitement;` → `excitement` — occorrenze: 11
+- `faculties;` → `faculties` — occorrenze: 11
+- `fair!` → `fair` — occorrenze: 11
+- `Fanny;` → `Fanny` — occorrenze: 11
+- `farm;` → `farm` — occorrenze: 11
+- `fat;` → `fat` — occorrenze: 11
+- `father?"` → `father` — occorrenze: 11
+- `fault:` → `fault` — occorrenze: 11
+- `fear!` → `fear` — occorrenze: 11
+- `fear,”` → `fear` — occorrenze: 11
+- `fellow?”` → `fellow` — occorrenze: 11
+- `few;` → `few` — occorrenze: 11
+- `fire.”` → `fire` — occorrenze: 11
+- `first?` → `first` — occorrenze: 11
+- `flight:` → `flight` — occorrenze: 11
+- `flood;` → `flood` — occorrenze: 11
+- `follows:—` → `follows` — occorrenze: 11
+- `folly;` → `folly` — occorrenze: 11
+- `form:` → `form` — occorrenze: 11
+- `fortune!` → `fortune` — occorrenze: 11
+- `fountain;` → `fountain` — occorrenze: 11
+- `George,”` → `George` — occorrenze: 11
+- `gifts;` → `gifts` — occorrenze: 11
+- `globe;` → `globe` — occorrenze: 11
+- `going.”` → `going` — occorrenze: 11
+- `good!”` → `good` — occorrenze: 11
+- `goodness;` → `goodness` — occorrenze: 11
+- `grace:` → `grace` — occorrenze: 11
+- `granted;` → `granted` — occorrenze: 11
+- `guest;` → `guest` — occorrenze: 11
+- `ha!”` → `ha` — occorrenze: 11
+- `have!` → `have` — occorrenze: 11
+- `he?"` → `he` — occorrenze: 11
+- `head."` → `head` — occorrenze: 11
+- `heart!”` → `heart` — occorrenze: 11
+- `heavens;` → `heavens` — occorrenze: 11
+- `heavy;` → `heavy` — occorrenze: 11
+- `Henry,”` → `Henry` — occorrenze: 11
+- `Henry;` → `Henry` — occorrenze: 11
+- `her.'` → `her` — occorrenze: 11
+- `her?"` → `her` — occorrenze: 11
+- `Hill;` → `Hill` — occorrenze: 11
+- `him!"` → `him` — occorrenze: 11
+- `hither?` → `hither` — occorrenze: 11
+- `horse."` → `horse` — occorrenze: 11
+- `III.,` → `III` — occorrenze: 11
+- `imagination;` → `imagination` — occorrenze: 11
+- `immediately.”` → `immediately` — occorrenze: 11
+- `in."` → `in` — occorrenze: 11
+- `income;` → `income` — occorrenze: 11
+- `injury;` → `injury` — occorrenze: 11
+- `is,'` → `is` — occorrenze: 11
+- `jest;` → `jest` — occorrenze: 11
+- `Jews;` → `Jews` — occorrenze: 11
+- `John?` → `John` — occorrenze: 11
+- `join;` → `join` — occorrenze: 11
+- `journey.”` → `journey` — occorrenze: 11
+- `judges;` → `judges` — occorrenze: 11
+- `Jupiter_` → `Jupiter` — occorrenze: 11
+- `just?` → `just` — occorrenze: 11
+- `key;` → `key` — occorrenze: 11
+- `kind,”` → `kind` — occorrenze: 11
+- `kind:` → `kind` — occorrenze: 11
+- `king."` → `king` — occorrenze: 11
+- `land!` → `land` — occorrenze: 11
+- `laughing;` → `laughing` — occorrenze: 11
+- `lay:` → `lay` — occorrenze: 11
+- `learning;` → `learning` — occorrenze: 11
+- `least,”` → `least` — occorrenze: 11
+- `letter?”` → `letter` — occorrenze: 11
+- `letters:` → `letters` — occorrenze: 11
+- `liberty?` → `liberty` — occorrenze: 11
+- `list;` → `list` — occorrenze: 11
+- `little,”` → `little` — occorrenze: 11
+- `little.”` → `little` — occorrenze: 11
+- `live!` → `live` — occorrenze: 11
+- `live?”` → `live` — occorrenze: 11
+- `London?”` → `London` — occorrenze: 11
+- `looks!` → `looks` — occorrenze: 11
+- `Lord?` → `Lord` — occorrenze: 11
+- `maintain;` → `maintain` — occorrenze: 11
+- `Man;` → `Man` — occorrenze: 11
+- `master!”` → `master` — occorrenze: 11
+- `masters;` → `masters` — occorrenze: 11
+- `minds;` → `minds` — occorrenze: 11
+- `mine?”` → `mine` — occorrenze: 11
+- `miserable;` → `miserable` — occorrenze: 11
+- `miss,”` → `miss` — occorrenze: 11
+- `morning!` → `morning` — occorrenze: 11
+- `Moses;` → `Moses` — occorrenze: 11
+- `moved;` → `moved` — occorrenze: 11
+- `movement;` → `movement` — occorrenze: 11
+- `much!` → `much` — occorrenze: 11
+- `murder;` → `murder` — occorrenze: 11
+- `nest;` → `nest` — occorrenze: 11
+- `night."` → `night` — occorrenze: 11
+- `no,’` → `no` — occorrenze: 11
+- `nobody;` → `nobody` — occorrenze: 11
+- `now.’` → `now` — occorrenze: 11
+- `oars;` → `oars` — occorrenze: 11
+- `old?` → `old` — occorrenze: 11
+- `once,”` → `once` — occorrenze: 11
+- `once?` → `once` — occorrenze: 11
+- `open.”` → `open` — occorrenze: 11
+- `operation;` → `operation` — occorrenze: 11
+- `opportunity;` → `opportunity` — occorrenze: 11
+- `other!` → `other` — occorrenze: 11
+- `out.’` → `out` — occorrenze: 11
+- `overboard;` → `overboard` — occorrenze: 11
+- `page;` → `page` — occorrenze: 11
+- `pardon;` → `pardon` — occorrenze: 11
+- `passions;` → `passions` — occorrenze: 11
+- `paused;` → `paused` — occorrenze: 11
+- `perfect;` → `perfect` — occorrenze: 11
+- `perhaps.”` → `perhaps` — occorrenze: 11
+- `plate;` → `plate` — occorrenze: 11
+- `possible:` → `possible` — occorrenze: 11
+- `pound;` → `pound` — occorrenze: 11
+- `pounds.”` → `pounds` — occorrenze: 11
+- `poverty;` → `poverty` — occorrenze: 11
+- `powder;` → `powder` — occorrenze: 11
+- `prayer;` → `prayer` — occorrenze: 11
+- `prepare;` → `prepare` — occorrenze: 11
+- `proud;` → `proud` — occorrenze: 11
+- `punishment;` → `punishment` — occorrenze: 11
+- `pure;` → `pure` — occorrenze: 11
+- `purpose:` → `purpose` — occorrenze: 11
+- `quantity;` → `quantity` — occorrenze: 11
+- `question.”` → `question` — occorrenze: 11
+- `quick;` → `quick` — occorrenze: 11
+- `rank;` → `rank` — occorrenze: 11
+- `ready?` → `ready` — occorrenze: 11
+- `reason,”` → `reason` — occorrenze: 11
+- `reasons;` → `reasons` — occorrenze: 11
+- `reception;` → `reception` — occorrenze: 11
+- `rein;` → `rein` — occorrenze: 11
+- `renown;` → `renown` — occorrenze: 11
+- `rest."` → `rest` — occorrenze: 11
+- `restored;` → `restored` — occorrenze: 11
+- `right."` → `right` — occorrenze: 11
+- `road.”` → `road` — occorrenze: 11
+- `rocks;` → `rocks` — occorrenze: 11
+- `Rome:` → `Rome` — occorrenze: 11
+- `S.,` → `S` — occorrenze: 11
+- `same:` → `same` — occorrenze: 11
+- `Samivel,’` → `Samivel` — occorrenze: 11
+- `say,"` → `say` — occorrenze: 11
+- `say."` → `say` — occorrenze: 11
+- `say.’` → `say` — occorrenze: 11
+- `sea:` → `sea` — occorrenze: 11
+- `sea?` → `sea` — occorrenze: 11
+- `service.”` → `service` — occorrenze: 11
+- `share;` → `share` — occorrenze: 11
+- `shine;` → `shine` — occorrenze: 11
+- `shouted:` → `shouted` — occorrenze: 11
+- `Sigvat:--` → `Sigvat` — occorrenze: 11
+- `Sir!’` → `Sir` — occorrenze: 11
+- `Sir?` → `Sir` — occorrenze: 11
+- `skin;` → `skin` — occorrenze: 11
+- `slave!` → `slave` — occorrenze: 11
+- `slow;` → `slow` — occorrenze: 11
+- `smiling;` → `smiling` — occorrenze: 11
+- `snow;` → `snow` — occorrenze: 11
+- `society:` → `society` — occorrenze: 11
+- `Society;` → `Society` — occorrenze: 11
+- `soldiers’` → `soldiers` — occorrenze: 11
+- `sorry;` → `sorry` — occorrenze: 11
+- `souls!` → `souls` — occorrenze: 11
+- `speak!` → `speak` — occorrenze: 11
+- `spread;` → `spread` — occorrenze: 11
+- `stage;` → `stage` — occorrenze: 11
+- `stands;` → `stands` — occorrenze: 11
+- `state:` → `state` — occorrenze: 11
+- `story.”` → `story` — occorrenze: 11
+- `Street;` → `Street` — occorrenze: 11
+- `surprised;` → `surprised` — occorrenze: 11
+- `sweet;` → `sweet` — occorrenze: 11
+- `sympathy;` → `sympathy` — occorrenze: 11
+- `that,'` → `that` — occorrenze: 11
+- `that?'` → `that` — occorrenze: 11
+- `the_` → `the` — occorrenze: 11
+- `themselves?` → `themselves` — occorrenze: 11
+- `There!` → `There` — occorrenze: 11
+- `they;` → `they` — occorrenze: 11
+- `they?’` → `they` — occorrenze: 11
+- `thing,"` → `thing` — occorrenze: 11
+- `Thing;` → `Thing` — occorrenze: 11
+- `think;` → `think` — occorrenze: 11
+- `though,”` → `though` — occorrenze: 11
+- `thousand;` → `thousand` — occorrenze: 11
+- `thus,”` → `thus` — occorrenze: 11
+- `together."` → `together` — occorrenze: 11
+- `Tom!` → `Tom` — occorrenze: 11
+- `too."` → `too` — occorrenze: 11
+- `town.”` → `town` — occorrenze: 11
+- `treasure;` → `treasure` — occorrenze: 11
+- `Troilus!` → `Troilus` — occorrenze: 11
+- `truth!` → `truth` — occorrenze: 11
+- `understand:` → `understand` — occorrenze: 11
+- `understood;` → `understood` — occorrenze: 11
+- `unhappy;` → `unhappy` — occorrenze: 11
+- `union;` → `union` — occorrenze: 11
+- `us,"` → `us` — occorrenze: 11
+- `V.,` → `V` — occorrenze: 11
+- `vain.”` → `vain` — occorrenze: 11
+- `verses:--` → `verses` — occorrenze: 11
+- `views;` → `views` — occorrenze: 11
+- `virtue?` → `virtue` — occorrenze: 11
+- `voices;` → `voices` — occorrenze: 11
+- `volume;` → `volume` — occorrenze: 11
+- `W.,` → `W` — occorrenze: 11
+- `Wales;` → `Wales` — occorrenze: 11
+- `warm;` → `warm` — occorrenze: 11
+- `was,"` → `was` — occorrenze: 11
+- `was,”` → `was` — occorrenze: 11
+- `welcome!` → `welcome` — occorrenze: 11
+- `Welsh;` → `Welsh` — occorrenze: 11
+- `wept;` → `wept` — occorrenze: 11
+- `were!` → `were` — occorrenze: 11
+- `whale!` → `whale` — occorrenze: 11
+- `wheel;` → `wheel` — occorrenze: 11
+- `whole?` → `whole` — occorrenze: 11
+- `wicked;` → `wicked` — occorrenze: 11
+- `wife!` → `wife` — occorrenze: 11
+- `wit:` → `wit` — occorrenze: 11
+- `woman:` → `woman` — occorrenze: 11
+- `wonder,”` → `wonder` — occorrenze: 11
+- `words.”` → `words` — occorrenze: 11
+- `world?”` → `world` — occorrenze: 11
+- `worth?` → `worth` — occorrenze: 11
+- `would,”` → `would` — occorrenze: 11
+- `wrong,”` → `wrong` — occorrenze: 11
+- `yard;` → `yard` — occorrenze: 11
+- `ye.”` → `ye` — occorrenze: 11
+- `year?` → `year` — occorrenze: 11
+- `yes,’` → `yes` — occorrenze: 11
+- `yet?”` → `yet` — occorrenze: 11
+- `yoke;` → `yoke` — occorrenze: 11
+- `yourself!` → `yourself` — occorrenze: 11
+- `{10}` → `10` — occorrenze: 11
+- `{60}` → `60` — occorrenze: 11
+- `‘Ah,’` → `Ah` — occorrenze: 11
+- `‘Certainly,` → `Certainly` — occorrenze: 11
+- `‘Sir,’` → `Sir` — occorrenze: 11
+- `‘they` → `they` — occorrenze: 11
+- `’twould` → `twould` — occorrenze: 11
+- `“Anything` → `Anything` — occorrenze: 11
+- `“Art` → `Art` — occorrenze: 11
+- `“Because,”` → `Because` — occorrenze: 11
+- `“Believe` → `Believe` — occorrenze: 11
+- `“Bring` → `Bring` — occorrenze: 11
+- `“Colonel` → `Colonel` — occorrenze: 11
+- `“Come!”` → `Come` — occorrenze: 11
+- `“Could` → `Could` — occorrenze: 11
+- `“Fair` → `Fair` — occorrenze: 11
+- `“First` → `First` — occorrenze: 11
+- `“Gentlemen,”` → `Gentlemen` — occorrenze: 11
+- `“Ha!”` → `Ha` — occorrenze: 11
+- `“had` → `had` — occorrenze: 11
+- `“just` → `just` — occorrenze: 11
+- `“like` → `like` — occorrenze: 11
+- `“little` → `little` — occorrenze: 11
+- `“Lord,` → `Lord` — occorrenze: 11
+- `“may` → `may` — occorrenze: 11
+- `“nothing` → `nothing` — occorrenze: 11
+- `“Nothing,”` → `Nothing` — occorrenze: 11
+- `“should` → `should` — occorrenze: 11
+- `“Ten` → `Ten` — occorrenze: 11
+- `“There!”` → `There` — occorrenze: 11
+- `“Tom` → `Tom` — occorrenze: 11
+- `“True,”` → `True` — occorrenze: 11
+- `“Try` → `Try` — occorrenze: 11
+- `“Under` → `Under` — occorrenze: 11
+- `“were` → `were` — occorrenze: 11
+- `“Where?”` → `Where` — occorrenze: 11
+
+---
+
+## 2. Stringhe composte solamente da simboli e quindi equivalenti al vuoto
+
+Queste stringhe non contengono lettere o numeri e, nel contesto dell'analisi delle parole, devono produrre una parola ripulita vuota (`''`).
+
+### Elenco completo
+
+- `(?),` → `''` — occorrenze: 4876
+- `.` → `''` — occorrenze: 2257
+- `+` → `''` — occorrenze: 1165
+- `?` → `''` — occorrenze: 1092
+- `&` → `''` — occorrenze: 1008
+- `--` → `''` — occorrenze: 843
+- `-` → `''` — occorrenze: 835
+- `(#),` → `''` — occorrenze: 534
+- `*` → `''` — occorrenze: 510
+- `(?).` → `''` — occorrenze: 318
+- `...` → `''` — occorrenze: 278
+- `?,` → `''` — occorrenze: 264
+- `µ` → `''` — occorrenze: 238
+- `(?);` → `''` — occorrenze: 233
+- `}` → `''` — occorrenze: 210
+- `#` → `''` — occorrenze: 144
+- `÷` → `''` — occorrenze: 129
+- `”` → `''` — occorrenze: 113
+- `[` → `''` — occorrenze: 112
+- `..` → `''` — occorrenze: 96
+- `~` → `''` — occorrenze: 89
+- `-->` → `''` — occorrenze: 87
+- `,` → `''` — occorrenze: 85
+- `?.]` → `''` — occorrenze: 75
+- `(?;` → `''` — occorrenze: 73
+- `{` → `''` — occorrenze: 68
+- `"` → `''` — occorrenze: 67
+- `.”` → `''` — occorrenze: 61
+- `?;` → `''` — occorrenze: 59
+- `~,` → `''` — occorrenze: 53
+- `(?).]` → `''` — occorrenze: 50
+- `?.` → `''` — occorrenze: 42
+- `%` → `''` — occorrenze: 37
+- `§` → `''` — occorrenze: 37
+- `|` → `''` — occorrenze: 36
+- `—` → `''` — occorrenze: 36
+- `(?)` → `''` — occorrenze: 34
+- `.'` → `''` — occorrenze: 34
+- `...]` → `''` — occorrenze: 34
+- `----` → `''` — occorrenze: 30
+- `_` → `''` — occorrenze: 30
+- `'.` → `''` — occorrenze: 29
+- `								<--` → `''` — occorrenze: 28
+- `~.` → `''` — occorrenze: 28
+- `(` → `''` — occorrenze: 25
+- `]` → `''` — occorrenze: 25
+- `---` → `''` — occorrenze: 23
+- `~;` → `''` — occorrenze: 23
+- `."` → `''` — occorrenze: 22
+- `——` → `''` — occorrenze: 19
+- `(#).` → `''` — occorrenze: 18
+- `---,` → `''` — occorrenze: 17
+- `=` → `''` — occorrenze: 17
+- `(#);` → `''` — occorrenze: 16
+- `(#;` → `''` — occorrenze: 16
+- `?:` → `''` — occorrenze: 16
+- `;` → `''` — occorrenze: 15
+- `,,` → `''` — occorrenze: 14
+- `----,` → `''` — occorrenze: 12
+- `…` → `''` — occorrenze: 12
+- `'` → `''` — occorrenze: 11
+
+---
+
+## 2b. Elenchi puntati, numerazioni e marcatori assimilabili a una parola vuota
+
+Queste stringhe sono marcatori tipografici o numerazioni che non costituiscono una parola del testo. Devono essere trattate come vuoto.
+
+Il limite usato nell'elenco dei numeri è prudenziale: numerazioni brevi come `1.`, `2.`, `10.` sono considerate possibili marcatori; valori come `1838.` o `20,000` non vengono automaticamente trattati come elenchi perché possono rappresentare anni o numeri reali.
+
+### Elenco completo
+
+- `2.` → `''` — occorrenze: 1593
+- `1.` → `''` — occorrenze: 1531
+- `3.` → `''` — occorrenze: 771
+- `4.` → `''` — occorrenze: 406
+- `5.` → `''` — occorrenze: 255
+- `(a)` → `''` — occorrenze: 202
+- `(b)` → `''` — occorrenze: 198
+- `[1]` → `''` — occorrenze: 197
+- `6.` → `''` — occorrenze: 184
+- `7.` → `''` — occorrenze: 124
+- `8.` → `''` — occorrenze: 101
+- `9.` → `''` — occorrenze: 93
+- `10.` → `''` — occorrenze: 73
+- `[2]` → `''` — occorrenze: 62
+- `12.` → `''` — occorrenze: 58
+- `11.` → `''` — occorrenze: 56
+- `13.` → `''` — occorrenze: 53
+- `14.` → `''` — occorrenze: 50
+- `(c)` → `''` — occorrenze: 48
+- `[3]` → `''` — occorrenze: 47
+- `15.` → `''` — occorrenze: 46
+- `17.` → `''` — occorrenze: 46
+- `16.` → `''` — occorrenze: 38
+- `23.` → `''` — occorrenze: 33
+- `20.` → `''` — occorrenze: 32
+- `24.` → `''` — occorrenze: 31
+- `18.` → `''` — occorrenze: 30
+- `22.` → `''` — occorrenze: 30
+- `28.` → `''` — occorrenze: 29
+- `29.` → `''` — occorrenze: 27
+- `19.` → `''` — occorrenze: 26
+- `21.` → `''` — occorrenze: 24
+- `26.` → `''` — occorrenze: 24
+- `27.` → `''` — occorrenze: 24
+- `31.` → `''` — occorrenze: 23
+- `[4]` → `''` — occorrenze: 23
+- `30.` → `''` — occorrenze: 22
+- `32.` → `''` — occorrenze: 22
+- `25.` → `''` — occorrenze: 21
+- `[5]` → `''` — occorrenze: 20
+- `34.` → `''` — occorrenze: 19
+- `37.` → `''` — occorrenze: 19
+- `(d)` → `''` — occorrenze: 17
+- `35.` → `''` — occorrenze: 17
+- `38.` → `''` — occorrenze: 17
+- `33.` → `''` — occorrenze: 16
+- `40.` → `''` — occorrenze: 16
+- `47.` → `''` — occorrenze: 16
+- `39.` → `''` — occorrenze: 15
+- `44.` → `''` — occorrenze: 15
+- `48.` → `''` — occorrenze: 15
+- `[7]` → `''` — occorrenze: 15
+- `41.` → `''` — occorrenze: 14
+- `43.` → `''` — occorrenze: 14
+- `36.` → `''` — occorrenze: 13
+- `46.` → `''` — occorrenze: 12
+- `[8]` → `''` — occorrenze: 12
+- `52.` → `''` — occorrenze: 11
+- `[10]` → `''` — occorrenze: 11
+- `[9]` → `''` — occorrenze: 11
+
+---
+
+## 3. Parole o stringhe che potrebbero avere significato oppure no
+
+Questa categoria comprende soprattutto annotazioni editoriali, abbreviazioni, indicazioni tra parentesi o parentesi quadre e simboli che possono rappresentare informazione reale oppure semplice rumore tipografico.
+
+Per queste stringhe **non bisogna decidere automaticamente** che il risultato sia una parola: il risultato dovrebbe poter essere sia il testo ripulito sia `''`.
+
+Forma concettuale: `stringa → parola_ripulita || ''`.
+
+Esempi dal prompt originale: `(Bot.) → Bot || ''`, `(return) → return || ''`, `[R.] → R || ''`, `[Colloq.] → Colloq || ''`, `& → & || ''`, `&c. → c || ''`.
+
+### Elenco completo
+
+- `&c.` → `c || ''` — occorrenze: 4172
+- `[Obs.]` → `Obs || ''` — occorrenze: 962
+- `[L.` → `L || ''` — occorrenze: 673
+- `(Zo”l.)` → `Zo”l || ''` — occorrenze: 431
+- `(as` → `as || ''` — occorrenze: 358
+- `[Gr.` → `Gr || ''` — occorrenze: 351
+- `[imp.` → `imp || ''` — occorrenze: 329
+- `[OE.` → `OE || ''` — occorrenze: 308
+- `[_Exeunt._]` → `Exeunt || ''` — occorrenze: 279
+- `(Bot.)` → `Bot || ''` — occorrenze: 271
+- `(for` → `for || ''` — occorrenze: 267
+- `[F.` → `F || ''` — occorrenze: 267
+- `[_Exit._]` → `Exit || ''` — occorrenze: 266
+- `[R.]` → `R || ''` — occorrenze: 259
+- `(the` → `the || ''` — occorrenze: 257
+- `[Cf.` → `Cf || ''` — occorrenze: 238
+- `[_Exit` → `Exit || ''` — occorrenze: 221
+- `[_Exeunt` → `Exeunt || ''` — occorrenze: 211
+- `[Pref.` → `Pref || ''` — occorrenze: 195
+- `(and` → `and || ''` — occorrenze: 182
+- `(ll.` → `ll || ''` — occorrenze: 167
+- `(Med.)` → `Med || ''` — occorrenze: 166
+- `[_To` → `To || ''` — occorrenze: 166
+- `[See` → `See || ''` — occorrenze: 164
+- `(which` → `which || ''` — occorrenze: 157
+- `(I` → `I || ''` — occorrenze: 145
+- `(A.D.` → `A.D || ''` — occorrenze: 135
+- `(Chem.)` → `Chem || ''` — occorrenze: 135
+- `(1)` → `1 || ''` — occorrenze: 131
+- `(in` → `in || ''` — occorrenze: 125
+- `(a` → `a || ''` — occorrenze: 110
+- `(Law)` → `Law || ''` — occorrenze: 95
+- `[NL.,` → `NL || ''` — occorrenze: 95
+- `[OF.` → `OF || ''` — occorrenze: 87
+- `(return)` → `return || ''` — occorrenze: 86
+- `(who` → `who || ''` — occorrenze: 85
+- `[_Aside._]` → `Aside || ''` — occorrenze: 78
+- `(or` → `or || ''` — occorrenze: 77
+- `[_Aside_.]` → `Aside || ''` — occorrenze: 77
+- `[From` → `From || ''` — occorrenze: 77
+- `[L.,` → `L || ''` — occorrenze: 77
+- `(Naut.)` → `Naut || ''` — occorrenze: 75
+- `(he` → `he || ''` — occorrenze: 73
+- `(if` → `if || ''` — occorrenze: 73
+- `[AS.` → `AS || ''` — occorrenze: 73
+- `n.]` → `n || ''` — occorrenze: 73
+- `(Anat.)` → `Anat || ''` — occorrenze: 71
+- `(to` → `to || ''` — occorrenze: 69
+- `(Zo”l.),` → `Zo”l || ''` — occorrenze: 67
+- `[Archaic]` → `Archaic || ''` — occorrenze: 67
+- `(though` → `though || ''` — occorrenze: 66
+- `(with` → `with || ''` — occorrenze: 64
+- `277),` → `277 || ''` — occorrenze: 61
+- `(Arch.)` → `Arch || ''` — occorrenze: 60
+- `[_They` → `They || ''` — occorrenze: 59
+- `(Biol.)` → `Biol || ''` — occorrenze: 57
+- `(Min.)` → `Min || ''` — occorrenze: 57
+- `(so` → `so || ''` — occorrenze: 56
+- `[Colloq.]` → `Colloq || ''` — occorrenze: 55
+- `(of` → `of || ''` — occorrenze: 54
+- `[Written` → `Written || ''` — occorrenze: 54
+- `[LL.` → `LL || ''` — occorrenze: 52
+- `[The` → `The || ''` — occorrenze: 51
+- `Law)` → `Law || ''` — occorrenze: 49
+- `(_Endorsed_:` → `Endorsed || ''` — occorrenze: 48
+- `(it` → `it || ''` — occorrenze: 48
+- `[Image]` → `Image || ''` — occorrenze: 48
+- `(not` → `not || ''` — occorrenze: 47
+- `[Footnote` → `Footnote || ''` — occorrenze: 47
+- `(2)` → `2 || ''` — occorrenze: 46
+- `[F.,` → `F || ''` — occorrenze: 46
+- `[Illustration:` → `Illustration || ''` — occorrenze: 46
+- `[_He` → `He || ''` — occorrenze: 44
+- `(that` → `that || ''` — occorrenze: 43
+- `[U.S.],` → `U.S || ''` — occorrenze: 43
+- `[_Aside` → `Aside || ''` — occorrenze: 42
+- `Eng.]` → `Eng || ''` — occorrenze: 42
+- `a.]` → `a || ''` — occorrenze: 41
+- `it)` → `it || ''` — occorrenze: 41
+- `said)` → `said || ''` — occorrenze: 41
+- `(be` → `be || ''` — occorrenze: 40
+- `(The` → `The || ''` — occorrenze: 40
+- `[Obs.` → `Obs || ''` — occorrenze: 40
+- `[Picture:` → `Picture || ''` — occorrenze: 39
+- `(For` → `For || ''` — occorrenze: 35
+- `[U.` → `U || ''` — occorrenze: 35
+- `S.]` → `S || ''` — occorrenze: 35
+- `(L.` → `L || ''` — occorrenze: 34
+- `(Mus.)` → `Mus || ''` — occorrenze: 34
+- `(she` → `she || ''` — occorrenze: 34
+- `[Prov.` → `Prov || ''` — occorrenze: 34
+- `[U.S.].` → `U.S || ''` — occorrenze: 34
+- `(3)` → `3 || ''` — occorrenze: 32
+- `[F.]` → `F || ''` — occorrenze: 32
+- `(by` → `by || ''` — occorrenze: 31
+- `[_The` → `The || ''` — occorrenze: 31
+- `me)` → `me || ''` — occorrenze: 31
+- `(but` → `but || ''` — occorrenze: 30
+- `(cf.` → `cf || ''` — occorrenze: 29
+- `(see` → `see || ''` — occorrenze: 29
+- `[Eng.]` → `Eng || ''` — occorrenze: 29
+- `[U.S.];` → `U.S || ''` — occorrenze: 29
+- `ad)` → `ad || ''` — occorrenze: 29
+- `say)` → `say || ''` — occorrenze: 29
+- `(Mil.)` → `Mil || ''` — occorrenze: 28
+- `(Physiol.)` → `Physiol || ''` — occorrenze: 27
+- `[_A` → `A || ''` — occorrenze: 27
+- `[_Sings._]` → `Sings || ''` — occorrenze: 26
+- `[A` → `A || ''` — occorrenze: 26
+- `[footnote...` → `footnote || ''` — occorrenze: 26
+- `[NL.` → `NL || ''` — occorrenze: 26
+- `him)` → `him || ''` — occorrenze: 26
+- `within._]` → `within || ''` — occorrenze: 26
+- `(at` → `at || ''` — occorrenze: 25
+- `(So` → `So || ''` — occorrenze: 25
+- `him._]` → `him || ''` — occorrenze: 25
+- `name.]` → `name || ''` — occorrenze: 25
+- `t.]` → `t || ''` — occorrenze: 25
+- `(like` → `like || ''` — occorrenze: 24
+- `(on` → `on || ''` — occorrenze: 24
+- `(such` → `such || ''` — occorrenze: 24
+- `(To` → `To || ''` — occorrenze: 24
+- `(whose` → `whose || ''` — occorrenze: 24
+- `[Scot.]` → `Scot || ''` — occorrenze: 24
+- `of)` → `of || ''` — occorrenze: 24
+- `them)` → `them || ''` — occorrenze: 24
+- `(Mr.` → `Mr || ''` — occorrenze: 22
+- `(Naut.),` → `Naut || ''` — occorrenze: 22
+- `(p.` → `p || ''` — occorrenze: 22
+- `[L.]` → `L || ''` — occorrenze: 22
+- `[THIS` → `THIS || ''` — occorrenze: 22
+- `Servant._]` → `Servant || ''` — occorrenze: 22
+- `(an` → `an || ''` — occorrenze: 21
+- `(Aside.)` → `Aside || ''` — occorrenze: 21
+- `(Astron.)` → `Astron || ''` — occorrenze: 21
+- `(Her.)` → `Her || ''` — occorrenze: 21
+- `(where` → `where || ''` — occorrenze: 21
+- `[This` → `This || ''` — occorrenze: 21
+- `to)` → `to || ''` — occorrenze: 21
+- `(Bot.),` → `Bot || ''` — occorrenze: 20
+- `[_Within_.]` → `Within || ''` — occorrenze: 20
+- `[It.` → `It || ''` — occorrenze: 20
+- `[Science` → `Science || ''` — occorrenze: 20
+- `Hist.)` → `Hist || ''` — occorrenze: 20
+- `(5)` → `5 || ''` — occorrenze: 19
+- `(Gram.)` → `Gram || ''` — occorrenze: 19
+- `(Law),` → `Law || ''` — occorrenze: 19
+- `(now` → `now || ''` — occorrenze: 19
+- `(what` → `what || ''` — occorrenze: 19
+- `[1` → `1 || ''` — occorrenze: 19
+- `[_Reads_.]` → `Reads || ''` — occorrenze: 19
+- `[Heb.` → `Heb || ''` — occorrenze: 19
+- `[Sp.` → `Sp || ''` — occorrenze: 19
+- `[the` → `the || ''` — occorrenze: 19
+- `[Tu` → `Tu || ''` — occorrenze: 19
+- `(4)` → `4 || ''` — occorrenze: 18
+- `(from` → `from || ''` — occorrenze: 18
+- `(this` → `this || ''` — occorrenze: 18
+- `[For` → `For || ''` — occorrenze: 18
+- `[Poetic]` → `Poetic || ''` — occorrenze: 18
+- `it),` → `it || ''` — occorrenze: 18
+- `Ïform.]` → `Ïform || ''` — occorrenze: 18
+- `(1).` → `1 || ''` — occorrenze: 17
+- `(except` → `except || ''` — occorrenze: 17
+- `(Mining)` → `Mining || ''` — occorrenze: 17
+- `(when` → `when || ''` — occorrenze: 17
+- `[_Exit_.]` → `Exit || ''` — occorrenze: 17
+- `[_Within._]` → `Within || ''` — occorrenze: 17
+- `[of` → `of || ''` — occorrenze: 17
+- `[person` → `person || ''` — occorrenze: 17
+- `[THE` → `THE || ''` — occorrenze: 17
+- `[U.S.]` → `U.S || ''` — occorrenze: 17
+- `me),` → `me || ''` — occorrenze: 17
+- `(according` → `according || ''` — occorrenze: 16
+- `(And` → `And || ''` — occorrenze: 16
+- `(my` → `my || ''` — occorrenze: 16
+- `[Henry` → `Henry || ''` — occorrenze: 16
+- `[in` → `in || ''` — occorrenze: 16
+- `[Lat][Horace];` → `Lat][Horace || ''` — occorrenze: 16
+- `Exeunt._]` → `Exeunt || ''` — occorrenze: 16
+- `Ïoid.]` → `Ïoid || ''` — occorrenze: 16
+- `(1),` → `1 || ''` — occorrenze: 15
+- `(after` → `after || ''` — occorrenze: 15
+- `(his` → `his || ''` — occorrenze: 15
+- `(one` → `one || ''` — occorrenze: 15
+- `(they` → `they || ''` — occorrenze: 15
+- `(we` → `we || ''` — occorrenze: 15
+- `1838)` → `1838 || ''` — occorrenze: 15
+- `[Exeunt` → `Exeunt || ''` — occorrenze: 15
+- `[Lat][Ovid];` → `Lat][Ovid || ''` — occorrenze: 15
+- `[Native` → `Native || ''` — occorrenze: 15
+- `[Prob.` → `Prob || ''` — occorrenze: 15
+- `(?),n.` → `n || ''` — occorrenze: 14
+- `(Eng.` → `Eng || ''` — occorrenze: 14
+- `(having` → `having || ''` — occorrenze: 14
+- `(said` → `said || ''` — occorrenze: 14
+- `[_Flourish.` → `Flourish || ''` — occorrenze: 14
+- `[_Reads._]` → `Reads || ''` — occorrenze: 14
+- `[_to` → `to || ''` — occorrenze: 14
+- `[Chang` → `Chang || ''` — occorrenze: 14
+- `[Illustration]` → `Illustration || ''` — occorrenze: 14
+- `[In` → `In || ''` — occorrenze: 14
+- `[obs3][U.S.],` → `obs3][U.S || ''` — occorrenze: 14
+- `[Pope];` → `Pope || ''` — occorrenze: 14
+- `[Ps.` → `Ps || ''` — occorrenze: 14
+- `Attendants._]` → `Attendants || ''` — occorrenze: 14
+- `be)` → `be || ''` — occorrenze: 14
+- `June]` → `June || ''` — occorrenze: 14
+- `(although` → `although || ''` — occorrenze: 13
+- `(Concerning` → `Concerning || ''` — occorrenze: 13
+- `(Eccl.` → `Eccl || ''` — occorrenze: 13
+- `(Math.)` → `Math || ''` — occorrenze: 13
+- `(Old` → `Old || ''` — occorrenze: 13
+- `(R.` → `R || ''` — occorrenze: 13
+- `(there` → `there || ''` — occorrenze: 13
+- `(whom` → `whom || ''` — occorrenze: 13
+- `(without` → `without || ''` — occorrenze: 13
+- `135),` → `135 || ''` — occorrenze: 13
+- `[Ar.` → `Ar || ''` — occorrenze: 13
+- `[Isa.` → `Isa || ''` — occorrenze: 13
+- `Aug.]` → `Aug || ''` — occorrenze: 13
+- `man)` → `man || ''` — occorrenze: 13
+- `origin.]` → `origin || ''` — occorrenze: 13
+- `R.]` → `R || ''` — occorrenze: 13
+- `(As` → `As || ''` — occorrenze: 12
+- `(being` → `being || ''` — occorrenze: 12
+- `(Geom.)` → `Geom || ''` — occorrenze: 12
+- `(Such` → `Such || ''` — occorrenze: 12
+- `(which,` → `which || ''` — occorrenze: 12
+- `[_Dies._]` → `Dies || ''` — occorrenze: 12
+- `[_She` → `She || ''` — occorrenze: 12
+- `[It.,` → `It || ''` — occorrenze: 12
+- `[Lat][Vergil];` → `Lat][Vergil || ''` — occorrenze: 12
+- `[NL.]` → `NL || ''` — occorrenze: 12
+- `[Slang]` → `Slang || ''` — occorrenze: 12
+- `Antiq.)` → `Antiq || ''` — occorrenze: 12
+- `letter._]` → `letter || ''` — occorrenze: 12
+- `name)` → `name || ''` — occorrenze: 12
+- `out._]` → `out || ''` — occorrenze: 12
+- `(afterwards` → `afterwards || ''` — occorrenze: 11
+- `(all` → `all || ''` — occorrenze: 11
+- `(Arch.),` → `Arch || ''` — occorrenze: 11
+- `(Chem.),` → `Chem || ''` — occorrenze: 11
+- `(He` → `He || ''` — occorrenze: 11
+- `(meaning` → `meaning || ''` — occorrenze: 11
+- `(no` → `no || ''` — occorrenze: 11
+- `(perhaps` → `perhaps || ''` — occorrenze: 11
+- `(Physics)` → `Physics || ''` — occorrenze: 11
+- `(Rhet.)` → `Rhet || ''` — occorrenze: 11
+- `(See` → `See || ''` — occorrenze: 11
+- `(Which` → `Which || ''` — occorrenze: 11
+- `[Exeunt.]` → `Exeunt || ''` — occorrenze: 11
+- `[Tennyson];` → `Tennyson || ''` — occorrenze: 11
+- `bear.]` → `bear || ''` — occorrenze: 11
+- `Ch.)` → `Ch || ''` — occorrenze: 11
+- `out)` → `out || ''` — occorrenze: 11
+- `S.].` → `S || ''` — occorrenze: 11
+- `S.];` → `S || ''` — occorrenze: 11
+- `them),` → `them || ''` — occorrenze: 11
+- `Ïmeter.]` → `Ïmeter || ''` — occorrenze: 11
+
+---
+
+## 4. Parole che potrebbero essere formate da più termini
+
+Questa categoria comprende soprattutto apostrofi/elisioni, contrazioni, possessivi e parole composte con trattino. La presenza del carattere speciale non significa necessariamente che la stringa debba essere semplicemente ripulita.
+
+### 4.1 Apostrofi, contrazioni e possessivi
+
+Possibili interpretazioni:
+- `don't` → `dont` oppure `don + t` oppure `do + not`
+- `didn’t` → `didnt` oppure `didn + t` oppure `did + not`
+- `I’m` → `im` oppure `I + am` oppure `I + m`
+- `one’s` → `ones` oppure `one + s`
+- `father’s` → `fathers` oppure `father + s`
+- `’tis` è invece un caso particolare: nel prompt originale è stato trattato come semplice pulizia (`tis`), quindi questa convenzione va mantenuta.
+
+### 4.2 Parole composte con trattino
+
+Il trattino interno può separare più termini: `half-a-dozen` → `half + a + dozen`, `father-in-law` → `father + in + law`, `self-sacrifice` → `self + sacrifice`. Non va quindi eliminato alla cieca se l'obiettivo è recuperare i singoli termini.
+
+### Elenco completo
+
+- `I’ll` → `Ill || I + ll` — occorrenze: 1574
+- `don’t` → `dont || don + t` — occorrenze: 1442
+- `one's` → `ones || one + s` — occorrenze: 1080
+- `don't` → `dont || don + t` — occorrenze: 751
+- `man’s` → `mans || man + s` — occorrenze: 611
+- `it’s` → `its || it + s` — occorrenze: 527
+- `I’m` → `Im || I + m` — occorrenze: 523
+- `can’t` → `cant || can + t` — occorrenze: 512
+- `father’s` → `fathers || father + s` — occorrenze: 502
+- `that’s` → `thats || that + s` — occorrenze: 455
+- `king's` → `kings || king + s` — occorrenze: 418
+- `there’s` → `theres || there + s` — occorrenze: 416
+- `he’s` → `hes || he + s` — occorrenze: 357
+- `I'll` → `Ill || I + ll` — occorrenze: 353
+- `won’t` → `wont || won + t` — occorrenze: 341
+- `I’ve` → `Ive || I + ve` — occorrenze: 335
+- `mother’s` → `mothers || mother + s` — occorrenze: 310
+- `father's` → `fathers || father + s` — occorrenze: 300
+- `didn’t` → `didnt || didn + t` — occorrenze: 296
+- `man's` → `mans || man + s` — occorrenze: 295
+- `o’clock` → `oclock || o + clock` — occorrenze: 294
+- `can't` → `cant || can + t` — occorrenze: 285
+- `one’s` → `ones || one + s` — occorrenze: 282
+- `It’s` → `Its || It + s` — occorrenze: 262
+- `God’s` → `Gods || God + s` — occorrenze: 252
+- `o’er` → `oer || o + er` — occorrenze: 241
+- `you’ll` → `youll || you + ll` — occorrenze: 241
+- `didn't` → `didnt || didn + t` — occorrenze: 237
+- `I’d` → `Id || I + d` — occorrenze: 237
+- `I'm` → `Im || I + m` — occorrenze: 236
+- `There’s` → `Theres || There + s` — occorrenze: 230
+- `God's` → `Gods || God + s` — occorrenze: 223
+- `won't` → `wont || won + t` — occorrenze: 222
+- `woman’s` → `womans || woman + s` — occorrenze: 219
+- `That’s` → `Thats || That + s` — occorrenze: 212
+- `she’s` → `shes || she + s` — occorrenze: 202
+- `husband’s` → `husbands || husband + s` — occorrenze: 195
+- `lady’s` → `ladys || lady + s` — occorrenze: 192
+- `to-day` → `today || to + day` — occorrenze: 186
+- `ne’er` → `neer || ne + er` — occorrenze: 181
+- `mother's` → `mothers || mother + s` — occorrenze: 180
+- `couldn’t` → `couldnt || couldn + t` — occorrenze: 176
+- `King’s` → `Kings || King + s` — occorrenze: 176
+- `it's` → `its || it + s` — occorrenze: 175
+- `we’ll` → `well || we + ll` — occorrenze: 175
+- `master’s` → `masters || master + s` — occorrenze: 173
+- `wouldn’t` → `wouldnt || wouldn + t` — occorrenze: 170
+- `Don’t` → `Dont || Don + t` — occorrenze: 166
+- `to-morrow` → `tomorrow || to + morrow` — occorrenze: 160
+- `what’s` → `whats || what + s` — occorrenze: 155
+- `to-day,` → `today, || to + day` — occorrenze: 152
+- `you’re` → `youre || you + re` — occorrenze: 151
+- `Browning's` → `Brownings || Browning + s` — occorrenze: 144
+- `he’ll` → `hell || he + ll` — occorrenze: 142
+- `“It’s` → `“Its || It + s` — occorrenze: 141
+- `I've` → `Ive || I + ve` — occorrenze: 140
+- `moment’s` → `moments || moment + s` — occorrenze: 137
+- `What’s` → `Whats || What + s` — occorrenze: 137
+- `isn’t` → `isnt || isn + t` — occorrenze: 136
+- `o'er` → `oer || o + er` — occorrenze: 135
+- `“Don’t` → `“Dont || Don + t` — occorrenze: 135
+- `brother’s` → `brothers || brother + s` — occorrenze: 133
+- `“I’ll` → `“Ill || I + ll` — occorrenze: 133
+- `day’s` → `days || day + s` — occorrenze: 129
+- `there's` → `theres || there + s` — occorrenze: 129
+- `you’d` → `youd || you + d` — occorrenze: 127
+- `that's` → `thats || that + s` — occorrenze: 126
+- `wouldn't` → `wouldnt || wouldn + t` — occorrenze: 126
+- `He’s` → `Hes || He + s` — occorrenze: 124
+- `We’ll` → `Well || We + ll` — occorrenze: 124
+- `he’d` → `hed || he + d` — occorrenze: 118
+- `“I’m` → `“Im || I + m` — occorrenze: 118
+- `Heav’n` → `Heavn || Heav + n` — occorrenze: 115
+- `men’s` → `mens || men + s` — occorrenze: 115
+- `child’s` → `childs || child + s` — occorrenze: 114
+- `sister’s` → `sisters || sister + s` — occorrenze: 114
+- `other’s` → `others || other + s` — occorrenze: 113
+- `“That’s` → `“Thats || That + s` — occorrenze: 113
+- `o’clock,` → `oclock, || o + clock` — occorrenze: 112
+- `you’ve` → `youve || you + ve` — occorrenze: 110
+- `let’s` → `lets || let + s` — occorrenze: 109
+- `ain’t` → `aint || ain + t` — occorrenze: 108
+- `Here’s` → `Heres || Here + s` — occorrenze: 108
+- `lady's` → `ladys || lady + s` — occorrenze: 107
+- `doesn’t` → `doesnt || doesn + t` — occorrenze: 105
+- `Olaf's` → `Olafs || Olaf + s` — occorrenze: 105
+- `well-known` → `wellknown || well + known` — occorrenze: 103
+- `here’s` → `heres || here + s` — occorrenze: 102
+- `men's` → `mens || men + s` — occorrenze: 102
+- `world’s` → `worlds || world + s` — occorrenze: 101
+- `twenty-five` → `twentyfive || twenty + five` — occorrenze: 100
+- `he's` → `hes || he + s` — occorrenze: 99
+- `people’s` → `peoples || people + s` — occorrenze: 99
+- `wife’s` → `wifes || wife + s` — occorrenze: 98
+- `half-past` → `halfpast || half + past` — occorrenze: 97
+- `old-fashioned` → `oldfashioned || old + fashioned` — occorrenze: 96
+- `Pickwick’s` → `Pickwicks || Pickwick + s` — occorrenze: 96
+- `couldn't` → `couldnt || couldn + t` — occorrenze: 94
+- `you're` → `youre || you + re` — occorrenze: 94
+- `good-natured` → `goodnatured || good + natured` — occorrenze: 93
+- `I'd` → `Id || I + d` — occorrenze: 90
+- `Crawley's` → `Crawleys || Crawley + s` — occorrenze: 88
+- `o'clock` → `oclock || o + clock` — occorrenze: 88
+- `ship’s` → `ships || ship + s` — occorrenze: 88
+- `drawing-room` → `drawingroom || drawing + room` — occorrenze: 86
+- `gentleman’s` → `gentlemans || gentleman + s` — occorrenze: 86
+- `Tirant's` → `Tirants || Tirant + s` — occorrenze: 86
+- `husband's` → `husbands || husband + s` — occorrenze: 85
+- `woman's` → `womans || woman + s` — occorrenze: 84
+- `Adam’s` → `Adams || Adam + s` — occorrenze: 83
+- `Percival’s` → `Percivals || Percival + s` — occorrenze: 83
+- `brother's` → `brothers || brother + s` — occorrenze: 82
+- `to-morrow,` → `tomorrow, || to + morrow` — occorrenze: 82
+- `twenty-four` → `twentyfour || twenty + four` — occorrenze: 82
+- `wasn’t` → `wasnt || wasn + t` — occorrenze: 81
+- `to-night,` → `tonight, || to + night` — occorrenze: 80
+- `Let’s` → `Lets || Let + s` — occorrenze: 78
+- `wasn't` → `wasnt || wasn + t` — occorrenze: 78
+- `you'll` → `youll || you + ll` — occorrenze: 78
+- `drawing-room,` → `drawingroom, || drawing + room` — occorrenze: 77
+- `King's` → `Kings || King + s` — occorrenze: 77
+- `It's` → `Its || It + s` — occorrenze: 76
+- `other's` → `others || other + s` — occorrenze: 75
+- `to-day.` → `today. || to + day` — occorrenze: 75
+- `Tom’s` → `Toms || Tom + s` — occorrenze: 75
+- `“There’s` → `“Theres || There + s` — occorrenze: 74
+- `haven’t` → `havent || haven + t` — occorrenze: 73
+- `Arthur’s` → `Arthurs || Arthur + s` — occorrenze: 72
+- `master's` → `masters || master + s` — occorrenze: 71
+- `Njal's` → `Njals || Njal + s` — occorrenze: 71
+- `daughter’s` → `daughters || daughter + s` — occorrenze: 70
+- `friend’s` → `friends || friend + s` — occorrenze: 70
+- `She’s` → `Shes || She + s` — occorrenze: 70
+- `enemy’s` → `enemys || enemy + s` — occorrenze: 68
+- `Heaven’s` → `Heavens || Heaven + s` — occorrenze: 68
+- `to-morrow.` → `tomorrow. || to + morrow` — occorrenze: 68
+- `uncle’s` → `uncles || uncle + s` — occorrenze: 68
+- `what's` → `whats || what + s` — occorrenze: 68
+- `king’s` → `kings || king + s` — occorrenze: 67
+- `call’d` → `calld || call + d` — occorrenze: 66
+- `earl's` → `earls || earl + s` — occorrenze: 66
+- `heart’s` → `hearts || heart + s` — occorrenze: 66
+- `Fanny’s` → `Fannys || Fanny + s` — occorrenze: 65
+- `“What’s` → `“Whats || What + s` — occorrenze: 64
+- `an’t` → `ant || an + t` — occorrenze: 63
+- `boy’s` → `boys || boy + s` — occorrenze: 62
+- `she’ll` → `shell || she + ll` — occorrenze: 62
+- `Hetty’s` → `Hettys || Hetty + s` — occorrenze: 61
+- `Crawford’s` → `Crawfords || Crawford + s` — occorrenze: 60
+- `Dorothea’s` → `Dorotheas || Dorothea + s` — occorrenze: 60
+- `e’er` → `eer || e + er` — occorrenze: 60
+- `hadn’t` → `hadnt || hadn + t` — occorrenze: 60
+- `Henry’s` → `Henrys || Henry + s` — occorrenze: 60
+- `love’s` → `loves || love + s` — occorrenze: 60
+- `ma’am,` → `maam, || ma + am` — occorrenze: 60
+- `night’s` → `nights || night + s` — occorrenze: 60
+- `Queen's` → `Queens || Queen + s` — occorrenze: 60
+- `Where’s` → `Wheres || Where + s` — occorrenze: 60
+- `Mas’r` → `Masr || Mas + r` — occorrenze: 59
+- `wife's` → `wifes || wife + s` — occorrenze: 59
+- `day's` → `days || day + s` — occorrenze: 58
+- `Lydgate’s` → `Lydgates || Lydgate + s` — occorrenze: 58
+- `ne'er` → `neer || ne + er` — occorrenze: 58
+- `shouldn’t` → `shouldnt || shouldn + t` — occorrenze: 58
+- `they’re` → `theyre || they + re` — occorrenze: 58
+- `Wolf’s` → `Wolfs || Wolf + s` — occorrenze: 58
+- `‘It’s` → `‘Its || It + s` — occorrenze: 58
+- `ev’ry` → `evry || ev + ry` — occorrenze: 57
+- `soul’s` → `souls || soul + s` — occorrenze: 57
+- `they’ll` → `theyll || they + ll` — occorrenze: 57
+- `Cosette’s` → `Cosettes || Cosette + s` — occorrenze: 56
+- `Emperor's` → `Emperors || Emperor + s` — occorrenze: 56
+- `life’s` → `lifes || life + s` — occorrenze: 56
+- `we'll` → `well || we + ll` — occorrenze: 56
+- `Don't` → `Dont || Don + t` — occorrenze: 55
+- `ain't` → `aint || ain + t` — occorrenze: 54
+- `Fairlie’s` → `Fairlies || Fairlie + s` — occorrenze: 54
+- `he'd` → `hed || he + d` — occorrenze: 54
+- `You’ll` → `Youll || You + ll` — occorrenze: 54
+- `"Don't` → `"Dont || Don + t` — occorrenze: 53
+- `Browning’s` → `Brownings || Browning + s` — occorrenze: 53
+- `first-rate` → `firstrate || first + rate` — occorrenze: 53
+- `heaven’s` → `heavens || heaven + s` — occorrenze: 53
+- `people's` → `peoples || people + s` — occorrenze: 52
+- `Verinder’s` → `Verinders || Verinder + s` — occorrenze: 52
+- `Heav’n,` → `Heavn, || Heav + n` — occorrenze: 51
+- `horse's` → `horses || horse + s` — occorrenze: 51
+- `o’clock.` → `oclock. || o + clock` — occorrenze: 51
+- `Casaubon’s` → `Casaubons || Casaubon + s` — occorrenze: 50
+- `Diamond's` → `Diamonds || Diamond + s` — occorrenze: 50
+- `George's` → `Georges || George + s` — occorrenze: 50
+- `Lord’s` → `Lords || Lord + s` — occorrenze: 50
+- `morning’s` → `mornings || morning + s` — occorrenze: 50
+- `"I'll` → `"Ill || I + ll` — occorrenze: 49
+- `"It's` → `"Its || It + s` — occorrenze: 49
+- `Harald's` → `Haralds || Harald + s` — occorrenze: 49
+- `son's` → `sons || son + s` — occorrenze: 49
+- `daughter's` → `daughters || daughter + s` — occorrenze: 48
+- `England’s` → `Englands || England + s` — occorrenze: 48
+- `is’t` → `ist || is + t` — occorrenze: 48
+- `John’s` → `Johns || John + s` — occorrenze: 48
+- `“I’ve` → `“Ive || I + ve` — occorrenze: 48
+- `enemy's` → `enemys || enemy + s` — occorrenze: 47
+- `Father’s` → `Fathers || Father + s` — occorrenze: 47
+- `ship's` → `ships || ship + s` — occorrenze: 47
+- `another's` → `anothers || another + s` — occorrenze: 46
+- `another’s` → `anothers || another + s` — occorrenze: 46
+- `Osborne's` → `Osbornes || Osborne + s` — occorrenze: 46
+- `Prince’s` → `Princes || Prince + s` — occorrenze: 46
+- `Rachel’s` → `Rachels || Rachel + s` — occorrenze: 46
+- `son’s` → `sons || son + s` — occorrenze: 46
+- `Caesar’s` → `Caesars || Caesar + s` — occorrenze: 45
+- `girl’s` → `girls || girl + s` — occorrenze: 45
+- `hour’s` → `hours || hour + s` — occorrenze: 45
+- `Rogero's` → `Rogeros || Rogero + s` — occorrenze: 45
+- `she's` → `shes || she + s` — occorrenze: 45
+- `You’re` → `Youre || You + re` — occorrenze: 45
+- `“He’s` → `“Hes || He + s` — occorrenze: 45
+- `earth’s` → `earths || earth + s` — occorrenze: 44
+- `half-way` → `halfway || half + way` — occorrenze: 44
+- `know’st` → `knowst || know + st` — occorrenze: 44
+- `shouldn't` → `shouldnt || shouldn + t` — occorrenze: 44
+- `Marianne’s` → `Mariannes || Marianne + s` — occorrenze: 43
+- `Re-enter` → `Reenter || Re + enter` — occorrenze: 43
+- `to-night.` → `tonight. || to + night` — occorrenze: 43
+- `well-nigh` → `wellnigh || well + nigh` — occorrenze: 43
+- `Bulstrode’s` → `Bulstrodes || Bulstrode + s` — occorrenze: 42
+- `Laura’s` → `Lauras || Laura + s` — occorrenze: 42
+- `Mary’s` → `Marys || Mary + s` — occorrenze: 42
+- `shan’t` → `shant || shan + t` — occorrenze: 42
+- `steam-engine` → `steamengine || steam + engine` — occorrenze: 42
+- `to-night` → `tonight || to + night` — occorrenze: 42
+- `‘I’m` → `‘Im || I + m` — occorrenze: 42
+- `Amelia's` → `Amelias || Amelia + s` — occorrenze: 41
+- `Edward’s` → `Edwards || Edward + s` — occorrenze: 41
+- `emperor's` → `emperors || emperor + s` — occorrenze: 41
+- `Grettir's` → `Grettirs || Grettir + s` — occorrenze: 41
+- `lov’d` → `lovd || lov + d` — occorrenze: 41
+- `Sand's` → `Sands || Sand + s` — occorrenze: 41
+- `sitting-room` → `sittingroom || sitting + room` — occorrenze: 41
+- `ta’en` → `taen || ta + en` — occorrenze: 41
+- `Anne’s` → `Annes || Anne + s` — occorrenze: 40
+- `aunt’s` → `aunts || aunt + s` — occorrenze: 40
+- `body’s` → `bodys || body + s` — occorrenze: 40
+- `captain’s` → `captains || captain + s` — occorrenze: 40
+- `doesn't` → `doesnt || doesn + t` — occorrenze: 40
+- `good-humoured` → `goodhumoured || good + humoured` — occorrenze: 40
+- `Hepzibah’s` → `Hepzibahs || Hepzibah + s` — occorrenze: 40
+- `He’ll` → `Hell || He + ll` — occorrenze: 40
+- `poet’s` → `poets || poet + s` — occorrenze: 40
+- `they're` → `theyre || they + re` — occorrenze: 40
+- `whale’s` → `whales || whale + s` — occorrenze: 40
+- `"I'm` → `"Im || I + m` — occorrenze: 39
+- `drawing-room.` → `drawingroom. || drawing + room` — occorrenze: 39
+- `Emma’s` → `Emmas || Emma + s` — occorrenze: 39
+- `far-off` → `faroff || far + off` — occorrenze: 39
+- `Hakon's` → `Hakons || Hakon + s` — occorrenze: 39
+- `sister's` → `sisters || sister + s` — occorrenze: 39
+- `son-in-law` → `soninlaw || son + in + law` — occorrenze: 39
+- `summer’s` → `summers || summer + s` — occorrenze: 39
+- `‘I’ll` → `‘Ill || I + ll` — occorrenze: 39
+- `Colonel’s` → `Colonels || Colonel + s` — occorrenze: 38
+- `e’en` → `een || e + en` — occorrenze: 38
+- `good-will` → `goodwill || good + will` — occorrenze: 38
+- `lordship’s` → `lordships || lordship + s` — occorrenze: 38
+- `poet's` → `poets || poet + s` — occorrenze: 38
+- `There's` → `Theres || There + s` — occorrenze: 38
+- `Ts’ao` → `Tsao || Ts + ao` — occorrenze: 38
+- `Antonia’s` → `Antonias || Antonia + s` — occorrenze: 37
+- `country’s` → `countrys || country + s` — occorrenze: 37
+- `hadn't` → `hadnt || hadn + t` — occorrenze: 37
+- `isn't` → `isnt || isn + t` — occorrenze: 37
+- `middle-aged` → `middleaged || middle + aged` — occorrenze: 37
+- `she’d` → `shed || she + d` — occorrenze: 37
+- `un-to` → `unto || un + to` — occorrenze: 37
+- `warrior's` → `warriors || warrior + s` — occorrenze: 37
+- `Who’s` → `Whos || Who + s` — occorrenze: 37
+- `"That's` → `"Thats || That + s` — occorrenze: 36
+- `anti-slavery` → `antislavery || anti + slavery` — occorrenze: 36
+- `Bois-Guilbert,` → `BoisGuilbert, || Bois + Guilbert` — occorrenze: 36
+- `Count’s` → `Counts || Count + s` — occorrenze: 36
+- `Dinah’s` → `Dinahs || Dinah + s` — occorrenze: 36
+- `he'll` → `hell || he + ll` — occorrenze: 36
+- `Is’t` → `Ist || Is + t` — occorrenze: 36
+- `ladyship’s` → `ladyships || ladyship + s` — occorrenze: 36
+- `OLAF'S` → `OLAFS || OLAF + S` — occorrenze: 36
+- `‘Don’t` → `‘Dont || Don + t` — occorrenze: 36
+- `children’s` → `childrens || children + s` — occorrenze: 35
+- `Front-de-Bœuf,` → `FrontdeBœuf, || Front + de + Bœuf` — occorrenze: 35
+- `good-looking` → `goodlooking || good + looking` — occorrenze: 35
+- `Gunnar's` → `Gunnars || Gunnar + s` — occorrenze: 35
+- `Harriet’s` → `Harriets || Harriet + s` — occorrenze: 35
+- `nature’s` → `natures || nature + s` — occorrenze: 35
+- `Nature’s` → `Natures || Nature + s` — occorrenze: 35
+- `promis’d` → `promisd || promis + d` — occorrenze: 35
+- `Rosamond’s` → `Rosamonds || Rosamond + s` — occorrenze: 35
+- `where’s` → `wheres || where + s` — occorrenze: 35
+- `you've` → `youve || you + ve` — occorrenze: 35
+- `Ahab’s` → `Ahabs || Ahab + s` — occorrenze: 34
+- `Becky's` → `Beckys || Becky + s` — occorrenze: 34
+- `boy's` → `boys || boy + s` — occorrenze: 34
+- `Godfrey’s` → `Godfreys || Godfrey + s` — occorrenze: 34
+- `half-hour` → `halfhour || half + hour` — occorrenze: 34
+- `haven't` → `havent || haven + t` — occorrenze: 34
+- `horse’s` → `horses || horse + s` — occorrenze: 34
+- `O’er` → `Oer || O + er` — occorrenze: 34
+- `Pyncheon’s` → `Pyncheons || Pyncheon + s` — occorrenze: 34
+- `so-called` → `socalled || so + called` — occorrenze: 34
+- `Clifford’s` → `Cliffords || Clifford + s` — occorrenze: 33
+- `Duke’s` → `Dukes || Duke + s` — occorrenze: 33
+- `Eirik's` → `Eiriks || Eirik + s` — occorrenze: 33
+- `Elinor’s` → `Elinors || Elinor + s` — occorrenze: 33
+- `gentleman's` → `gentlemans || gentleman + s` — occorrenze: 33
+- `needn’t` → `neednt || needn + t` — occorrenze: 33
+- `O'Dowd` → `ODowd || O + Dowd` — occorrenze: 33
+- `pocket-book` → `pocketbook || pocket + book` — occorrenze: 33
+- `Tellson’s` → `Tellsons || Tellson + s` — occorrenze: 33
+- `“it’s` → `“its || it + s` — occorrenze: 33
+- `Bois-Guilbert` → `BoisGuilbert || Bois + Guilbert` — occorrenze: 32
+- `Christ's` → `Christs || Christ + s` — occorrenze: 32
+- `o'clock,` → `oclock, || o + clock` — occorrenze: 32
+- `public-house` → `publichouse || public + house` — occorrenze: 32
+- `Sam’s` → `Sams || Sam + s` — occorrenze: 32
+- `Sigurd's` → `Sigurds || Sigurd + s` — occorrenze: 32
+- `That's` → `Thats || That + s` — occorrenze: 32
+- `to-morrow.”` → `tomorrow.” || to + morrow` — occorrenze: 32
+- `brother-in-law` → `brotherinlaw || brother + in + law` — occorrenze: 31
+- `brother-in-law,` → `brotherinlaw, || brother + in + law` — occorrenze: 31
+- `cast-iron` → `castiron || cast + iron` — occorrenze: 31
+- `Elton’s` → `Eltons || Elton + s` — occorrenze: 31
+- `fellow’s` → `fellows || fellow + s` — occorrenze: 31
+- `Heav’ns` → `Heavns || Heav + ns` — occorrenze: 31
+- `it’ll` → `itll || it + ll` — occorrenze: 31
+- `lover’s` → `lovers || lover + s` — occorrenze: 31
+- `market-place,` → `marketplace, || market + place` — occorrenze: 31
+- `mustn’t` → `mustnt || mustn + t` — occorrenze: 31
+- `Poyser’s` → `Poysers || Poyser + s` — occorrenze: 31
+- `right-hand` → `righthand || right + hand` — occorrenze: 31
+- `Sedley's` → `Sedleys || Sedley + s` — occorrenze: 31
+- `thirty-five` → `thirtyfive || thirty + five` — occorrenze: 31
+- `winter’s` → `winters || winter + s` — occorrenze: 31
+- `‘What’s` → `‘Whats || What + s` — occorrenze: 31
+- `Catherick’s` → `Cathericks || Catherick + s` — occorrenze: 30
+- `child's` → `childs || child + s` — occorrenze: 30
+- `dining-room,` → `diningroom, || dining + room` — occorrenze: 30
+- `doctor’s` → `doctors || doctor + s` — occorrenze: 30
+- `d’ye` → `dye || d + ye` — occorrenze: 30
+- `Fred’s` → `Freds || Fred + s` — occorrenze: 30
+- `Hester’s` → `Hesters || Hester + s` — occorrenze: 30
+- `honour’s` → `honours || honour + s` — occorrenze: 30
+- `Lord's` → `Lords || Lord + s` — occorrenze: 30
+- `public-house,` → `publichouse, || public + house` — occorrenze: 30
+- `they’d` → `theyd || they + d` — occorrenze: 30
+- `turn’d` → `turnd || turn + d` — occorrenze: 30
+- `Wallenstein's` → `Wallensteins || Wallenstein + s` — occorrenze: 30
+- `week’s` → `weeks || week + s` — occorrenze: 30
+- `Weller’s` → `Wellers || Weller + s` — occorrenze: 30
+- `year’s` → `years || year + s` — occorrenze: 30
+- `Edmund’s` → `Edmunds || Edmund + s` — occorrenze: 29
+- `Erling's` → `Erlings || Erling + s` — occorrenze: 29
+- `Glyde’s` → `Glydes || Glyde + s` — occorrenze: 29
+- `He's` → `Hes || He + s` — occorrenze: 29
+- `Lucy’s` → `Lucys || Lucy + s` — occorrenze: 29
+- `Majesty's` → `Majestys || Majesty + s` — occorrenze: 29
+- `ma’am,’` → `maam, || ma + am` — occorrenze: 29
+- `monarch's` → `monarchs || monarch + s` — occorrenze: 29
+- `red-hot` → `redhot || red + hot` — occorrenze: 29
+- `Timon’s` → `Timons || Timon + s` — occorrenze: 29
+- `Valjean’s` → `Valjeans || Valjean + s` — occorrenze: 29
+- `Will’s` → `Wills || Will + s` — occorrenze: 29
+- `women’s` → `womens || women + s` — occorrenze: 29
+- `“don’t` → `“dont || don + t` — occorrenze: 29
+- `everybody’s` → `everybodys || everybody + s` — occorrenze: 28
+- `friend's` → `friends || friend + s` — occorrenze: 28
+- `James's` → `Jamess || James + s` — occorrenze: 28
+- `Lloyd’s` → `Lloyds || Lloyd + s` — occorrenze: 28
+- `Marguerite’s` → `Marguerites || Marguerite + s` — occorrenze: 28
+- `men-at-arms` → `menatarms || men + at + arms` — occorrenze: 28
+- `Queen-Dauphin` → `QueenDauphin || Queen + Dauphin` — occorrenze: 28
+- `sitting-room,` → `sittingroom, || sitting + room` — occorrenze: 28
+- `stranger’s` → `strangers || stranger + s` — occorrenze: 28
+- `three-quarters` → `threequarters || three + quarters` — occorrenze: 28
+- `to-day.”` → `today.” || to + day` — occorrenze: 28
+- `twenty-two` → `twentytwo || twenty + two` — occorrenze: 28
+- `we’ve` → `weve || we + ve` — occorrenze: 28
+- `“I’d` → `“Id || I + d` — occorrenze: 28
+- `a-goin’` → `agoin || a + goin` — occorrenze: 27
+- `beauty’s` → `beautys || beauty + s` — occorrenze: 27
+- `boat’s` → `boats || boat + s` — occorrenze: 27
+- `Catherine’s` → `Catherines || Catherine + s` — occorrenze: 27
+- `cousin’s` → `cousins || cousin + s` — occorrenze: 27
+- `devil’s` → `devils || devil + s` — occorrenze: 27
+- `Franklin’s` → `Franklins || Franklin + s` — occorrenze: 27
+- `half-dozen` → `halfdozen || half + dozen` — occorrenze: 27
+- `lord's` → `lords || lord + s` — occorrenze: 27
+- `Man’s` → `Mans || Man + s` — occorrenze: 27
+- `O'er` → `Oer || O + er` — occorrenze: 27
+- `Pitt's` → `Pitts || Pitt + s` — occorrenze: 27
+- `Queen’s` → `Queens || Queen + s` — occorrenze: 27
+- `Rawdon's` → `Rawdons || Rawdon + s` — occorrenze: 27
+- `sun’s` → `suns || sun + s` — occorrenze: 27
+- `“You’re` → `“Youre || You + re` — occorrenze: 27
+- `co-operation` → `cooperation || co + operation` — occorrenze: 26
+- `death’s` → `deaths || death + s` — occorrenze: 26
+- `dining-room` → `diningroom || dining + room` — occorrenze: 26
+- `Front-de-Bœuf` → `FrontdeBœuf || Front + de + Bœuf` — occorrenze: 26
+- `Javert’s` → `Javerts || Javert + s` — occorrenze: 26
+- `Magnus's` → `Magnuss || Magnus + s` — occorrenze: 26
+- `Major's` → `Majors || Major + s` — occorrenze: 26
+- `Maudslay's` → `Maudslays || Maudslay + s` — occorrenze: 26
+- `Montbarry’s` → `Montbarrys || Montbarry + s` — occorrenze: 26
+- `one-half` → `onehalf || one + half` — occorrenze: 26
+- `pocket-book,` → `pocketbook, || pocket + book` — occorrenze: 26
+- `sun's` → `suns || sun + s` — occorrenze: 26
+- `worn-out` → `wornout || worn + out` — occorrenze: 26
+- `‘You’re` → `‘Youre || You + re` — occorrenze: 26
+- `gen’l’m’n` → `genlmn || gen + l + m + n` — occorrenze: 25
+- `James’s` → `Jamess || James + s` — occorrenze: 25
+- `Katy's` → `Katys || Katy + s` — occorrenze: 25
+- `kill’d` → `killd || kill + d` — occorrenze: 25
+- `look-out` → `lookout || look + out` — occorrenze: 25
+- `Michael’s,` → `Michaels, || Michael + s` — occorrenze: 25
+- `rais’d` → `raisd || rais + d` — occorrenze: 25
+- `they’ve` → `theyve || they + ve` — occorrenze: 25
+- `twenty-six` → `twentysix || twenty + six` — occorrenze: 25
+- `two-thirds` → `twothirds || two + thirds` — occorrenze: 25
+- `unheard-of` → `unheardof || unheard + of` — occorrenze: 25
+- `‘That’s` → `‘Thats || That + s` — occorrenze: 25
+- `arm-chair` → `armchair || arm + chair` — occorrenze: 24
+- `England's` → `Englands || England + s` — occorrenze: 24
+- `farmer’s` → `farmers || farmer + s` — occorrenze: 24
+- `Gloucester’s` → `Gloucesters || Gloucester + s` — occorrenze: 24
+- `half-a-dozen` → `halfadozen || half + a + dozen` — occorrenze: 24
+- `heart's` → `hearts || heart + s` — occorrenze: 24
+- `here's` → `heres || here + s` — occorrenze: 24
+- `Jennings’s` → `Jenningss || Jennings + s` — occorrenze: 24
+- `lawyer’s` → `lawyers || lawyer + s` — occorrenze: 24
+- `let's` → `lets || let + s` — occorrenze: 24
+- `market-place` → `marketplace || market + place` — occorrenze: 24
+- `Matty’s` → `Mattys || Matty + s` — occorrenze: 24
+- `new-born` → `newborn || new + born` — occorrenze: 24
+- `O'Connor` → `OConnor || O + Connor` — occorrenze: 24
+- `one-third` → `onethird || one + third` — occorrenze: 24
+- `Priam’s` → `Priams || Priam + s` — occorrenze: 24
+- `princess's` → `princesss || princess + s` — occorrenze: 24
+- `Rebecca's` → `Rebeccas || Rebecca + s` — occorrenze: 24
+- `say’st` → `sayst || say + st` — occorrenze: 24
+- `shan't` → `shant || shan + t` — occorrenze: 24
+- `Silas’s` → `Silass || Silas + s` — occorrenze: 24
+- `They’re` → `Theyre || They + re` — occorrenze: 24
+- `To-morrow` → `Tomorrow || To + morrow` — occorrenze: 24
+- `we’re` → `were || we + re` — occorrenze: 24
+- `William’s` → `Williams || William + s` — occorrenze: 24
+- `world's` → `worlds || world + s` — occorrenze: 24
+- `“I'm` → `“Im || I + m` — occorrenze: 24
+- `author's` → `authors || author + s` — occorrenze: 23
+- `children's` → `childrens || children + s` — occorrenze: 23
+- `Clare’s` → `Clares || Clare + s` — occorrenze: 23
+- `damsel's` → `damsels || damsel + s` — occorrenze: 23
+- `don’t,` → `dont, || don + t` — occorrenze: 23
+- `fix’d` → `fixd || fix + d` — occorrenze: 23
+- `Halcombe’s` → `Halcombes || Halcombe + s` — occorrenze: 23
+- `hard-hearted` → `hardhearted || hard + hearted` — occorrenze: 23
+- `Humphrey’s` → `Humphreys || Humphrey + s` — occorrenze: 23
+- `Jos's` → `Joss || Jos + s` — occorrenze: 23
+- `lord’s` → `lords || lord + s` — occorrenze: 23
+- `moment's` → `moments || moment + s` — occorrenze: 23
+- `Peter’s` → `Peters || Peter + s` — occorrenze: 23
+- `Phœbe’s` → `Phœbes || Phœbe + s` — occorrenze: 23
+- `Richard’s` → `Richards || Richard + s` — occorrenze: 23
+- `seem’d` → `seemd || seem + d` — occorrenze: 23
+- `self-acting` → `selfacting || self + acting` — occorrenze: 23
+- `son-in-law,` → `soninlaw, || son + in + law` — occorrenze: 23
+- `stol’n` → `stoln || stol + n` — occorrenze: 23
+- `they'll` → `theyll || they + ll` — occorrenze: 23
+- `Thomas’s` → `Thomass || Thomas + s` — occorrenze: 23
+- `to-night.”` → `tonight.” || to + night` — occorrenze: 23
+- `well-being` → `wellbeing || well + being` — occorrenze: 23
+- `wine-shop` → `wineshop || wine + shop` — occorrenze: 23
+- `“Here’s` → `“Heres || Here + s` — occorrenze: 23
+- `“It's` → `“Its || It + s` — occorrenze: 23
+- `"There's` → `"Theres || There + s` — occorrenze: 22
+- `Ashton’s` → `Ashtons || Ashton + s` — occorrenze: 22
+- `banish’d` → `banishd || banish + d` — occorrenze: 22
+- `captain's` → `captains || captain + s` — occorrenze: 22
+- `coffee-room` → `coffeeroom || coffee + room` — occorrenze: 22
+- `Countess’s` → `Countesss || Countess + s` — occorrenze: 22
+- `Dobbin's` → `Dobbins || Dobbin + s` — occorrenze: 22
+- `fill’d` → `filld || fill + d` — occorrenze: 22
+- `five-and-twenty` → `fiveandtwenty || five + and + twenty` — occorrenze: 22
+- `Fogg’s` → `Foggs || Fogg + s` — occorrenze: 22
+- `heav’n` → `heavn || heav + n` — occorrenze: 22
+- `ill-will` → `illwill || ill + will` — occorrenze: 22
+- `Inge's` → `Inges || Inge + s` — occorrenze: 22
+- `Jove’s` → `Joves || Jove + s` — occorrenze: 22
+- `lion’s` → `lions || lion + s` — occorrenze: 22
+- `Majesty’s` → `Majestys || Majesty + s` — occorrenze: 22
+- `night's` → `nights || night + s` — occorrenze: 22
+- `o'clock.` → `oclock. || o + clock` — occorrenze: 22
+- `O'Mara` → `OMara || O + Mara` — occorrenze: 22
+- `passers-by` → `passersby || passers + by` — occorrenze: 22
+- `Pequod’s` → `Pequods || Pequod + s` — occorrenze: 22
+- `person’s` → `persons || person + s` — occorrenze: 22
+- `pleas’d` → `pleasd || pleas + d` — occorrenze: 22
+- `Seth’s` → `Seths || Seth + s` — occorrenze: 22
+- `twenty-one` → `twentyone || twenty + one` — occorrenze: 22
+- `Weston’s` → `Westons || Weston + s` — occorrenze: 22
+- `who’s` → `whos || who + s` — occorrenze: 22
+- `‘There’s` → `‘Theres || There + s` — occorrenze: 22
+- `“that’s` → `“thats || that + s` — occorrenze: 22
+- `“You’ll` → `“Youll || You + ll` — occorrenze: 22
+- `"I've` → `"Ive || I + ve` — occorrenze: 21
+- `Brooke’s` → `Brookes || Brooke + s` — occorrenze: 21
+- `Canute's` → `Canutes || Canute + s` — occorrenze: 21
+- `Charles's` → `Charless || Charles + s` — occorrenze: 21
+- `city’s` → `citys || city + s` — occorrenze: 21
+- `cocoa-nut` → `cocoanut || cocoa + nut` — occorrenze: 21
+- `Doctor’s` → `Doctors || Doctor + s` — occorrenze: 21
+- `Eva’s` → `Evas || Eva + s` — occorrenze: 21
+- `four-and-twenty` → `fourandtwenty || four + and + twenty` — occorrenze: 21
+- `hasn’t` → `hasnt || hasn + t` — occorrenze: 21
+- `heav’nly` → `heavnly || heav + nly` — occorrenze: 21
+- `Hiawatha’s` → `Hiawathas || Hiawatha + s` — occorrenze: 21
+- `Hiram's` → `Hirams || Hiram + s` — occorrenze: 21
+- `left-hand` → `lefthand || left + hand` — occorrenze: 21
+- `look’d` → `lookd || look + d` — occorrenze: 21
+- `Lorenzo’s` → `Lorenzos || Lorenzo + s` — occorrenze: 21
+- `l’Homme` → `lHomme || l + Homme` — occorrenze: 21
+- `Manon's` → `Manons || Manon + s` — occorrenze: 21
+- `Master’s` → `Masters || Master + s` — occorrenze: 21
+- `ma’am,”` → `maam,” || ma + am` — occorrenze: 21
+- `mistress’s` → `mistresss || mistress + s` — occorrenze: 21
+- `person's` → `persons || person + s` — occorrenze: 21
+- `Prince's` → `Princes || Prince + s` — occorrenze: 21
+- `re-entered` → `reentered || re + entered` — occorrenze: 21
+- `Russell’s` → `Russells || Russell + s` — occorrenze: 21
+- `Scrooge's` → `Scrooges || Scrooge + s` — occorrenze: 21
+- `snow-white` → `snowwhite || snow + white` — occorrenze: 21
+- `to’t.` → `tot. || to + t` — occorrenze: 21
+- `wand’ring` → `wandring || wand + ring` — occorrenze: 21
+- `with-outen` → `withouten || with + outen` — occorrenze: 21
+- `you'd` → `youd || you + d` — occorrenze: 21
+- `“That's` → `“Thats || That + s` — occorrenze: 21
+- `"What's` → `"Whats || What + s` — occorrenze: 20
+- `clergyman’s` → `clergymans || clergyman + s` — occorrenze: 20
+- `Devil’s` → `Devils || Devil + s` — occorrenze: 20
+- `Elliot’s` → `Elliots || Elliot + s` — occorrenze: 20
+- `Fortune’s` → `Fortunes || Fortune + s` — occorrenze: 20
+- `grown-up` → `grownup || grown + up` — occorrenze: 20
+- `Isabella’s` → `Isabellas || Isabella + s` — occorrenze: 20
+- `mak’st` → `makst || mak + st` — occorrenze: 20
+- `Matilda’s` → `Matildas || Matilda + s` — occorrenze: 20
+- `on’t.` → `ont. || on + t` — occorrenze: 20
+- `Orlando's` → `Orlandos || Orlando + s` — occorrenze: 20
+- `passer-by` → `passerby || passer + by` — occorrenze: 20
+- `possess’d` → `possessd || possess + d` — occorrenze: 20
+- `prisoner’s` → `prisoners || prisoner + s` — occorrenze: 20
+- `Rinaldo's` → `Rinaldos || Rinaldo + s` — occorrenze: 20
+- `self-same` → `selfsame || self + same` — occorrenze: 20
+- `sister-in-law,` → `sisterinlaw, || sister + in + law` — occorrenze: 20
+- `to-day;` → `today; || to + day` — occorrenze: 20
+- `twenty-seven` → `twentyseven || twenty + seven` — occorrenze: 20
+- `warn’t` → `warnt || warn + t` — occorrenze: 20
+- `Whale’s` → `Whales || Whale + s` — occorrenze: 20
+- `Whate’er` → `Whateer || Whate + er` — occorrenze: 20
+- `Winkle’s` → `Winkles || Winkle + s` — occorrenze: 20
+- `Woodhouse’s` → `Woodhouses || Woodhouse + s` — occorrenze: 20
+- `‘I’ve` → `‘Ive || I + ve` — occorrenze: 20
+- `“Isn’t` → `“Isnt || Isn + t` — occorrenze: 20
+- `“there’s` → `“theres || there + s` — occorrenze: 20
+- `Candy’s` → `Candys || Candy + s` — occorrenze: 19
+- `Charles’s` → `Charless || Charles + s` — occorrenze: 19
+- `Christ’s` → `Christs || Christ + s` — occorrenze: 19
+- `country's` → `countrys || country + s` — occorrenze: 19
+- `duke's` → `dukes || duke + s` — occorrenze: 19
+- `Fairfax’s` → `Fairfaxs || Fairfax + s` — occorrenze: 19
+- `first-born` → `firstborn || first + born` — occorrenze: 19
+- `forc’d` → `forcd || forc + d` — occorrenze: 19
+- `fun’ral` → `funral || fun + ral` — occorrenze: 19
+- `grandfather’s` → `grandfathers || grandfather + s` — occorrenze: 19
+- `grave-digger` → `gravedigger || grave + digger` — occorrenze: 19
+- `heav'nly` → `heavnly || heav + nly` — occorrenze: 19
+- `Jack's` → `Jacks || Jack + s` — occorrenze: 19
+- `Jew’s` → `Jews || Jew + s` — occorrenze: 19
+- `Love’s` → `Loves || Love + s` — occorrenze: 19
+- `moon’s` → `moons || moon + s` — occorrenze: 19
+- `Nick’s` → `Nicks || Nick + s` — occorrenze: 19
+- `pass’d` → `passd || pass + d` — occorrenze: 19
+- `Peterkin's` → `Peterkins || Peterkin + s` — occorrenze: 19
+- `Queen-Dauphin,` → `QueenDauphin, || Queen + Dauphin` — occorrenze: 19
+- `Sergeant’s` → `Sergeants || Sergeant + s` — occorrenze: 19
+- `soldier’s` → `soldiers || soldier + s` — occorrenze: 19
+- `time’s` → `times || time + s` — occorrenze: 19
+- `To-day` → `Today || To + day` — occorrenze: 19
+- `up-on` → `upon || up + on` — occorrenze: 19
+- `wat’ry` → `watry || wat + ry` — occorrenze: 19
+- `we're` → `were || we + re` — occorrenze: 19
+- `Willoughby’s` → `Willoughbys || Willoughby + s` — occorrenze: 19
+- `Year’s` → `Years || Year + s` — occorrenze: 19
+- `“We’ll` → `“Well || We + ll` — occorrenze: 19
+- `all’s` → `alls || all + s` — occorrenze: 18
+- `Armand’s` → `Armands || Armand + s` — occorrenze: 18
+- `Aymon's` → `Aymons || Aymon + s` — occorrenze: 18
+- `Bishop’s` → `Bishops || Bishop + s` — occorrenze: 18
+- `Captain’s` → `Captains || Captain + s` — occorrenze: 18
+- `Churchill’s` → `Churchills || Churchill + s` — occorrenze: 18
+- `Cleves's` → `Clevess || Cleves + s` — occorrenze: 18
+- `companion’s` → `companions || companion + s` — occorrenze: 18
+- `Cupid’s` → `Cupids || Cupid + s` — occorrenze: 18
+- `e'er` → `eer || e + er` — occorrenze: 18
+- `General’s` → `Generals || General + s` — occorrenze: 18
+- `George’s` → `Georges || George + s` — occorrenze: 18
+- `girl's` → `girls || girl + s` — occorrenze: 18
+- `good-will,` → `goodwill, || good + will` — occorrenze: 18
+- `Gunhild's` → `Gunhilds || Gunhild + s` — occorrenze: 18
+- `heaven's` → `heavens || heaven + s` — occorrenze: 18
+- `Jasper’s` → `Jaspers || Jasper + s` — occorrenze: 18
+- `life's` → `lifes || life + s` — occorrenze: 18
+- `mind’s` → `minds || mind + s` — occorrenze: 18
+- `Mother’s` → `Mothers || Mother + s` — occorrenze: 18
+- `Nemo’s` → `Nemos || Nemo + s` — occorrenze: 18
+- `Ne’er` → `Neer || Ne + er` — occorrenze: 18
+- `on’t,` → `ont, || on + t` — occorrenze: 18
+- `Pearl’s` → `Pearls || Pearl + s` — occorrenze: 18
+- `pow’r` → `powr || pow + r` — occorrenze: 18
+- `receiv’d` → `receivd || receiv + d` — occorrenze: 18
+- `resting-place` → `restingplace || resting + place` — occorrenze: 18
+- `Rome’s` → `Romes || Rome + s` — occorrenze: 18
+- `Rosanna’s` → `Rosannas || Rosanna + s` — occorrenze: 18
+- `shepherd’s` → `shepherds || shepherd + s` — occorrenze: 18
+- `sister-in-law` → `sisterinlaw || sister + in + law` — occorrenze: 18
+- `thirty-two` → `thirtytwo || thirty + two` — occorrenze: 18
+- `twenty-three` → `twentythree || twenty + three` — occorrenze: 18
+- `writer’s` → `writers || writer + s` — occorrenze: 18
+- `Allen’s` → `Allens || Allen + s` — occorrenze: 17
+- `anybody’s` → `anybodys || anybody + s` — occorrenze: 17
+- `by-and-by` → `byandby || by + and + by` — occorrenze: 17
+- `Ch’uan` → `Chuan || Ch + uan` — occorrenze: 17
+- `common-sense` → `commonsense || common + sense` — occorrenze: 17
+- `court-yard,` → `courtyard, || court + yard` — occorrenze: 17
+- `earth's` → `earths || earth + s` — occorrenze: 17
+- `fall’n` → `falln || fall + n` — occorrenze: 17
+- `Farebrother’s` → `Farebrothers || Farebrother + s` — occorrenze: 17
+- `forty-eight` → `fortyeight || forty + eight` — occorrenze: 17
+- `heart-broken` → `heartbroken || heart + broken` — occorrenze: 17
+- `Heaven's` → `Heavens || Heaven + s` — occorrenze: 17
+- `hiding-place` → `hidingplace || hiding + place` — occorrenze: 17
+- `him-self` → `himself || him + self` — occorrenze: 17
+- `ill-used` → `illused || ill + used` — occorrenze: 17
+- `in-to` → `into || in + to` — occorrenze: 17
+- `Jamieson’s` → `Jamiesons || Jamieson + s` — occorrenze: 17
+- `judgment-seat` → `judgmentseat || judgment + seat` — occorrenze: 17
+- `kind-hearted` → `kindhearted || kind + hearted` — occorrenze: 17
+- `Kinglake’s` → `Kinglakes || Kinglake + s` — occorrenze: 17
+- `know’d` → `knowd || know + d` — occorrenze: 17
+- `Lady’s` → `Ladys || Lady + s` — occorrenze: 17
+- `lov’st` → `lovst || lov + st` — occorrenze: 17
+- `Maule’s` → `Maules || Maule + s` — occorrenze: 17
+- `minister’s` → `ministers || minister + s` — occorrenze: 17
+- `month’s` → `months || month + s` — occorrenze: 17
+- `Nature's` → `Natures || Nature + s` — occorrenze: 17
+- `Peter's` → `Peters || Peter + s` — occorrenze: 17
+- `queen's` → `queens || queen + s` — occorrenze: 17
+- `queen’s` → `queens || queen + s` — occorrenze: 17
+- `repli’d.` → `replid. || repli + d` — occorrenze: 17
+- `Rushworth’s` → `Rushworths || Rushworth + s` — occorrenze: 17
+- `seiz’d` → `seizd || seiz + d` — occorrenze: 17
+- `Steyne's` → `Steynes || Steyne + s` — occorrenze: 17
+- `think’st` → `thinkst || think + st` — occorrenze: 17
+- `three-cornered` → `threecornered || three + cornered` — occorrenze: 17
+- `up-stairs` → `upstairs || up + stairs` — occorrenze: 17
+- `widow’s` → `widows || widow + s` — occorrenze: 17
+- `wish’d` → `wishd || wish + d` — occorrenze: 17
+- `Alban's` → `Albans || Alban + s` — occorrenze: 16
+- `Ambrosio’s` → `Ambrosios || Ambrosio + s` — occorrenze: 16
+- `Barbicane’s` → `Barbicanes || Barbicane + s` — occorrenze: 16
+- `Bertram’s` → `Bertrams || Bertram + s` — occorrenze: 16
+- `Blake’s` → `Blakes || Blake + s` — occorrenze: 16
+- `boat-house` → `boathouse || boat + house` — occorrenze: 16
+- `butcher’s` → `butchers || butcher + s` — occorrenze: 16
+- `Caleb’s` → `Calebs || Caleb + s` — occorrenze: 16
+- `Cuff’s` → `Cuffs || Cuff + s` — occorrenze: 16
+- `dar’st` → `darst || dar + st` — occorrenze: 16
+- `Eliza’s` → `Elizas || Eliza + s` — occorrenze: 16
+- `farmer's` → `farmers || farmer + s` — occorrenze: 16
+- `Featherstone’s` → `Featherstones || Featherstone + s` — occorrenze: 16
+- `forty-five` → `fortyfive || forty + five` — occorrenze: 16
+- `Fosco’s` → `Foscos || Fosco + s` — occorrenze: 16
+- `good-humour` → `goodhumour || good + humour` — occorrenze: 16
+- `Harding's` → `Hardings || Harding + s` — occorrenze: 16
+- `He’d` → `Hed || He + d` — occorrenze: 16
+- `Julia’s` → `Julias || Julia + s` — occorrenze: 16
+- `Juno’s` → `Junos || Juno + s` — occorrenze: 16
+- `looking-glass,` → `lookingglass, || looking + glass` — occorrenze: 16
+- `Luker’s` → `Lukers || Luker + s` — occorrenze: 16
+- `Mas’r,` → `Masr, || Mas + r` — occorrenze: 16
+- `merchant’s` → `merchants || merchant + s` — occorrenze: 16
+- `mountain’s` → `mountains || mountain + s` — occorrenze: 16
+- `mustn't` → `mustnt || mustn + t` — occorrenze: 16
+- `Nancy’s` → `Nancys || Nancy + s` — occorrenze: 16
+- `Nasmyth's` → `Nasmyths || Nasmyth + s` — occorrenze: 16
+- `never-ending` → `neverending || never + ending` — occorrenze: 16
+- `new-made` → `newmade || new + made` — occorrenze: 16
+- `niece’s` → `nieces || niece + s` — occorrenze: 16
+- `north-east` → `northeast || north + east` — occorrenze: 16
+- `O’Bradley!` → `OBradley! || O + Bradley` — occorrenze: 16
+- `o’er,` → `oer, || o + er` — occorrenze: 16
+- `Paul's` → `Pauls || Paul + s` — occorrenze: 16
+- `Percy’s` → `Percys || Percy + s` — occorrenze: 16
+- `Pesca’s` → `Pescas || Pesca + s` — occorrenze: 16
+- `pit-coal` → `pitcoal || pit + coal` — occorrenze: 16
+- `play’d` → `playd || play + d` — occorrenze: 16
+- `Pope’s` → `Popes || Pope + s` — occorrenze: 16
+- `pow’rs` → `powrs || pow + rs` — occorrenze: 16
+- `propos'd` → `proposd || propos + d` — occorrenze: 16
+- `Ravenswood’s` → `Ravenswoods || Ravenswood + s` — occorrenze: 16
+- `She’ll` → `Shell || She + ll` — occorrenze: 16
+- `Sister’s` → `Sisters || Sister + s` — occorrenze: 16
+- `south-west` → `southwest || south + west` — occorrenze: 16
+- `strange-looking` → `strangelooking || strange + looking` — occorrenze: 16
+- `Thénardier’s` → `Thénardiers || Thénardier + s` — occorrenze: 16
+- `to-morrow,”` → `tomorrow,” || to + morrow` — occorrenze: 16
+- `touch’d` → `touchd || touch + d` — occorrenze: 16
+- `twenty-eight` → `twentyeight || twenty + eight` — occorrenze: 16
+- `t’other` → `tother || t + other` — occorrenze: 16
+- `well-bred` → `wellbred || well + bred` — occorrenze: 16
+- `weren't` → `werent || weren + t` — occorrenze: 16
+- `Wind's` → `Winds || Wind + s` — occorrenze: 16
+- `women's` → `womens || women + s` — occorrenze: 16
+- `year's` → `years || year + s` — occorrenze: 16
+- `You’d` → `Youd || You + d` — occorrenze: 16
+- `You’ve` → `Youve || You + ve` — occorrenze: 16
+- `‘He’s` → `‘Hes || He + s` — occorrenze: 16
+- `‘it’s` → `‘its || it + s` — occorrenze: 16
+- `“Don't` → `“Dont || Don + t` — occorrenze: 16
+- `“Let’s` → `“Lets || Let + s` — occorrenze: 16
+- `“She’s` → `“Shes || She + s` — occorrenze: 16
+- `'Don't` → `Dont || Don + t` — occorrenze: 15
+- `all-powerful` → `allpowerful || all + powerful` — occorrenze: 15
+- `aren’t` → `arent || aren + t` — occorrenze: 15
+- `Breitmann's` → `Breitmanns || Breitmann + s` — occorrenze: 15
+- `carpenter’s` → `carpenters || carpenter + s` — occorrenze: 15
+- `cast-off` → `castoff || cast + off` — occorrenze: 15
+- `crown’d` → `crownd || crown + d` — occorrenze: 15
+- `death-bed` → `deathbed || death + bed` — occorrenze: 15
+- `dressing-gown,` → `dressinggown, || dressing + gown` — occorrenze: 15
+- `Elvira’s` → `Elviras || Elvira + s` — occorrenze: 15
+- `farm-house` → `farmhouse || farm + house` — occorrenze: 15
+- `farm-rent` → `farmrent || farm + rent` — occorrenze: 15
+- `first-class` → `firstclass || first + class` — occorrenze: 15
+- `follow’d` → `followd || follow + d` — occorrenze: 15
+- `fool’s` → `fools || fool + s` — occorrenze: 15
+- `Friar’s` → `Friars || Friar + s` — occorrenze: 15
+- `giv’n` → `givn || giv + n` — occorrenze: 15
+- `half-open` → `halfopen || half + open` — occorrenze: 15
+- `Hector’s` → `Hectors || Hector + s` — occorrenze: 15
+- `Jacob's` → `Jacobs || Jacob + s` — occorrenze: 15
+- `Knightley’s` → `Knightleys || Knightley + s` — occorrenze: 15
+- `knight’s` → `knights || knight + s` — occorrenze: 15
+- `lad’s` → `lads || lad + s` — occorrenze: 15
+- `landing-master’s` → `landingmasters || landing + master + s` — occorrenze: 15
+- `lion's` → `lions || lion + s` — occorrenze: 15
+- `Love's` → `Loves || Love + s` — occorrenze: 15
+- `lover's` → `lovers || lover + s` — occorrenze: 15
+- `Marian’s` → `Marians || Marian + s` — occorrenze: 15
+- `mother-in-law` → `motherinlaw || mother + in + law` — occorrenze: 15
+- `name’s` → `names || name + s` — occorrenze: 15
+- `needn't` → `neednt || needn + t` — occorrenze: 15
+- `respectable-looking` → `respectablelooking || respectable + looking` — occorrenze: 15
+- `second-hand` → `secondhand || second + hand` — occorrenze: 15
+- `slave’s` → `slaves || slave + s` — occorrenze: 15
+- `Ssu-ma` → `Ssuma || Ssu + ma` — occorrenze: 15
+- `steam-engines` → `steamengines || steam + engines` — occorrenze: 15
+- `Svein's` → `Sveins || Svein + s` — occorrenze: 15
+- `They’ll` → `Theyll || They + ll` — occorrenze: 15
+- `three-fourths` → `threefourths || three + fourths` — occorrenze: 15
+- `to-day?”` → `today?” || to + day` — occorrenze: 15
+- `us’d` → `usd || us + d` — occorrenze: 15
+- `Valgard's` → `Valgards || Valgard + s` — occorrenze: 15
+- `virtue’s` → `virtues || virtue + s` — occorrenze: 15
+- `wine-shop,` → `wineshop, || wine + shop` — occorrenze: 15
+- `winter's` → `winters || winter + s` — occorrenze: 15
+- `Yao-ch’en` → `Yaochen || Yao + ch + en` — occorrenze: 15
+- `You've` → `Youve || You + ve` — occorrenze: 15
+- `“here’s` → `“heres || here + s` — occorrenze: 15
+- `“Where’s` → `“Wheres || Where + s` — occorrenze: 15
+- `a-going` → `agoing || a + going` — occorrenze: 14
+- `Abbot’s` → `Abbots || Abbot + s` — occorrenze: 14
+- `Abraham's` → `Abrahams || Abraham + s` — occorrenze: 14
+- `aunt's` → `aunts || aunt + s` — occorrenze: 14
+- `author’s` → `authors || author + s` — occorrenze: 14
+- `battle-field` → `battlefield || battle + field` — occorrenze: 14
+- `Celia’s` → `Celias || Celia + s` — occorrenze: 14
+- `chang’d` → `changd || chang + d` — occorrenze: 14
+- `Chauvelin’s` → `Chauvelins || Chauvelin + s` — occorrenze: 14
+- `death-like` → `deathlike || death + like` — occorrenze: 14
+- `doctor's` → `doctors || doctor + s` — occorrenze: 14
+- `doom’d` → `doomd || doom + d` — occorrenze: 14
+- `dressing-room` → `dressingroom || dressing + room` — occorrenze: 14
+- `Emperor’s` → `Emperors || Emperor + s` — occorrenze: 14
+- `ev'ry` → `evry || ev + ry` — occorrenze: 14
+- `every-day` → `everyday || every + day` — occorrenze: 14
+- `ev’n` → `evn || ev + n` — occorrenze: 14
+- `Fantine’s` → `Fantines || Fantine + s` — occorrenze: 14
+- `Giovanni’s` → `Giovannis || Giovanni + s` — occorrenze: 14
+- `good-for-nothing` → `goodfornothing || good + for + nothing` — occorrenze: 14
+- `good-humoured,` → `goodhumoured, || good + humoured` — occorrenze: 14
+- `Gray’s` → `Grays || Gray + s` — occorrenze: 14
+- `head-dress` → `headdress || head + dress` — occorrenze: 14
+- `hero’s` → `heros || hero + s` — occorrenze: 14
+- `ill-looking` → `illlooking || ill + looking` — occorrenze: 14
+- `in’t` → `int || in + t` — occorrenze: 14
+- `Ladislaw’s` → `Ladislaws || Ladislaw + s` — occorrenze: 14
+- `life-long` → `lifelong || life + long` — occorrenze: 14
+- `Lisbeth’s` → `Lisbeths || Lisbeth + s` — occorrenze: 14
+- `long-drawn` → `longdrawn || long + drawn` — occorrenze: 14
+- `Luther's` → `Luthers || Luther + s` — occorrenze: 14
+- `maid-servant` → `maidservant || maid + servant` — occorrenze: 14
+- `maiden’s` → `maidens || maiden + s` — occorrenze: 14
+- `Man's` → `Mans || Man + s` — occorrenze: 14
+- `matter-of-fact` → `matteroffact || matter + of + fact` — occorrenze: 14
+- `may'st` → `mayst || may + st` — occorrenze: 14
+- `may’st` → `mayst || may + st` — occorrenze: 14
+- `ma’am.` → `maam. || ma + am` — occorrenze: 14
+- `Michael’s` → `Michaels || Michael + s` — occorrenze: 14
+- `mix’d` → `mixd || mix + d` — occorrenze: 14
+- `Morland’s` → `Morlands || Morland + s` — occorrenze: 14
+- `no-thing` → `nothing || no + thing` — occorrenze: 14
+- `north-west` → `northwest || north + west` — occorrenze: 14
+- `Odin's` → `Odins || Odin + s` — occorrenze: 14
+- `Pau-Puk-Keewis` → `PauPukKeewis || Pau + Puk + Keewis` — occorrenze: 14
+- `Pau-Puk-Keewis,` → `PauPukKeewis, || Pau + Puk + Keewis` — occorrenze: 14
+- `pent-up` → `pentup || pent + up` — occorrenze: 14
+- `pierc’d` → `piercd || pierc + d` — occorrenze: 14
+- `plac’d` → `placd || plac + d` — occorrenze: 14
+- `pleas’d,` → `pleasd, || pleas + d` — occorrenze: 14
+- `pre-eminence` → `preeminence || pre + eminence` — occorrenze: 14
+- `red-faced` → `redfaced || red + faced` — occorrenze: 14
+- `red-haired` → `redhaired || red + haired` — occorrenze: 14
+- `resolv’d` → `resolvd || resolv + d` — occorrenze: 14
+- `servant’s` → `servants || servant + s` — occorrenze: 14
+- `seventy-five` → `seventyfive || seventy + five` — occorrenze: 14
+- `sixty-five` → `sixtyfive || sixty + five` — occorrenze: 14
+- `thee’t` → `theet || thee + t` — occorrenze: 14
+- `thirty-six` → `thirtysix || thirty + six` — occorrenze: 14
+- `threat’ning` → `threatning || threat + ning` — occorrenze: 14
+- `T’ang` → `Tang || T + ang` — occorrenze: 14
+- `uncle's` → `uncles || uncle + s` — occorrenze: 14
+- `we've` → `weve || we + ve` — occorrenze: 14
+- `well-informed` → `wellinformed || well + informed` — occorrenze: 14
+- `y-wis,` → `ywis, || y + wis` — occorrenze: 14
+- `ye’ll` → `yell || ye + ll` — occorrenze: 14
+- `You'll` → `Youll || You + ll` — occorrenze: 14
+- `“he’s` → `“hes || he + s` — occorrenze: 14
+- `"don't` → `"dont || don + t` — occorrenze: 13
+- `[Ts’ao` → `[Tsao || Ts + ao` — occorrenze: 13
+- `All’s` → `Alls || All + s` — occorrenze: 13
+- `arm-chair,` → `armchair, || arm + chair` — occorrenze: 13
+- `ask’d` → `askd || ask + d` — occorrenze: 13
+- `Atli's` → `Atlis || Atli + s` — occorrenze: 13
+- `baker’s` → `bakers || baker + s` — occorrenze: 13
+- `bank-notes` → `banknotes || bank + notes` — occorrenze: 13
+- `Betteredge’s` → `Betteredges || Betteredge + s` — occorrenze: 13
+- `broad-brimmed` → `broadbrimmed || broad + brimmed` — occorrenze: 13
+- `business-like` → `businesslike || business + like` — occorrenze: 13
+- `Capulet’s` → `Capulets || Capulet + s` — occorrenze: 13
+- `chimney-piece` → `chimneypiece || chimney + piece` — occorrenze: 13
+- `Ch’i` → `Chi || Ch + i` — occorrenze: 13
+- `clerk’s` → `clerks || clerk + s` — occorrenze: 13
+- `Colonel's` → `Colonels || Colonel + s` — occorrenze: 13
+- `com’st` → `comst || com + st` — occorrenze: 13
+- `Cort's` → `Corts || Cort + s` — occorrenze: 13
+- `David’s` → `Davids || David + s` — occorrenze: 13
+- `dog’s` → `dogs || dog + s` — occorrenze: 13
+- `dressing-gown` → `dressinggown || dressing + gown` — occorrenze: 13
+- `dressing-room,` → `dressingroom, || dressing + room` — occorrenze: 13
+- `Dudley's` → `Dudleys || Dudley + s` — occorrenze: 13
+- `Ear-gate,` → `Eargate, || Ear + gate` — occorrenze: 13
+- `Elizabeth’s` → `Elizabeths || Elizabeth + s` — occorrenze: 13
+- `Ev’n` → `Evn || Ev + n` — occorrenze: 13
+- `far-famed` → `farfamed || far + famed` — occorrenze: 13
+- `farm-house,` → `farmhouse, || farm + house` — occorrenze: 13
+- `father-in-law,` → `fatherinlaw, || father + in + law` — occorrenze: 13
+- `fellow's` → `fellows || fellow + s` — occorrenze: 13
+- `Ferrari’s` → `Ferraris || Ferrari + s` — occorrenze: 13
+- `gav’st` → `gavst || gav + st` — occorrenze: 13
+- `glitt’ring` → `glittring || glitt + ring` — occorrenze: 13
+- `Good-bye,` → `Goodbye, || Good + bye` — occorrenze: 13
+- `hasn't` → `hasnt || hasn + t` — occorrenze: 13
+- `heart-rending` → `heartrending || heart + rending` — occorrenze: 13
+- `heav’n,` → `heavn, || heav + n` — occorrenze: 13
+- `Hector's` → `Hectors || Hector + s` — occorrenze: 13
+- `honour's` → `honours || honour + s` — occorrenze: 13
+- `John's` → `Johns || John + s` — occorrenze: 13
+- `Law's` → `Laws || Law + s` — occorrenze: 13
+- `Let's` → `Lets || Let + s` — occorrenze: 13
+- `life-blood` → `lifeblood || life + blood` — occorrenze: 13
+- `Lorry’s` → `Lorrys || Lorry + s` — occorrenze: 13
+- `ma'am;` → `maam; || ma + am` — occorrenze: 13
+- `Marner’s` → `Marners || Marner + s` — occorrenze: 13
+- `meeting-house` → `meetinghouse || meeting + house` — occorrenze: 13
+- `men-at-arms,` → `menatarms, || men + at + arms` — occorrenze: 13
+- `Montriveau’s` → `Montriveaus || Montriveau + s` — occorrenze: 13
+- `Mord's` → `Mords || Mord + s` — occorrenze: 13
+- `mov’d` → `movd || mov + d` — occorrenze: 13
+- `Napoleon’s` → `Napoleons || Napoleon + s` — occorrenze: 13
+- `offer’d` → `offerd || offer + d` — occorrenze: 13
+- `Olivia’s` → `Olivias || Olivia + s` — occorrenze: 13
+- `Ophelia’s` → `Ophelias || Ophelia + s` — occorrenze: 13
+- `Pinocchio’s` → `Pinocchios || Pinocchio + s` — occorrenze: 13
+- `public-house.` → `publichouse. || public + house` — occorrenze: 13
+- `quarter-deck` → `quarterdeck || quarter + deck` — occorrenze: 13
+- `river’s` → `rivers || river + s` — occorrenze: 13
+- `Robert's` → `Roberts || Robert + s` — occorrenze: 13
+- `sea-shore,` → `seashore, || sea + shore` — occorrenze: 13
+- `seal’d` → `seald || seal + d` — occorrenze: 13
+- `self-sacrifice` → `selfsacrifice || self + sacrifice` — occorrenze: 13
+- `She's` → `Shes || She + s` — occorrenze: 13
+- `show’d` → `showd || show + d` — occorrenze: 13
+- `sitting-room.` → `sittingroom. || sitting + room` — occorrenze: 13
+- `Skeggi's` → `Skeggis || Skeggi + s` — occorrenze: 13
+- `snuff-box` → `snuffbox || snuff + box` — occorrenze: 13
+- `south-east,` → `southeast, || south + east` — occorrenze: 13
+- `such-like` → `suchlike || such + like` — occorrenze: 13
+- `they've` → `theyve || they + ve` — occorrenze: 13
+- `Thord's` → `Thords || Thord + s` — occorrenze: 13
+- `thou’lt` → `thoult || thou + lt` — occorrenze: 13
+- `to-day,”` → `today,” || to + day` — occorrenze: 13
+- `Tolstoy’s` → `Tolstoys || Tolstoy + s` — occorrenze: 13
+- `unlooked-for` → `unlookedfor || unlooked + for` — occorrenze: 13
+- `warden's` → `wardens || warden + s` — occorrenze: 13
+- `water’s` → `waters || water + s` — occorrenze: 13
+- `weather-beaten` → `weatherbeaten || weather + beaten` — occorrenze: 13
+- `well-dressed` → `welldressed || well + dressed` — occorrenze: 13
+- `well-remembered` → `wellremembered || well + remembered` — occorrenze: 13
+- `whate’er` → `whateer || whate + er` — occorrenze: 13
+- `White's` → `Whites || White + s` — occorrenze: 13
+- `William's` → `Williams || William + s` — occorrenze: 13
+- `wi’out` → `wiout || wi + out` — occorrenze: 13
+- `Woman’s` → `Womans || Woman + s` — occorrenze: 13
+- `wrought-iron` → `wroughtiron || wrought + iron` — occorrenze: 13
+- `yesterday’s` → `yesterdays || yesterday + s` — occorrenze: 13
+- `You're` → `Youre || You + re` — occorrenze: 13
+- `‘that’s` → `‘thats || that + s` — occorrenze: 13
+- `“I'll` → `“Ill || I + ll` — occorrenze: 13
+- `“what’s` → `“whats || what + s` — occorrenze: 13
+- `"She's` → `"Shes || She + s` — occorrenze: 12
+- `'What's` → `Whats || What + s` — occorrenze: 12
+- `Alcina's` → `Alcinas || Alcina + s` — occorrenze: 12
+- `Antonio's` → `Antonios || Antonio + s` — occorrenze: 12
+- `arm’d` → `armd || arm + d` — occorrenze: 12
+- `arm’s` → `arms || arm + s` — occorrenze: 12
+- `arriv'd` → `arrivd || arriv + d` — occorrenze: 12
+- `artist’s` → `artists || artist + s` — occorrenze: 12
+- `bishop's` → `bishops || bishop + s` — occorrenze: 12
+- `Bjorn's` → `Bjorns || Bjorn + s` — occorrenze: 12
+- `Bramah's` → `Bramahs || Bramah + s` — occorrenze: 12
+- `Brandon’s` → `Brandons || Brandon + s` — occorrenze: 12
+- `cam’st` → `camst || cam + st` — occorrenze: 12
+- `chimney-corner` → `chimneycorner || chimney + corner` — occorrenze: 12
+- `chimney-corner,` → `chimneycorner, || chimney + corner` — occorrenze: 12
+- `chimney-piece,` → `chimneypiece, || chimney + piece` — occorrenze: 12
+- `Clark’s` → `Clarks || Clark + s` — occorrenze: 12
+- `conquer’d` → `conquerd || conquer + d` — occorrenze: 12
+- `courser's` → `coursers || courser + s` — occorrenze: 12
+- `custom-house` → `customhouse || custom + house` — occorrenze: 12
+- `damn’d` → `damnd || damn + d` — occorrenze: 12
+- `Dashwood’s` → `Dashwoods || Dashwood + s` — occorrenze: 12
+- `Didn’t` → `Didnt || Didn + t` — occorrenze: 12
+- `fellow-men,` → `fellowmen, || fellow + men` — occorrenze: 12
+- `fifty-five` → `fiftyfive || fifty + five` — occorrenze: 12
+- `Fisherman’s` → `Fishermans || Fisherman + s` — occorrenze: 12
+- `for’t.` → `fort. || for + t` — occorrenze: 12
+- `general’s` → `generals || general + s` — occorrenze: 12
+- `good-tempered` → `goodtempered || good + tempered` — occorrenze: 12
+- `great-coat,` → `greatcoat, || great + coat` — occorrenze: 12
+- `guest-quarters` → `guestquarters || guest + quarters` — occorrenze: 12
+- `hackney-coach` → `hackneycoach || hackney + coach` — occorrenze: 12
+- `half-an-hour` → `halfanhour || half + an + hour` — occorrenze: 12
+- `He'd` → `Hed || He + d` — occorrenze: 12
+- `honour’d` → `honourd || honour + d` — occorrenze: 12
+- `host’s` → `hosts || host + s` — occorrenze: 12
+- `ill-tempered` → `illtempered || ill + tempered` — occorrenze: 12
+- `in’s` → `ins || in + s` — occorrenze: 12
+- `journey’s` → `journeys || journey + s` — occorrenze: 12
+- `Judge’s` → `Judges || Judge + s` — occorrenze: 12
+- `landlord’s` → `landlords || landlord + s` — occorrenze: 12
+- `latter’s` → `latters || latter + s` — occorrenze: 12
+- `light-hearted` → `lighthearted || light + hearted` — occorrenze: 12
+- `ling’ring` → `lingring || ling + ring` — occorrenze: 12
+- `liv’d` → `livd || liv + d` — occorrenze: 12
+- `long-continued` → `longcontinued || long + continued` — occorrenze: 12
+- `looking-glass` → `lookingglass || looking + glass` — occorrenze: 12
+- `Maria’s` → `Marias || Maria + s` — occorrenze: 12
+- `meeting-house,` → `meetinghouse, || meeting + house` — occorrenze: 12
+- `Michael’s.` → `Michaels. || Michael + s` — occorrenze: 12
+- `mid-day` → `midday || mid + day` — occorrenze: 12
+- `minute’s` → `minutes || minute + s` — occorrenze: 12
+- `mistress's` → `mistresss || mistress + s` — occorrenze: 12
+- `morning's` → `mornings || morning + s` — occorrenze: 12
+- `mother-in-law,` → `motherinlaw, || mother + in + law` — occorrenze: 12
+- `neighb’ring` → `neighbring || neighb + ring` — occorrenze: 12
+- `Neptune’s` → `Neptunes || Neptune + s` — occorrenze: 12
+- `ninety-nine` → `ninetynine || ninety + nine` — occorrenze: 12
+- `O'Dowd's` → `ODowds || O + Dowd + s` — occorrenze: 12
+- `o’re` → `ore || o + re` — occorrenze: 12
+- `post-chaise` → `postchaise || post + chaise` — occorrenze: 12
+- `Queen-Dauphin;` → `QueenDauphin; || Queen + Dauphin` — occorrenze: 12
+- `Queequeg’s` → `Queequegs || Queequeg + s` — occorrenze: 12
+- `re-established` → `reestablished || re + established` — occorrenze: 12
+- `Reuben’s` → `Reubens || Reuben + s` — occorrenze: 12
+- `river's` → `rivers || river + s` — occorrenze: 12
+- `scatter’d` → `scatterd || scatter + d` — occorrenze: 12
+- `she'll` → `shell || she + ll` — occorrenze: 12
+- `Solmund's` → `Solmunds || Solmund + s` — occorrenze: 12
+- `speak’st` → `speakst || speak + st` — occorrenze: 12
+- `Spearman’s` → `Spearmans || Spearman + s` — occorrenze: 12
+- `Starkad's` → `Starkads || Starkad + s` — occorrenze: 12
+- `steam-engine,` → `steamengine, || steam + engine` — occorrenze: 12
+- `Temple’s` → `Temples || Temple + s` — occorrenze: 12
+- `Think’st` → `Thinkst || Think + st` — occorrenze: 12
+- `Tilney’s` → `Tilneys || Tilney + s` — occorrenze: 12
+- `To-day,` → `Today, || To + day` — occorrenze: 12
+- `to-night?”` → `tonight?” || to + night` — occorrenze: 12
+- `Todd’s` → `Todds || Todd + s` — occorrenze: 12
+- `town’s` → `towns || town + s` — occorrenze: 12
+- `trumpet’s` → `trumpets || trumpet + s` — occorrenze: 12
+- `twenty-first` → `twentyfirst || twenty + first` — occorrenze: 12
+- `tyrant’s` → `tyrants || tyrant + s` — occorrenze: 12
+- `urg’d` → `urgd || urg + d` — occorrenze: 12
+- `view’d` → `viewd || view + d` — occorrenze: 12
+- `Villon’s` → `Villons || Villon + s` — occorrenze: 12
+- `well-to-do` → `welltodo || well + to + do` — occorrenze: 12
+- `Wentworth’s` → `Wentworths || Wentworth + s` — occorrenze: 12
+- `we’d` → `wed || we + d` — occorrenze: 12
+- `What's` → `Whats || What + s` — occorrenze: 12
+- `“He’ll` → `“Hell || He + ll` — occorrenze: 12
+- `"You're` → `"Youre || You + re` — occorrenze: 11
+- `a-year,` → `ayear, || a + year` — occorrenze: 11
+- `Ablewhite’s` → `Ablewhites || Ablewhite + s` — occorrenze: 11
+- `Alice’s` → `Alices || Alice + s` — occorrenze: 11
+- `all-important` → `allimportant || all + important` — occorrenze: 11
+- `Anglo-Saxon` → `AngloSaxon || Anglo + Saxon` — occorrenze: 11
+- `Apollo’s` → `Apollos || Apollo + s` — occorrenze: 11
+- `appear'd` → `appeard || appear + d` — occorrenze: 11
+- `banker’s` → `bankers || banker + s` — occorrenze: 11
+- `barley-mow!` → `barleymow! || barley + mow` — occorrenze: 11
+- `beggar’s` → `beggars || beggar + s` — occorrenze: 11
+- `blacksmith’s` → `blacksmiths || blacksmith + s` — occorrenze: 11
+- `blood-red` → `bloodred || blood + red` — occorrenze: 11
+- `call'd` → `calld || call + d` — occorrenze: 11
+- `Campbell’s` → `Campbells || Campbell + s` — occorrenze: 11
+- `cast-steel` → `caststeel || cast + steel` — occorrenze: 11
+- `Cedric’s` → `Cedrics || Cedric + s` — occorrenze: 11
+- `Ch’ao` → `Chao || Ch + ao` — occorrenze: 11
+- `clos’d` → `closd || clos + d` — occorrenze: 11
+- `coffee-room,` → `coffeeroom, || coffee + room` — occorrenze: 11
+- `conqu’ring` → `conquring || conqu + ring` — occorrenze: 11
+- `continu'd` → `continud || continu + d` — occorrenze: 11
+- `court-men` → `courtmen || court + men` — occorrenze: 11
+- `cousin's` → `cousins || cousin + s` — occorrenze: 11
+- `creature’s` → `creatures || creature + s` — occorrenze: 11
+- `Custom-House` → `CustomHouse || Custom + House` — occorrenze: 11
+- `custom-house,` → `customhouse, || custom + house` — occorrenze: 11
+- `d'un` → `dun || d + un` — occorrenze: 11
+- `dark-blue` → `darkblue || dark + blue` — occorrenze: 11
+- `destin’d` → `destind || destin + d` — occorrenze: 11
+- `devil's` → `devils || devil + s` — occorrenze: 11
+- `district-attorney` → `districtattorney || district + attorney` — occorrenze: 11
+- `Dixon’s` → `Dixons || Dixon + s` — occorrenze: 11
+- `Earth’s` → `Earths || Earth + s` — occorrenze: 11
+- `Eleanor's` → `Eleanors || Eleanor + s` — occorrenze: 11
+- `Ellidagrim's` → `Ellidagrims || Ellidagrim + s` — occorrenze: 11
+- `else’s` → `elses || else + s` — occorrenze: 11
+- `Eppie’s` → `Eppies || Eppie + s` — occorrenze: 11
+- `fam’d` → `famd || fam + d` — occorrenze: 11
+- `father-in-law` → `fatherinlaw || father + in + law` — occorrenze: 11
+- `father’s,` → `fathers, || father + s` — occorrenze: 11
+- `Fauchelevent’s` → `Fauchelevents || Fauchelevent + s` — occorrenze: 11
+- `Fix’s` → `Fixs || Fix + s` — occorrenze: 11
+- `Flosi's` → `Flosis || Flosi + s` — occorrenze: 11
+- `fortune’s` → `fortunes || fortune + s` — occorrenze: 11
+- `full-grown` → `fullgrown || full + grown` — occorrenze: 11
+- `good-bye` → `goodbye || good + bye` — occorrenze: 11
+- `good-bye,` → `goodbye, || good + bye` — occorrenze: 11
+- `good-hearted` → `goodhearted || good + hearted` — occorrenze: 11
+- `good-humour,` → `goodhumour, || good + humour` — occorrenze: 11
+- `good-looking,` → `goodlooking, || good + looking` — occorrenze: 11
+- `good-natured,` → `goodnatured, || good + natured` — occorrenze: 11
+- `governor's` → `governors || governor + s` — occorrenze: 11
+- `Grace’s` → `Graces || Grace + s` — occorrenze: 11
+- `HAKON'S` → `HAKONS || HAKON + S` — occorrenze: 11
+- `HARALD'S` → `HARALDS || HARALD + S` — occorrenze: 11
+- `Harry’s` → `Harrys || Harry + s` — occorrenze: 11
+- `high-minded` → `highminded || high + minded` — occorrenze: 11
+- `high-water` → `highwater || high + water` — occorrenze: 11
+- `ill-fated` → `illfated || ill + fated` — occorrenze: 11
+- `instant’s` → `instants || instant + s` — occorrenze: 11
+- `Johnson’s` → `Johnsons || Johnson + s` — occorrenze: 11
+- `joint-stock` → `jointstock || joint + stock` — occorrenze: 11
+- `lab’ring` → `labring || lab + ring` — occorrenze: 11
+- `Madeleine’s` → `Madeleines || Madeleine + s` — occorrenze: 11
+- `MAGNUS'S` → `MAGNUSS || MAGNUS + S` — occorrenze: 11
+- `Marphisa's` → `Marphisas || Marphisa + s` — occorrenze: 11
+- `Martha’s` → `Marthas || Martha + s` — occorrenze: 11
+- `Martin’s` → `Martins || Martin + s` — occorrenze: 11
+- `mast-head` → `masthead || mast + head` — occorrenze: 11
+- `mast-heads` → `mastheads || mast + heads` — occorrenze: 11
+- `Mas’r,”` → `Masr,” || Mas + r` — occorrenze: 11
+- `Mayor’s` → `Mayors || Mayor + s` — occorrenze: 11
+- `milk-white` → `milkwhite || milk + white` — occorrenze: 11
+- `monster's` → `monsters || monster + s` — occorrenze: 11
+- `Montalban's` → `Montalbans || Montalban + s` — occorrenze: 11
+- `mother’s,` → `mothers, || mother + s` — occorrenze: 11
+- `mountain's` → `mountains || mountain + s` — occorrenze: 11
+- `nature's` → `natures || nature + s` — occorrenze: 11
+- `Norris’s` → `Norriss || Norris + s` — occorrenze: 11
+- `O'Connor,` → `OConnor, || O + Connor` — occorrenze: 11
+- `O'Dowd,` → `ODowd, || O + Dowd` — occorrenze: 11
+- `ocean's` → `oceans || ocean + s` — occorrenze: 11
+- `one-tenth` → `onetenth || one + tenth` — occorrenze: 11
+- `on’t` → `ont || on + t` — occorrenze: 11
+- `on’y` → `ony || on + y` — occorrenze: 11
+- `o’clock;` → `oclock; || o + clock` — occorrenze: 11
+- `pass’d,` → `passd, || pass + d` — occorrenze: 11
+- `patron’s` → `patrons || patron + s` — occorrenze: 11
+- `Paul’s` → `Pauls || Paul + s` — occorrenze: 11
+- `pow’r,` → `powr, || pow + r` — occorrenze: 11
+- `prince's` → `princes || prince + s` — occorrenze: 11
+- `projectile’s` → `projectiles || projectile + s` — occorrenze: 11
+- `public-houses` → `publichouses || public + houses` — occorrenze: 11
+- `quarter-deck,` → `quarterdeck, || quarter + deck` — occorrenze: 11
+- `re-establish` → `reestablish || re + establish` — occorrenze: 11
+- `reach’d` → `reachd || reach + d` — occorrenze: 11
+- `reader's` → `readers || reader + s` — occorrenze: 11
+- `rector’s` → `rectors || rector + s` — occorrenze: 11
+- `red-nosed` → `rednosed || red + nosed` — occorrenze: 11
+- `ruin’d` → `ruind || ruin + d` — occorrenze: 11
+- `Saint-Germain` → `SaintGermain || Saint + Germain` — occorrenze: 11
+- `self-control` → `selfcontrol || self + control` — occorrenze: 11
+- `self-control.` → `selfcontrol. || self + control` — occorrenze: 11
+- `self-denial` → `selfdenial || self + denial` — occorrenze: 11
+- `self-possession,` → `selfpossession, || self + possession` — occorrenze: 11
+- `slaughter’d` → `slaughterd || slaughter + d` — occorrenze: 11
+- `Smith’s` → `Smiths || Smith + s` — occorrenze: 11
+- `summer's` → `summers || summer + s` — occorrenze: 11
+- `summer-house` → `summerhouse || summer + house` — occorrenze: 11
+- `Suzanne’s` → `Suzannes || Suzanne + s` — occorrenze: 11
+- `thirty-four` → `thirtyfour || thirty + four` — occorrenze: 11
+- `thirty-seven` → `thirtyseven || thirty + seven` — occorrenze: 11
+- `Thorir's` → `Thorirs || Thorir + s` — occorrenze: 11
+- `to-night,”` → `tonight,” || to + night` — occorrenze: 11
+- `tow’rs` → `towrs || tow + rs` — occorrenze: 11
+- `twenty-nine` → `twentynine || twenty + nine` — occorrenze: 11
+- `vanquish’d` → `vanquishd || vanquish + d` — occorrenze: 11
+- `well-beloved` → `wellbeloved || well + beloved` — occorrenze: 11
+- `well-earned` → `wellearned || well + earned` — occorrenze: 11
+- `where’er` → `whereer || where + er` — occorrenze: 11
+- `ye’re` → `yere || ye + re` — occorrenze: 11
+- `youth’s` → `youths || youth + s` — occorrenze: 11
+- `“Can’t` → `“Cant || Can + t` — occorrenze: 11
+- `“I've` → `“Ive || I + ve` — occorrenze: 11
+- `“Mas’r` → `“Masr || Mas + r` — occorrenze: 11
+
+---
+
+## 5. Altri casi speciali da verificare
+
+Questi casi non sono stati forzati nelle quattro categorie principali perché presentano caratteristiche ulteriori: abbreviazioni con punti interni, numeri con separatori, caratteri tipografici non ASCII, em dash interno, virgolette/backtick anomali o combinazioni di più convenzioni.
+
+Questi casi dovrebbero essere gestiti con regole specifiche oppure restituiti come `da verificare`.
+
+### Sottotipi individuati
+- **Abbreviazioni con punti interni:** `p.p.`, `v.t.`, `v.i.`, `p.pr.`, `vb.n.`, `i.e.`, `A.D.`, `a.m.`, `B.C.`
+- **Caratteri alfabetici Unicode/legature:** `Phœbe`, `Tzŭ`
+- **Numeri con formattazione:** `10,000`, `20,000`, `100,000`, `£100`, `1/2`, `½The`
+- **Em dash interno:** `it—I`, `me—I`, `it—and`, `you—and`, `I—THE`
+- **Backtick e virgolette tipografiche anomale:** `` `And ``, `` `The ``, ` ``The` ``
+- **Combinazioni particolarmente anomale:** `SIR,--I`, `&c.v.;`, `_Myself_.—I`
+
+### Elenco completo
+
+- `p.p.` — occorrenze: 199
+- `Phœbe` — occorrenze: 89
+- `v.t.` — occorrenze: 85
+- `Tzŭ` — occorrenze: 71
+- ``And` — occorrenze: 69
+- `½The` — occorrenze: 69
+- `v.i.` — occorrenze: 64
+- `p.pr.` — occorrenze: 49
+- `vb.n.` — occorrenze: 46
+- `Phœbe,` — occorrenze: 45
+- ``But` — occorrenze: 43
+- `i.e.,` — occorrenze: 38
+- `½A` — occorrenze: 35
+- ``I` — occorrenze: 32
+- ``Now` — occorrenze: 30
+- `A.D.` — occorrenze: 30
+- `&c.v.;` — occorrenze: 27
+- ``For` — occorrenze: 27
+- ``O` — occorrenze: 27
+- `SIR,--I` — occorrenze: 24
+- `it—I` — occorrenze: 23
+- `10,000` — occorrenze: 22
+- `it—and` — occorrenze: 21
+- `me—I` — occorrenze: 21
+- `I—THE` — occorrenze: 20
+- `1/2` — occorrenze: 19
+- `½An` — occorrenze: 19
+- `½To` — occorrenze: 19
+- `½I` — occorrenze: 17
+- `_Myself_.—I` — occorrenze: 16
+- `you—I` — occorrenze: 16
+- ```The` — occorrenze: 15
+- ``What` — occorrenze: 15
+- `a.m.` — occorrenze: 15
+- `B.C.` — occorrenze: 15
+- `20,000` — occorrenze: 14
+- `her—and` — occorrenze: 14
+- `12,000` — occorrenze: 13
+- ``Allas!` — occorrenze: 13
+- ``Ye,` — occorrenze: 13
+- `Phœbe.` — occorrenze: 13
+- `Tzŭ,` — occorrenze: 13
+- `£100` — occorrenze: 13
+- `100,000` — occorrenze: 12
+- `40,000` — occorrenze: 12
+- ``That` — occorrenze: 12
+- ``The` — occorrenze: 12
+- ``Thou` — occorrenze: 12
+- `him—I` — occorrenze: 12
+- `II—THE` — occorrenze: 12
+- `you—and` — occorrenze: 12
+- `½He` — occorrenze: 12
+- `400,000` — occorrenze: 11
+- `_Myself_.—What` — occorrenze: 11
+- `again—and` — occorrenze: 11
+- `him—and` — occorrenze: 11
+- `me—but` — occorrenze: 11
+
+---
+
+## Regole suggerite per le future funzioni Node.js
+
+1. **Riconoscere prima le stringhe certamente vuote**, cioè quelle composte esclusivamente da simboli.
+2. **Riconoscere i marcatori di elenco/numerazione** come `1.`, `2.`, `(a)`, `[1]`, ecc.
+3. **Riconoscere le forme potenzialmente composte**, soprattutto apostrofi interni e trattini interni.
+4. **Riconoscere le forme ambigue** con parentesi, parentesi quadre o abbreviazioni editoriali.
+5. **Solo dopo applicare la semplice rimozione della punteggiatura esterna**.
+6. **Lasciare una categoria `special/unknown`** per i casi non riconosciuti, evitando di trasformare automaticamente una stringa potenzialmente significativa in una parola diversa.
+
+Questa sequenza è importante perché alcune stringhe possono soddisfare più regole. Ad esempio `“don't,”` contiene contemporaneamente una virgoletta iniziale, una contrazione e punteggiatura finale: la funzione dovrà prima isolare la parola e poi decidere come trattare l'apostrofo.
+
+## Fonte dei dati
+
+Il catalogo è stato costruito a partire da tutte le **5.773 stringhe uniche** presenti in `list-of-special-words.json`; il campo `count` indica il numero di occorrenze della stringa nel dataset originale.

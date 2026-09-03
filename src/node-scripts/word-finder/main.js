@@ -23,6 +23,11 @@ const {
     updateResults
 } = require('./src/results');
 
+const {
+    analyzeSpecialWord,
+    classifySpecialWord
+} = require('./src/special-words');
+
 
 /**
  * Legge un parametro dalla riga di comando.
@@ -49,7 +54,14 @@ function getArgument(args, name) {
 
 
 
+
 async function main() {
+
+    // test di analisi di parole
+    console.log(analyzeSpecialWord('“Hello'));
+    console.log(analyzeSpecialWord('don’t'));
+    console.log(analyzeSpecialWord('3.'));
+    console.log(analyzeSpecialWord('***'));
 
     const config = loadConfig();
 
