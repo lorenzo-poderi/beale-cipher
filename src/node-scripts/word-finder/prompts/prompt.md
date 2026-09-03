@@ -2,38 +2,37 @@ TODO: 283
 
 Elenco stringhe da ripulire dai caratteri di troppo:
 
-“I -> I
-
-"I -> I
-
-‘I -> I 
-
-'I -> I
-
-’tis -> tis
-
-"you" -> you
+“I      -> I
+"I      -> I
+‘I      -> I
+'I      -> I
+’tis    -> tis
+"you"   -> you
 
 it;     -> it
 it.”    -> it
-you? -> you
+you?    -> you
 
-said: -> said
-you; -> you
+said:   -> said
+you;    -> you
 
-[Obs.]      -> obs
-(Bot.),     -> Bot
+[Obs.]  -> obs
+(Bot.), -> Bot
 
-[L. -> L
+[L.     -> L
 
-me; -> me
+me;     -> me
 
 etc.,   -> etc
 etc.;   -> etc
 
-o’ -> o
+o’      -> o
 
-\tThe -> The
+\tThe   -> The
+
+(as     -> as
+(in     -> in
+n.,      -> n
 
 
 Elenco di stringhe che valgono come vuoto
@@ -69,27 +68,21 @@ Elenco di stringhe che valgono come vuoto
 }   -> ''
 
 
-Elenco di stringhe da convertire in semplici parole.
 
 
-
-(as     -> as
-(in     -> in
-
-
-Elenco parole ambigue:
+Elenco parole che potrebbero aver significato oppure no:
 
 (Zoöl.)     -> 'Zoöl' || ''
 (Zoˆl.)     -> Zol || ''
 (Zoöl.),    -> Zool || ''
 [R.]        -> 'R' || ''
+[F.,        -> 'F' || ''
 (return)    -> 'return' || ''
 (Chem.)     -> Chem || ''
 [NL.        -> NL || ''
 (Anat.)     -> Anat || ''
 [L.,        -> L || ''
-Eng.]       -> Eng
-I’ll        -> Ill || I + ll
+Eng.]       -> Eng || ''
 (Law)       -> Law || ''
 (Naut.)     -> Naut || ''
 [Colloq.]   -> Colloq || ''
@@ -98,6 +91,10 @@ I’ll        -> Ill || I + ll
 &           -> & || ''
 &c.         -> c || ''
 
+
+Elenco parole formate da più termini:
+
+I’ll        -> Ill || I + ll
 don’t       -> dont || don + t
 don't       -> dont || don + t
 can’t       -> cant || can + t
