@@ -4,7 +4,7 @@ const path = require('path');
 
 const {
     loadConfig,
-    getListOfResults,
+    resultFile,
     getListOfBooks,
     getCipher1,
     getCipher2,
@@ -57,11 +57,11 @@ function getArgument(args, name) {
 
 async function main() {
 
-    // test di analisi di parole
-    console.log(analyzeSpecialWord('“Hello'));
-    console.log(analyzeSpecialWord('don’t'));
-    console.log(analyzeSpecialWord('3.'));
-    console.log(analyzeSpecialWord('***'));
+    // // test di analisi di parole
+    // console.log(analyzeSpecialWord('“Hello'));
+    // console.log(analyzeSpecialWord('don’t'));
+    // console.log(analyzeSpecialWord('3.'));
+    // console.log(analyzeSpecialWord('***'));
 
     const config = loadConfig();
 

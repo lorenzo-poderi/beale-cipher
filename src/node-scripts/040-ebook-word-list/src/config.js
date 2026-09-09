@@ -12,11 +12,15 @@ const DEFAULTS = {
     dataPath: path.join(__dirname, '..', '..', '..', 'data'),
     generatedPath: path.join(__dirname, '..', '..', '..', 'data', 'generated'),
     listOfBooksFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-books.json'),
-    resultFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-first-letters.json'),
+    listOfResultsFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-results.json'),
+    resultFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-ebook-word-list.json'),
+    listOfFirstLettersFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-first-letters.json'),
+    listOfSpecialWordsFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-special-words.json'),
     cipher1: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher1.txt'),
     cipher2: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher2.txt'),
     cipher3: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher3.txt'),
     charsToRemove: "-*\"'“•()0123456789.",
+    startOfProjectGutenberg: "*** START OF THE PROJECT GUTENBERG EBOOK",
     endOfProjectGutenberg: "*** END OF THE PROJECT GUTENBERG"
 };
 
@@ -29,6 +33,12 @@ function loadConfig() {
     return c;
 }
 
+function getListOfResults(c) {
+    let f = {};
+    if (fs.existsSync(c.listOfResultsFile)) f = JSON.parse(fs.readFileSync(c.listOfResultsFile, 'utf8'));
+    return f;
+}
+
 function getResultFile(c) {
     let f = {};
     if (fs.existsSync(c.resultFile)) f = JSON.parse(fs.readFileSync(c.resultFile, 'utf8'));
@@ -38,6 +48,12 @@ function getResultFile(c) {
 function getListOfBooks(c) {
     let f = {};
     if (fs.existsSync(c.listOfBooksFile)) f = JSON.parse(fs.readFileSync(c.listOfBooksFile, 'utf8'));
+    return f;
+}
+
+function getListOfSpecialWords(c) {
+    let f = {};
+    if (fs.existsSync(c.listOfSpecialWordsFile)) f = JSON.parse(fs.readFileSync(c.listOfSpecialWordsFile, 'utf8'));
     return f;
 }
 
@@ -63,9 +79,11 @@ function getCipher3(c) {
 
 module.exports = {
     loadConfig,
-    getResultFile,
+    getListOfResults,
     getListOfBooks,
+    getListOfSpecialWords,
     getCipher1,
     getCipher2,
-    getCipher3
+    getCipher3,
+    resultFile
 };

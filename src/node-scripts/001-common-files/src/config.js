@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+
 const DEFAULTS = {
     logDirectory: path.join(__dirname, '..', 'logs'),
     apiConfigFile: path.join(__dirname, '..', 'config', 'config.local.json'),
@@ -12,11 +13,14 @@ const DEFAULTS = {
     dataPath: path.join(__dirname, '..', '..', '..', 'data'),
     generatedPath: path.join(__dirname, '..', '..', '..', 'data', 'generated'),
     listOfBooksFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-books.json'),
-    resultFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-first-letters.json'),
+    //listOfResultsFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-results.json'),
+    listOfFirstSentencesFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-first-sentences.json'),
+    listOfFirstLettersFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-first-letters.json'),
+    listOfSpecialWordsFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-special-words.json'),
     cipher1: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher1.txt'),
     cipher2: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher2.txt'),
     cipher3: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher3.txt'),
-    charsToRemove: "-*\"'“•()0123456789.",
+    startOfProjectGutenberg: "*** START OF THE PROJECT GUTENBERG EBOOK",
     endOfProjectGutenberg: "*** END OF THE PROJECT GUTENBERG"
 };
 
@@ -29,15 +33,21 @@ function loadConfig() {
     return c;
 }
 
-function getResultFile(c) {
+function getListOfResults(c) {
     let f = {};
-    if (fs.existsSync(c.resultFile)) f = JSON.parse(fs.readFileSync(c.resultFile, 'utf8'));
+    if (fs.existsSync(c.listOfResultsFile)) f = JSON.parse(fs.readFileSync(c.listOfResultsFile, 'utf8'));
     return f;
 }
 
 function getListOfBooks(c) {
     let f = {};
     if (fs.existsSync(c.listOfBooksFile)) f = JSON.parse(fs.readFileSync(c.listOfBooksFile, 'utf8'));
+    return f;
+}
+
+function getListOfSpecialWords(c) {
+    let f = {};
+    if (fs.existsSync(c.listOfSpecialWordsFile)) f = JSON.parse(fs.readFileSync(c.listOfSpecialWordsFile, 'utf8'));
     return f;
 }
 
@@ -63,8 +73,9 @@ function getCipher3(c) {
 
 module.exports = {
     loadConfig,
-    getResultFile,
+    getListOfResults,
     getListOfBooks,
+    getListOfSpecialWords,
     getCipher1,
     getCipher2,
     getCipher3

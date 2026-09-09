@@ -4,7 +4,7 @@ const path = require('path');
 
 const {
     loadConfig,
-    getResultFile,
+    getListOfResults,
     getListOfBooks,
     getCipher1,
     getCipher2,
@@ -50,7 +50,7 @@ function getArgument(args, name) {
 async function main() {
 
     const config = loadConfig();
-    const resultFile = getResultFile(config);
+    const listOfResults = getListOfResults(config);
 
     const args = process.argv.slice(2);
 
@@ -79,7 +79,7 @@ async function main() {
     const common = {
 
         basePath: config.basePath,
-        resultFile: resultFile,
+        listOfResults: listOfResults,
         cipher1: getCipher1(config),
         cipher2: getCipher2(config),
         cipher3: getCipher3(config),
@@ -151,7 +151,7 @@ async function main() {
      * sostituzione dei risultati è contenuta in results.js.
      */
     await updateResults(
-        config.resultFile,
+        config.listOfFirstLettersFile,
         results
     );
 
