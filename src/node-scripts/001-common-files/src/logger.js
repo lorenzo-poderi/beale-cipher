@@ -2,7 +2,12 @@
 const fs = require('fs');
 const path = require('path');
 
-function createLogger(id, c) {
+const {
+    DEFAULTS,
+} = require('./config');
+
+function createLogger(id) {
+    let c = DEFAULTS;
     fs.mkdirSync(c.logDirectory, {
         recursive: true
     });

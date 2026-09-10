@@ -11,10 +11,10 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            //"program": "${workspaceFolder}\\src\\node-scripts\\010-search-opening-sentence\\search.js",
+            "program": "${workspaceFolder}\\src\\node-scripts\\010-search-opening-sentence\\main.js",
             //"program": "${workspaceFolder}\\src\\node-scripts\\020-ebook-reader\\main.js",
             //"program": "${workspaceFolder}\\src\\node-scripts\\030-word-finder\\main.js",
-            "program": "${workspaceFolder}\\src\\node-scripts\\040-ebook-word-list\\main.js",
+            //"program": "${workspaceFolder}\\src\\node-scripts\\040-ebook-word-list\\main.js",
             //"args": [ "--id", "1", "--simulate", "--results", "src\\data\\generated\\list-of-results.json"],
             //"args": [ "--id", "1"]
             "args": [ ]

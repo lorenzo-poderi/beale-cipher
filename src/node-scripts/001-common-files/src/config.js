@@ -21,7 +21,8 @@ const DEFAULTS = {
     cipher2: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher2.txt'),
     cipher3: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher3.txt'),
     startOfProjectGutenberg: "*** START OF THE PROJECT GUTENBERG EBOOK",
-    endOfProjectGutenberg: "*** END OF THE PROJECT GUTENBERG"
+    endOfProjectGutenberg: "*** END OF THE PROJECT GUTENBERG",
+    apiKey: ""
 };
 
 function loadConfig() {
@@ -33,46 +34,62 @@ function loadConfig() {
     return c;
 }
 
+function readFile(filePath, defaultValue = '') {
+    if (!fs.existsSync(filePath)) return defaultValue;
+    return fs.readFileSync(filePath, 'utf8');
+}
+
 function getListOfResults(c) {
-    let f = {};
-    if (fs.existsSync(c.listOfResultsFile)) f = JSON.parse(fs.readFileSync(c.listOfResultsFile, 'utf8'));
-    return f;
+    return JSON.parse(readFile(c.listOfResultsFile, '{}'));
 }
 
 function getListOfBooks(c) {
-    let f = {};
-    if (fs.existsSync(c.listOfBooksFile)) f = JSON.parse(fs.readFileSync(c.listOfBooksFile, 'utf8'));
-    return f;
+    return JSON.parse(readFile(c.listOfBooksFile, '{}'));
 }
 
 function getListOfSpecialWords(c) {
-    let f = {};
-    if (fs.existsSync(c.listOfSpecialWordsFile)) f = JSON.parse(fs.readFileSync(c.listOfSpecialWordsFile, 'utf8'));
-    return f;
+    return JSON.parse(readFile(c.listOfSpecialWordsFile, '{}'));
 }
 
 function getCipher1(c) {
-    let f = "";
-    if (fs.existsSync(c.cipher1)) f = fs.readFileSync(c.cipher1, 'utf8');
-    let arr = f.replaceAll('\r\n','').split(',').map(x => x.replace(' ',''));
-    return arr;
+    return readFile(c.cipher1).replaceAll('\r\n','').split(',').map(x => x.replace(' ',''));
 }
 function getCipher2(c) {
-    let f = "";
-    if (fs.existsSync(c.cipher1)) f = fs.readFileSync(c.cipher2, 'utf8');
-    let arr = f.replaceAll('\r\n','').split(',').map(x => x.replace(' ',''));
-    return arr;
+    return readFile(c.cipher2).replaceAll('\r\n','').split(',').map(x => x.replace(' ',''));
 }
 function getCipher3(c) {
-    let f = "";
-    if (fs.existsSync(c.cipher1)) f = fs.readFileSync(c.cipher3, 'utf8');
-    let arr = f.replaceAll('\r\n','').split(',').map(x => x.replace(' ',''));
-    return arr;
+    return readFile(c.cipher3).replaceAll('\r\n','').split(',').map(x => x.replace(' ',''));
+}
+
+
+/**
+ * Legge un parametro dalla riga di comando.
+ *
+ * Esempio:
+ *
+ * --model gpt-5.6
+ *
+ * restituisce:
+ *
+ * gpt-5.6
+ */
+function getArgument(args, name) {
+
+    const index = args.indexOf(name);
+
+    if (index === -1) {
+        return null;
+    }
+
+    return args[index + 1];
 }
 
 
 module.exports = {
+    DEFAULTS,
+    getArgument,
     loadConfig,
+    readFile,
     getListOfResults,
     getListOfBooks,
     getListOfSpecialWords,

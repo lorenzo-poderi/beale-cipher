@@ -4,13 +4,17 @@ const path = require('path');
 
 const {
     loadConfig,
-    loadPrompt,
-    getApiKey
-} = require('./src/config');
+    getApiKey,
+    getArgument
+} = require('../001-common-files/src/config');
+
+const {
+    readFile,
+} = require('../001-common-files/src/file-reader');
 
 const {
     createLogger
-} = require('./src/logger');
+} = require('../001-common-files/src/logger');
 
 const {
     searchByAI
@@ -26,34 +30,15 @@ const {
 } = require('./src/results');
 
 
-/**
- * Legge un parametro dalla riga di comando.
- *
- * Esempio:
- *
- * --model gpt-5.6
- *
- * restituisce:
- *
- * gpt-5.6
- */
-function getArgument(args, name) {
-
-    const index = args.indexOf(name);
-
-    if (index === -1) {
-        return null;
-    }
-
-    return args[index + 1];
-}
-
 
 async function main() {
 
     const config = loadConfig();
-    const prompt = loadPrompt(config);
-    const apiKey = getApiKey(config);
+    
+    let promptFile = path.join(__dirname, 'prompts', 'search-start.md');
+    const prompt = readFile(promptFile);
+
+    const apiKey = config.apiKey;
 
     const args = process.argv.slice(2);
 
