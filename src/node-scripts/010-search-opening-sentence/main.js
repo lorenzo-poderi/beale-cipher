@@ -36,6 +36,8 @@ async function main() {
     const config = loadConfig();
     
     let promptFile = path.join(__dirname, 'prompts', 'search-start.md');
+    let resultsFile = path.join(config.generatedPath, 'list-of-first-sentences.json');
+
     const prompt = readFile(promptFile);
 
     const apiKey = config.apiKey;
@@ -58,20 +60,6 @@ async function main() {
      */
     const id = getArgument(args, '--id');
     const jsonFile = getArgument(args, '--json');
-    const resultsFile = getArgument(args, '--results');
-
-
-    /*
-     * Il file dei risultati è obbligatorio.
-     */
-    if (!resultsFile) {
-
-        throw new Error(
-            'È necessario specificare il file dei risultati ' +
-            'con il parametro --results <file.json>.'
-        );
-    }
-
 
     /*
      * Deve essere specificato uno solo dei due
@@ -85,7 +73,6 @@ async function main() {
         );
     }
 
-
     if (id && jsonFile) {
 
         throw new Error(
@@ -93,7 +80,6 @@ async function main() {
             '--id e --json.'
         );
     }
-
 
     /*
      * Risolve i percorsi rispetto alla directory
