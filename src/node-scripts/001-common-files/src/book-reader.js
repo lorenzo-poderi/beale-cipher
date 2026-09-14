@@ -1,7 +1,10 @@
 'use strict';
-const fs = require('fs');
+const {
+    readFile
+} = require('./file-reader');
+
 async function readBook(filePath) {
-    return (await fs.promises.readFile(filePath, 'utf8')).split(/\r?\n/);
+    return readFile(filePath).split(/\r?\n/);
 }
 
 function findMarker(lines, marker) {

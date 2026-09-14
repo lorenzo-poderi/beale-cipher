@@ -9,16 +9,8 @@ const {
 } = require('../001-common-files/src/config');
 
 const {
-    readFile,
-} = require('../001-common-files/src/file-reader');
-
-const {
     createLogger
 } = require('../001-common-files/src/logger');
-
-const {
-    searchByAI
-} = require('./src/ai-search');
 
 const {
     processIds,
@@ -34,13 +26,8 @@ const {
 async function main() {
 
     const config = loadConfig();
-    
-    let promptFile = path.join(__dirname, 'prompts', 'search-start.md');
+
     let resultsFile = path.join(config.generatedPath, 'list-of-first-sentences.json');
-
-    const prompt = readFile(promptFile);
-
-    const apiKey = config.apiKey;
 
     const args = process.argv.slice(2);
 
@@ -50,7 +37,7 @@ async function main() {
      */
     const simulate = args.includes('--simulate');
 
-    const modelName =
+    config.modelName =
         getArgument(args, '--model')
         || config.modelName;
 
@@ -98,14 +85,6 @@ async function main() {
         basePath: config.basePath,
 
         config,
-
-        searchByAI,
-
-        prompt,
-
-        apiKey,
-
-        modelName,
 
         simulate,
 
