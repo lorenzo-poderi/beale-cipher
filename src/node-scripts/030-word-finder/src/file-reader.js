@@ -50,7 +50,8 @@ async function extractSingleBook({
                 modelName,
                 prompt,
                 apiKey,
-                config,
+                maxRetries: config.maxRetries,
+                requestTimeoutMs: config.requestTimeoutMs,
                 logger,
                 simulate
             })

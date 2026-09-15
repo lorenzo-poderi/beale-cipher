@@ -1,9 +1,9 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { loadConfig: loadCommonConfig } = require('../../001-common-files/src/config');
 const DEFAULTS = {
     logDirectory: path.join(__dirname, '..', 'logs'),
-    apiConfigFile: path.join(__dirname, '..', 'config', 'config.local.json'),
     maxWordsCipher1: 2906,
     maxWordsCipher2: 1005,
     maxWordsCipher3: 975,
@@ -24,12 +24,7 @@ const DEFAULTS = {
 };
 
 function loadConfig() {
-    const c = {
-        ...DEFAULTS
-    };
-    if (fs.existsSync(c.apiConfigFile)) Object.assign(c, JSON.parse(fs.readFileSync(c.apiConfigFile, 'utf8')));
-    for (const k of ['logDirectory', 'apiConfigFile']) c[k] = path.resolve(c[k]);
-    return c;
+    return loadCommonConfig(path.join(__dirname, '..', 'config', 'config.local.json'), DEFAULTS);
 }
 
 function getListOfResults(c) {

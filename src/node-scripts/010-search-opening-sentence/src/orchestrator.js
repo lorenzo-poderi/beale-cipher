@@ -44,14 +44,31 @@ async function searchSingleBook({
     modelName,
     simulate
 }) {
+
+    // Ritorna un oggetto come il seguente:
+    // {
+    //     id: <book id>,
+    //     status: 'Done' | 'Not found' | 'Error',
+    //     trimmedLines: <number of lines trimmed from the start>,
+    //     firstSentenceLine: <line number of the first sentence>,
+    //     confidence: <AI confidence score>,
+    //     firstSentence: <the first sentence detected>
+    // }
+
+
+    // Ensure the file exists and is readable before proceeding
     logger.write('Reading file...');
     try {
         await fs.promises.access(filePath, fs.constants.R_OK)
     } catch (e) {
         throw new Error(`Cannot access ebook: ${filePath}`)
     }
+
+    // Read the book file into lines
     const lines = await readBook(filePath);
     logger.write(`File read successfully. Total lines: ${lines.length}`);
+
+    // Find the Gutenberg marker line in the book
     const markerLine = findMarker(lines, config.gutenbergMarker);
 
     if (markerLine < 0) {
@@ -59,27 +76,40 @@ async function searchSingleBook({
         return buildResult(id, 'Not found');
     }
 
+    // If the marker line is found, log its position
     logger.write(`Gutenberg marker found at line ${markerLine}`);
 
+    // Define the sizes of the samples to be extracted for AI analysis
     const sizes = [config.firstSampleLines, config.secondSampleLines];
 
+    // Attempt to find the opening sentence using progressively larger samples
     for (let attempt = 0; attempt < config.maxAttempts; attempt++) {
+
+        // Extract a sample of lines around the Gutenberg marker for this attempt
         const s = extractLines(lines, markerLine, sizes[Math.min(attempt, sizes.length - 1)]);
+
         logger.write(`Sending lines ${s.startLine}-${s.endLine} to AI...`);
+
+        // Send the extracted lines to the AI for analysis
         let ai;
         try {
+
+            // Call the AI search function with the extracted lines
             ai = await searchByAI({
                 id,
                 lines: s.lines,
                 modelName,
                 prompt,
                 apiKey,
-                config,
+                maxRetries: config.maxRetries,
+                requestTimeoutMs: config.requestTimeoutMs,
                 logger,
                 simulate
             })
         } catch (e) {
             logger.write(`ERROR: ${e.message}`);
+
+            // Return the result indicating that an error occurred during AI analysis
             return buildResult(id, 'Error', markerLine);
         }
         if (ai.status === 'Done') {
@@ -87,6 +117,8 @@ async function searchSingleBook({
             if (original < 0 || original >= lines.length) throw new Error(`Calculated original line ${original} is invalid.`);
             logger.write(`Start detected at local line ${ai.firstSentenceLine}`);
             logger.write(`Original start line: ${original}`);
+
+            // Return the result of the AI analysis
             return buildResult(id, 'Done', markerLine, original, ai.confidence, ai.firstSentence);
         }
         if (attempt + 1 < config.maxAttempts) {
@@ -94,6 +126,8 @@ async function searchSingleBook({
             continue;
         }
         logger.write('Maximum number of attempts reached. Manual search required.');
+
+        // Return the result indicating that the opening sentence was not found
         return buildResult(id, 'Not found', markerLine);
     }
     return buildResult(id, 'Error', markerLine);
@@ -101,32 +135,46 @@ async function searchSingleBook({
 
 async function processIds({
     ids,
-    basePath,
     config,
     simulate,
     loggerFactory
 }) {
+
+    // Parametri per la chiamata all'AI
     const prompt = readFile(PROMPT_FILE);
     const apiKey = config.apiKey;
     const modelName = config.modelName;
+    
+    // Array di risultati per ogni libro processato
     const results = [];
+
+
     for (const id of ids) {
+
         if (!validateId(id)) {
             results.push(buildResult(id, 'Error'));
             continue;
         }
+
+        // Creazione del logger per il libro corrente
         const logger = loggerFactory(id);
+
         try {
-            results.push(await searchSingleBook({
+
+            // Search for the opening sentence of the book using AI
+            const searchResult = await searchSingleBook({
                 id,
-                filePath: buildBookPath(basePath, id),
+                filePath: buildBookPath(config.basePath, id),
                 config,
                 logger,
                 prompt,
                 apiKey,
                 modelName,
                 simulate
-            }));
+            });
+
+            // Aggiungi il risultato della ricerca all'array dei risultati
+            results.push(searchResult);
         } catch (e) {
             logger.write(`UNHANDLED ERROR: ${e.stack||e.message}`);
             results.push(buildResult(id, 'Error'));

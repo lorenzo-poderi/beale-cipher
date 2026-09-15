@@ -92,7 +92,8 @@ async function searchByAI({
     modelName,
     prompt,
     apiKey,
-    config,
+    maxRetries,
+    requestTimeoutMs,
     logger,
     simulate = false
 }) {
@@ -133,15 +134,15 @@ async function searchByAI({
         }
     };
     let response, last;
-    for (let n = 0; n <= config.maxRetries; n++) {
+    for (let n = 0; n <= maxRetries; n++) {
         try {
             logger.write(`Calling API with model ${modelName} (attempt ${n+1})`);
-            response = await post(apiKey, body, config.requestTimeoutMs);
+            response = await post(apiKey, body, requestTimeoutMs);
             break
         } catch (e) {
             last = e;
             logger.write(`OpenAI API error: ${e.message}`);
-            if (n >= config.maxRetries || !(e.statusCode === 408 || e.statusCode === 409 || e.statusCode === 429 || e.statusCode >= 500)) throw e;
+            if (n >= maxRetries || !(e.statusCode === 408 || e.statusCode === 409 || e.statusCode === 429 || e.statusCode >= 500)) throw e;
             await sleep(2 ** n * 1000);
         }
     }

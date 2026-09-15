@@ -2,35 +2,43 @@
 const fs = require('fs');
 const path = require('path');
 
+const commonConfigFile = path.join(__dirname, '..', 'config', 'config.common.json');
+const pathProperties = [
+    'logDirectory',
+    'dataPath',
+    'generatedPath',
+    'listOfBooksFile',
+    'listOfFirstSentencesFile',
+    'listOfFirstLettersFile',
+    'listOfSpecialWordsFile',
+    'cipher1',
+    'cipher2',
+    'cipher3'
+];
+
 const DEFAULTS = {
-    logDirectory: path.join(__dirname, '..', 'logs'),
-    apiConfigFile: path.join(__dirname, '..', 'config', 'config.local.json'),
-    maxWordsCipher1: 2906,
-    maxWordsCipher2: 1005,
-    maxWordsCipher3: 975,
-    maxWords: 2906,
-    basePath: 'D:\\LolloNewPc\\Sviluppo\\data',
-    dataPath: path.join(__dirname, '..', '..', '..', 'data'),
-    generatedPath: path.join(__dirname, '..', '..', '..', 'data', 'generated'),
-    listOfBooksFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-books.json'),
-    //listOfResultsFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-results.json'),
-    listOfFirstSentencesFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-first-sentences.json'),
-    listOfFirstLettersFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-first-letters.json'),
-    listOfSpecialWordsFile: path.join(__dirname, '..', '..', '..', 'data', 'generated','list-of-special-words.json'),
-    cipher1: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher1.txt'),
-    cipher2: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher2.txt'),
-    cipher3: path.join(__dirname, '..', '..', '..', 'data', 'originals','ciphers','cipher3.txt'),
-    startOfProjectGutenberg: "*** START OF THE PROJECT GUTENBERG EBOOK",
-    endOfProjectGutenberg: "*** END OF THE PROJECT GUTENBERG",
-    apiKey: ""
+    ...JSON.parse(fs.readFileSync(commonConfigFile, 'utf8')),
+    commonConfigFile
 };
 
-function loadConfig() {
+for (const key of pathProperties) {
+    DEFAULTS[key] = path.resolve(path.dirname(commonConfigFile), DEFAULTS[key]);
+}
+
+function loadConfig(localConfigFile, scriptDefaults = {}) {
     const c = {
-        ...DEFAULTS
+        ...DEFAULTS,
+        ...scriptDefaults,
+        commonConfigFile: DEFAULTS.commonConfigFile,
+        localConfigFile: localConfigFile || null
     };
-    if (fs.existsSync(c.apiConfigFile)) Object.assign(c, JSON.parse(fs.readFileSync(c.apiConfigFile, 'utf8')));
-    for (const k of ['logDirectory', 'apiConfigFile']) c[k] = path.resolve(c[k]);
+    Object.assign(c, JSON.parse(fs.readFileSync(c.commonConfigFile, 'utf8')));
+    if (c.localConfigFile && fs.existsSync(c.localConfigFile)) {
+        Object.assign(c, JSON.parse(fs.readFileSync(c.localConfigFile, 'utf8')));
+    }
+    for (const k of pathProperties) c[k] = path.resolve(path.dirname(c.commonConfigFile), c[k]);
+    c.commonConfigFile = path.resolve(c.commonConfigFile);
+    if (c.localConfigFile) c.localConfigFile = path.resolve(c.localConfigFile);
     return c;
 }
 

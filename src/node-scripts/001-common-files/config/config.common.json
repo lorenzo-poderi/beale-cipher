@@ -1,0 +1,21 @@
+{
+  "logDirectory": "../logs",
+  "commonConfigFile": "config.common.json",
+  "maxWordsCipher1": 2906,
+  "maxWordsCipher2": 1005,
+  "maxWordsCipher3": 975,
+  "maxWords": 2906,
+  "basePath": "D:\\LolloNewPc\\Sviluppo\\data",
+  "dataPath": "../../../data",
+  "generatedPath": "../../../data/generated",
+  "listOfBooksFile": "../../../data/generated/list-of-books.json",
+  "listOfFirstSentencesFile": "../../../data/generated/list-of-first-sentences.json",
+  "listOfFirstLettersFile": "../../../data/generated/list-of-first-letters.json",
+  "listOfSpecialWordsFile": "../../../data/generated/list-of-special-words.json",
+  "cipher1": "../../../data/originals/ciphers/cipher1.txt",
+  "cipher2": "../../../data/originals/ciphers/cipher2.txt",
+  "cipher3": "../../../data/originals/ciphers/cipher3.txt",
+  "startOfProjectGutenberg": "*** START OF THE PROJECT GUTENBERG EBOOK",
+  "endOfProjectGutenberg": "*** END OF THE PROJECT GUTENBERG",
+  "apiKey": ""
+}
