@@ -22,9 +22,9 @@ async function main() {
   const config = loadConfig(localConfigFile);
 
   // Percorso assoluto del file dei risultati
-  const resultsFile = path.isAbsolute(config.resultsFile)
-    ? config.resultsFile
-    : path.join(config.generatedPath, config.resultsFile);
+  const resultsFile = path.isAbsolute(config.listOfFirstSentencesFile)
+    ? config.listOfFirstSentencesFile
+    : path.join(config.generatedPath, config.listOfFirstSentencesFile);
 
   // Lettura parametri
   const args = process.argv.slice(2);

@@ -69,7 +69,7 @@ async function searchSingleBook({
     logger.write(`File read successfully. Total lines: ${lines.length}`);
 
     // Find the Gutenberg marker line in the book
-    const markerLine = findMarker(lines, config.gutenbergMarker);
+    const markerLine = findMarker(lines, config.startOfProjectGutenberg);
 
     if (markerLine < 0) {
         logger.write('Gutenberg marker not found.');

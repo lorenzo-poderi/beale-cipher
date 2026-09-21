@@ -1,4 +1,10 @@
 {
   "resultsFile": "list-of-first-sentences.json",
-  "modelName": "gpt-5.6-luna"
+  "firstSampleLines": 200,
+  "secondSampleLines": 500,
+  "maxAttempts": 2,
+  "modelName": "gpt-5.6-luna",
+  "requestTimeoutMs": 300000,
+  "maxRetries": 2,
+  "costCsvFile": "token-usage.csv"
 }

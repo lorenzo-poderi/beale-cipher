@@ -12,7 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\src\\node-scripts\\010-search-opening-sentence\\main.js",
-            "args": [ "--id", "1", "--simulate"],
+            "args": [ "--id", "20"],
             //"args": [ "--id", "1", "--simulate", "--results", "src\\data\\generated\\list-of-results.json"],
             //"program": "${workspaceFolder}\\src\\node-scripts\\020-ebook-reader\\main.js",
             //"program": "${workspaceFolder}\\src\\node-scripts\\030-word-finder\\main.js",
