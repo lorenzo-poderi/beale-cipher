@@ -1,28 +1,22 @@
-'use strict';
+"use strict";
 
-const path = require('path');
+const path = require("path");
 
-const {
-    loadConfig,
-    getListOfResults,
-    getListOfBooks,
-    getCipher1,
-    getCipher2,
-    getCipher3,
-} = require('./src/config');
+const { loadConfig, getArgument } = require("../001-common-files/src/config");
 
 const {
-    createLogger
-} = require('./src/logger');
+  getListOfResults,
+  getListOfBooks,
+  getCipher1,
+  getCipher2,
+  getCipher3,
+} = require("./src/config");
 
-const {
-    processIds,
-} = require('./src/orchestrator');
+const { createLogger } = require("./src/logger");
 
-const {
-    updateResults
-} = require('./src/results');
+const { processIds } = require("./src/orchestrator");
 
+const { updateResults } = require("./src/results");
 
 /**
  * Legge un parametro dalla riga di comando.
@@ -36,144 +30,115 @@ const {
  * gpt-5.6
  */
 function getArgument(args, name) {
+  const index = args.indexOf(name);
 
-    const index = args.indexOf(name);
+  if (index === -1) {
+    return null;
+  }
 
-    if (index === -1) {
-        return null;
-    }
-
-    return args[index + 1];
+  return args[index + 1];
 }
-
 
 async function main() {
+  // Percorso opzionale del file di configurazione locale.
+  const localConfigFile = path.join(__dirname, "config", "config.local.json");
 
-    const config = loadConfig();
-    const listOfResults = getListOfResults(config);
+  const config = loadConfig(localConfigFile);
 
-    const args = process.argv.slice(2);
+  // Percorso assoluto del file dei risultati
+  const resultsFile = path.isAbsolute(config.resultsFile)
+    ? config.resultsFile
+    : path.join(config.generatedPath, config.resultsFile);
 
+  const listOfResults = getListOfResults(config);
 
-    /*
-     * Parametri opzionali.
-     */
-    const simulate = args.includes('--simulate');
+  
+  // Lettura parametri
+  const args = process.argv.slice(2);
+  const simulate = args.includes("--simulate");
+  config.modelName = getArgument(args, "--model") || config.modelName;
 
-    /*
-     * Parametri di elaborazione.
-     */
-    const id = getArgument(args, '--id');
+  const id = getArgument(args, "--id");
 
-    // if (!id) {
-
-    //     throw new Error(
-    //         'È necessario specificare --id <id> oppure ' +
-    //         '--json <file.json>.'
-    //     );
-    // }
-
-    /*
-     * Parametri comuni utilizzati dall'orchestrator.
-     */
-    const common = {
-
-        basePath: config.basePath,
-        listOfResults: listOfResults,
-        cipher1: getCipher1(config),
-        cipher2: getCipher2(config),
-        cipher3: getCipher3(config),
-        config,
-        simulate,
-
-        loggerFactory: currentId =>
-            createLogger(currentId, config)
-    };
-
-
-    let result;
-
-
-    /*
-     * Elaborazione di un singolo ID.
-     *
-     * Esempio:
-     *
-     * node search.js
-     *     --id 123
-     *     --results ./data/results.json
-     */
-    if (id) {
-
-        result = (
-            await processIds({
-                ...common,
-
-                ids: [
-                    Number(id)
-                ]
-            })
-        )[0];
-    }
-    else
-    {
-        // Rielaboro tutti gli id disponibili
-        let books = getListOfBooks(config);
-        let ids = books.map(x => x.id);
-
-        result = 
-            await processIds({
-                ...common,
-
-                ids: ids
-            });
-       
-
-    }
-
-
-    /*
-     * Converte il risultato in un array.
-     *
-     * processIds() restituisce un array anche quando
-     * viene elaborato un solo ID, ma manteniamo questa
-     * gestione per sicurezza.
-     */
-    const results = Array.isArray(result)
-        ? result
-        : [result];
-
-
-    /*
-     * Aggiorna results.json.
-     *
-     * Tutta la logica relativa agli status e alla
-     * sostituzione dei risultati è contenuta in results.js.
-     */
-    await updateResults(
-        config.listOfFirstLettersFile,
-        results
+  // Controllo parametri
+  if (!id) {
+    throw new Error(
+      "È necessario specificare --id <id>",
     );
+  }
 
 
-    /*
-     * Mantiene la stampa del risultato a video.
-     */
-    console.log(
-        JSON.stringify(
-            result,
-            null,
-            2
-        )
-    );
+  /*
+   * Parametri comuni utilizzati dall'orchestrator.
+   */
+  const common = {
+    basePath: config.basePath,
+    listOfResults: listOfResults,
+    cipher1: getCipher1(config),
+    cipher2: getCipher2(config),
+    cipher3: getCipher3(config),
+    config,
+    simulate,
+
+    loggerFactory: (currentId) => createLogger(currentId, config),
+  };
+
+  let result;
+
+  /*
+   * Elaborazione di un singolo ID.
+   *
+   * Esempio:
+   *
+   * node search.js
+   *     --id 123
+   *     --results ./data/results.json
+   */
+  if (id) {
+    result = (
+      await processIds({
+        ...common,
+
+        ids: [Number(id)],
+      })
+    )[0];
+  } else {
+    // Rielaboro tutti gli id disponibili
+    let books = getListOfBooks(config);
+    let ids = books.map((x) => x.id);
+
+    result = await processIds({
+      ...common,
+
+      ids: ids,
+    });
+  }
+
+  /*
+   * Converte il risultato in un array.
+   *
+   * processIds() restituisce un array anche quando
+   * viene elaborato un solo ID, ma manteniamo questa
+   * gestione per sicurezza.
+   */
+  const results = Array.isArray(result) ? result : [result];
+
+  /*
+   * Aggiorna results.json.
+   *
+   * Tutta la logica relativa agli status e alla
+   * sostituzione dei risultati è contenuta in results.js.
+   */
+  await updateResults(config.listOfFirstLettersFile, results);
+
+  /*
+   * Mantiene la stampa del risultato a video.
+   */
+  console.log(JSON.stringify(result, null, 2));
 }
 
+main().catch((error) => {
+  console.error(`ERROR: ${error.message}`);
 
-main().catch(error => {
-
-    console.error(
-        `ERROR: ${error.message}`
-    );
-
-    process.exitCode = 1;
+  process.exitCode = 1;
 });

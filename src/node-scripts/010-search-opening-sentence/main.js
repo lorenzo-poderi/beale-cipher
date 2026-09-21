@@ -15,35 +15,26 @@ const { processIds, processJsonFile } = require("./src/orchestrator");
 const { updateResults } = require("./src/results");
 
 async function main() {
-
   // Percorso opzionale del file di configurazione locale.
   const localConfigFile = path.join(__dirname, "config", "config.local.json");
 
+  // Caricamento configurazione
   const config = loadConfig(localConfigFile);
 
+  // Percorso assoluto del file dei risultati
   const resultsFile = path.isAbsolute(config.resultsFile)
     ? config.resultsFile
     : path.join(config.generatedPath, config.resultsFile);
 
+  // Lettura parametri
   const args = process.argv.slice(2);
-
-  /*
-   * Parametri opzionali.
-   */
   const simulate = args.includes("--simulate");
-
   config.modelName = getArgument(args, "--model") || config.modelName;
 
-  /*
-   * Parametri di elaborazione.
-   */
   const id = getArgument(args, "--id");
   const jsonFile = getArgument(args, "--json");
 
-  /*
-   * Deve essere specificato uno solo dei due
-   * metodi di selezione degli ID.
-   */
+  // Controllo parametri
   if (!id && !jsonFile) {
     throw new Error(
       "È necessario specificare --id <id> oppure " + "--json <file.json>.",

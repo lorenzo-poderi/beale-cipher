@@ -121,10 +121,13 @@ async function extractSingleBook({
 
             if (word != null && word.length > 0) {
 
+                // Considero solamente le parole che non sono totalemente alfanumeriche (es. "casa", viene scartata)
                 if (!isAlphanumeric(word)) {
 
+                    // Considero solamente le parole che non iniziano o finiscono con un carattere speciale.
                     if (!startsOrEndsWithSpecialCharWord(word))
                     {
+                        // Ciò che resta è una parola il cui contenuto va analizzato (es. don't, well-known, etc.).
                         results.push(word);
                     }
                 }

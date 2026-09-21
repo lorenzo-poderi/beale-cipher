@@ -1,0 +1,52 @@
+[
+  {
+    "name": "alfanumeric",
+    "example": "piano, casa, libro",
+    "note": "Contains only alphanumeric characters",
+    "regex": "",
+    "count": 1
+  },
+  {
+    "name": "isIsolatedCharacter",
+    "example": "+, -, /",
+    "note": "1 char che non sia testo o numeri",
+    "regex": "/[A-Za-zÀ-ÖØ-öø-ÿ0-9]/",
+    "count": 0
+  },
+  {
+    "name": "endsWithSpecialCharWord",
+    "example": "puo', fine.",
+    "note": "Parole che finiscono con un carattere speciale come ', .",
+    "regex": "/^[A-Za-zÀ-ÖØ-öø-ÿ]+[',.]?$/",
+    "count": 1
+  },
+  {
+    "name": "startsOrEndsWithSpecialCharWord",
+    "example": "puo', fine.,-inizio ",
+    "note": "Parole che iniziano o finiscono con un carattere speciale come ', .",
+    "regex": "/^[',.]?[A-Za-zÀ-ÖØ-öø-ÿ]+[',.]?$/",
+    "count": 1
+  },
+
+  {
+    "name": "isListMarker",
+    "example": "1), 2., a), b.",
+    "note": "Indicatore di elenco numerato o alfabetico",
+    "regex": "/^(?:\\d+|[A-Za-z])[.)-]$/",
+    "count": 0
+  },
+  {
+    "name": "isHyphenatedWord",
+    "example": "self-contained, well-known, nineteenth-century (valutare anche n trattini!)",
+    "note": "Parole composte con trattino",
+    "regex": "/^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:-[A-Za-zÀ-ÖØ-öø-ÿ]+)+$/",
+    "count": 2
+  },
+  {
+    "name": "isApostropheWord",
+    "example": "don't, John's, o'clock",
+    "note": "Parole contenenti apostrofi",
+    "regex": "/^[A-Za-zÀ-ÖØ-öø-ÿ]+['’][A-Za-zÀ-ÖØ-öø-ÿ]+$/",
+    "count": 2
+  }
+]

@@ -192,7 +192,6 @@ function isIsolatedCharacter(token) {
         return false;
     }
 
-    // Controlla se il token è uno dei caratteri isolati/simbolo noti.
     return !/[A-Za-zÀ-ÖØ-öø-ÿ0-9]/.test(token);
 }
 
@@ -245,12 +244,10 @@ function isApostropheWord(token) {
     return /^[A-Za-zÀ-ÖØ-öø-ÿ]+['’][A-Za-zÀ-ÖØ-öø-ÿ]+$/.test(token);
 }
 
-// Determina se una parola termina con un carattere speciale.
 function endsWithSpecialCharWord(token) {
     return /^[A-Za-zÀ-ÖØ-öø-ÿ]+[',.]?$/.test(token);
 }
 
-// Determina se una parola inizia o finisce con un carattere speciale.
 function startsOrEndsWithSpecialCharWord(token) {
     return /^[',.":;“‘’\[\]]?[A-Za-zÀ-ÖØ-öø-ÿ]+[',.":;“‘’\[\]]?$/.test(token);
 }

@@ -61,12 +61,17 @@ async function processIds({
             // Per ogni parola speciale estratta aggiungo il conteggio delle occorrenze nell'array distinctSpecialWords
             for (const item of distinctSpecialWords) {
                 let matchingResults = results.filter(x => x.word === item.word);
+
+                // Se non ci sono risultati corrispondenti, aggiungo il nuovo elemento all'array dei risultati.
                 if (matchingResults.length === 0) {
+
+                    // Aggiungo il nuovo elemento all'array dei risultati (parola + occorrenze)
                     results.push({
                         word: item.word,
                         count: item.count
                     });
                 }else {
+                    // Se ci sono risultati corrispondenti, aggiorno il conteggio delle occorrenze. 
                     for (const match of matchingResults) {
                         match.count += item.count;
                     }
